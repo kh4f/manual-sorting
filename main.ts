@@ -1,6 +1,7 @@
 import { App, ButtonComponent, Menu, MenuItem, Modal, Plugin } from 'obsidian';
 import Sortable from 'sortablejs';
 import { around } from 'monkey-around';
+import {i18n} from "i18next";
 
 
 function debugLog(...args: any[]) {
@@ -9,6 +10,9 @@ function debugLog(...args: any[]) {
 	}
 }
 
+declare global {
+	const i18next: i18n;
+}
 
 declare module 'obsidian' {
 	interface TFolder {
@@ -202,7 +206,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const thisPlugin = this;
 		this.unpatchMenu = around(Menu.prototype, {
 			showAtMouseEvent: (original) => function (...args) {
-				if ((args[0].target as HTMLElement).getAttribute('aria-label') === 'Change sort order') {
+				if ((args[0].target as HTMLElement).getAttribute('aria-label') === i18next.t("plugins.file-explorer.action-change-sort")) {
 					const menu = this;
 					menu.sections.unshift("custom-sorting");
 					if (thisPlugin.manualSortingEnabled) {

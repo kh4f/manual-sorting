@@ -16,7 +16,7 @@ import ManualSortingPlugin from './main';
 export class FileOrderManager {
 	private _customFileOrder: FileOrder;
 
-    constructor(private plugin: ManualSortingPlugin) {}
+	constructor(private plugin: ManualSortingPlugin) { }
 
 	/**
 	 * Saves the custom file order to the plugin's data storage.
@@ -26,13 +26,13 @@ export class FileOrderManager {
 	 * Preloading previously saved data is avoided to save time.
 	 */
 	private async _saveCustomOrder() {
-		const data: PluginData = {customFileOrder: {}};
+		const data: PluginData = { customFileOrder: {}, draggingEnabled: this.plugin.draggingEnabled };
 		data.customFileOrder = this._customFileOrder;
 		await this.plugin.saveData(data);
 	}
-	
+
 	private async _loadCustomOrder() {
-		const defaultOrder = {customFileOrder: {"/": []}};
+		const defaultOrder = { customFileOrder: { "/": [] } };
 		const data = Object.assign({}, defaultOrder, await this.plugin.loadData());
 		await this._migrateDataToNewFormat(data);
 		this._customFileOrder = data.customFileOrder;
@@ -42,10 +42,10 @@ export class FileOrderManager {
 	private async _migrateDataToNewFormat(data: PluginData) {
 		const keys = Object.keys(data);
 		const otherKeys = keys.filter(key => key !== 'customFileOrder');
-		
+
 		if (otherKeys.length > 0) {
 			for (const key of otherKeys) {
-				data.customFileOrder[key] = data[key] ;
+				data.customFileOrder[key] = data[key];
 				delete data[key];
 			}
 		}
@@ -57,7 +57,7 @@ export class FileOrderManager {
 	}
 
 	resetOrder() {
-		this._customFileOrder = {"/": []};
+		this._customFileOrder = { "/": [] };
 		this._saveCustomOrder();
 	}
 
@@ -71,26 +71,26 @@ export class FileOrderManager {
 		console.log("Order updated:", this._customFileOrder);
 	}
 
-    private async _getCurrentOrder() {
+	private async _getCurrentOrder() {
 		const currentData: { [folderPath: string]: string[] } = {};
-        const explorerView = this.plugin.app.workspace.getLeavesOfType("file-explorer")[0]?.view as FileExplorerView;
+		const explorerView = this.plugin.app.workspace.getLeavesOfType("file-explorer")[0]?.view as FileExplorerView;
 
-        const indexFolder = (folder: TFolder) => {
-            const sortedItems = explorerView.getSortedFolderItems(folder);
-            const sortedItemPaths = sortedItems.map((item) => item.file.path);
-            currentData[folder.path] = sortedItemPaths;
+		const indexFolder = (folder: TFolder) => {
+			const sortedItems = explorerView.getSortedFolderItems(folder);
+			const sortedItemPaths = sortedItems.map((item) => item.file.path);
+			currentData[folder.path] = sortedItemPaths;
 
-            for (const item of sortedItems) {
-                const itemObject = item.file;
-                if (itemObject instanceof TFolder) {
-                    indexFolder(itemObject);
-                }
-            }
-        };
+			for (const item of sortedItems) {
+				const itemObject = item.file;
+				if (itemObject instanceof TFolder) {
+					indexFolder(itemObject);
+				}
+			}
+		};
 
-        indexFolder(this.plugin.app.vault.root);
-        return currentData;
-    }
+		indexFolder(this.plugin.app.vault.root);
+		return currentData;
+	}
 
 	private async _matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
 		let result: FileOrder = {};
@@ -192,7 +192,7 @@ export class FileOrderManager {
 	getFlattenPaths() {
 		function flattenPaths(obj: { [key: string]: string[] }, path: string = "/"): string[] {
 			let result = [];
-			
+
 			if (obj[path]) {
 				for (const item of obj[path]) {
 					result.push(item);

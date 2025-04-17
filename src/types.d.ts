@@ -3,6 +3,7 @@ import { TAbstractFile } from "obsidian";
 
 export interface PluginData {
 	customFileOrder: FileOrder;
+	draggingEnabled: boolean;
 	[otherKey: string]: any;
 }
 

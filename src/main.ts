@@ -4,12 +4,13 @@ import { around } from 'monkey-around';
 import Sortable, { SortableEvent } from 'sortablejs';
 import { ResetOrderConfirmationModal } from './ResetOrderConfirmationModal';
 import { FileOrderManager } from './FileOrderManager';
+import type { PluginData } from './types';
 
 
 
 export default class ManualSortingPlugin extends Plugin {
 	private _manualSortingEnabled: boolean = false;
-	private _draggingEnabled: boolean = true;
+	draggingEnabled: boolean;
 	private _fileOrderManager = new FileOrderManager(this);
 	private _explorerUnpatchFunctions: Function[] = [];
 	private _unpatchMenu: Function | null = null;
@@ -18,6 +19,7 @@ export default class ManualSortingPlugin extends Plugin {
 	private _sortableInstances: Sortable[] = [];
 
 	async onload() {
+		await this._loadDragging();
 		this.app.workspace.onLayoutReady(() => {
 			this.initialize();
 		});
@@ -30,6 +32,11 @@ export default class ManualSortingPlugin extends Plugin {
 		this._unpatchMenu && this._unpatchMenu() && (this._unpatchMenu = null);
 	}
 
+	async _loadDragging() {
+		const data: PluginData = await this.loadData();
+		this.draggingEnabled = data.draggingEnabled === undefined ? true : data.draggingEnabled;
+	}
+
 	async initialize() {
 		this.patchSortable();
 		this.patchSortOrderMenu();
@@ -37,7 +44,7 @@ export default class ManualSortingPlugin extends Plugin {
 		await this._fileOrderManager.initOrder();
 		this._manualSortingEnabled = true;
 		this.reloadExplorerPlugin();
-		
+
 		this.registerEvent(this.app.vault.on('create', (treeItem) => {
 			if (this._manualSortingEnabled) {
 				console.log('Manually created item:', treeItem);
@@ -48,8 +55,9 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async toogleDragging() {
 		this._sortableInstances.forEach((sortableInstance) => {
-			sortableInstance.option('disabled', !this._draggingEnabled);
+			sortableInstance.option('disabled', !this.draggingEnabled);
 		});
+		await this.saveData(Object.assign({}, await this.loadData(), { draggingEnabled: this.draggingEnabled }));
 	}
 
 	async patchSortable() {
@@ -115,8 +123,8 @@ export default class ManualSortingPlugin extends Plugin {
 								} else {
 									const actualParentPath = childElement.parentElement?.previousElementSibling?.getAttribute("data-path") || "/";
 									const itemObjectParentPath = itemObject.parent?.path;
-									
-									if ((itemObjectParentPath !== actualParentPath) && !thisPlugin._draggingEnabled) {
+
+									if ((itemObjectParentPath !== actualParentPath) && !thisPlugin.draggingEnabled) {
 										console.warn("Item not in the right place, removing its DOM element:", childPath);
 										this.removeChild(childElement);
 										// Sync file explorer DOM tree
@@ -159,7 +167,7 @@ export default class ManualSortingPlugin extends Plugin {
 							console.warn(`All children loaded for ${elementFolderPath}`);
 							thisPlugin._fileOrderManager.restoreOrder(itemContainer, elementFolderPath);
 						}
-						
+
 						function makeSortable(container: HTMLElement) {
 							if (Sortable.get(container)) return;
 							console.log(`Initiating Sortable on`, container);
@@ -199,6 +207,7 @@ export default class ManualSortingPlugin extends Plugin {
 								draggable: ".tree-item",
 								chosenClass: "manual-sorting-chosen",
 								ghostClass: "manual-sorting-ghost",
+								disabled: !thisPlugin.draggingEnabled,
 
 								animation: 100,
 								swapThreshold: maxSwapThreshold,
@@ -255,13 +264,13 @@ export default class ManualSortingPlugin extends Plugin {
 											const extension = lastDotIndex === -1 ? "" : fullName.slice(lastDotIndex + 1);
 											let revisedPath = path;
 											let counter = 1;
-											
+
 											while (thisPlugin.app.vault.getAbstractFileByPath(revisedPath)) {
 												const newName = `${name} ${counter}${extension ? '.' + extension : ''}`;
 												revisedPath = folderPathInItemNewPath + newName;
 												counter++;
 											}
-											
+
 											return revisedPath;
 										}
 
@@ -288,16 +297,16 @@ export default class ManualSortingPlugin extends Plugin {
 								},
 								onUnchoose: () => {
 									console.log("Sortable: onUnchoose");
-									if (thisPlugin._draggingEnabled) {
+									if (thisPlugin.draggingEnabled) {
 										try {
-											const dropEvent = new DragEvent("drop", { 
-												bubbles: true, 
-												cancelable: true, 
+											const dropEvent = new DragEvent("drop", {
+												bubbles: true,
+												cancelable: true,
 												dataTransfer: new DataTransfer()
 											});
-										
+
 											document.dispatchEvent(dropEvent);
-										} catch {}
+										} catch { }
 									}
 								},
 							});
@@ -349,7 +358,7 @@ export default class ManualSortingPlugin extends Plugin {
 					original.apply(this, [file, oldPath]);
 					if (thisPlugin._manualSortingEnabled) {
 						const oldDirPath = oldPath.substring(0, oldPath.lastIndexOf("/")) || "/";
-						if (!thisPlugin._draggingEnabled && oldDirPath !== file.parent?.path) {
+						if (!thisPlugin.draggingEnabled && oldDirPath !== file.parent?.path) {
 							thisPlugin._fileOrderManager.moveFile(oldPath, file.path, 0);
 						}
 						thisPlugin._fileOrderManager.renameItem(oldPath, file.path);
@@ -464,9 +473,9 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async reloadExplorerPlugin() {
-        const fileExplorerPlugin = this.app.internalPlugins.plugins['file-explorer'];
-        fileExplorerPlugin.disable();
-        await fileExplorerPlugin.enable();
+		const fileExplorerPlugin = this.app.internalPlugins.plugins['file-explorer'];
+		fileExplorerPlugin.disable();
+		await fileExplorerPlugin.enable();
 		console.log("File Explorer plugin reloaded");
 
 		const toggleSortingClass = async () => {
@@ -475,14 +484,14 @@ export default class ManualSortingPlugin extends Plugin {
 		}
 		toggleSortingClass();
 
-		const configureAutoScrolling = async () =>  {
+		const configureAutoScrolling = async () => {
 			let scrollInterval: number | null = null;
 			const explorer = await this.waitForExplorer();
 			if (!explorer) return;
 
 			explorer.removeEventListener("dragover", handleDragOver);
 
-			if(!this._manualSortingEnabled) return; 
+			if (!this._manualSortingEnabled) return;
 			explorer.addEventListener("dragover", handleDragOver);
 
 			function handleDragOver(event: DragEvent) {
@@ -529,7 +538,7 @@ export default class ManualSortingPlugin extends Plugin {
 			await this.app.plugins.disablePlugin('folder-notes');
 			this.app.plugins.enablePlugin('folder-notes');
 		}
-    }
+	}
 
 	async patchSortOrderMenu() {
 		const thisPlugin = this;
@@ -553,7 +562,7 @@ export default class ManualSortingPlugin extends Plugin {
 							.onClick(async () => {
 								if (!thisPlugin._manualSortingEnabled) {
 									thisPlugin._manualSortingEnabled = true;
-									thisPlugin._draggingEnabled = true;
+									thisPlugin.draggingEnabled = true;
 									await thisPlugin._fileOrderManager.updateOrder();
 									thisPlugin.reloadExplorerPlugin();
 								} else {
@@ -567,14 +576,14 @@ export default class ManualSortingPlugin extends Plugin {
 							item.setTitle('Dragging')
 								.setIcon('move')
 								.setSection(sortingMenuSection)
-								.onClick(() => {
-									thisPlugin._draggingEnabled = !thisPlugin._draggingEnabled;
-									thisPlugin.toogleDragging();
+								.onClick(async () => {
+									thisPlugin.draggingEnabled = !thisPlugin.draggingEnabled;
+									await thisPlugin.toogleDragging();
 								});
-								
-							const checkboxContainerEl = item.dom.createEl('div', {cls: 'menu-item-icon dragging-enabled-checkbox'});
-							const checkboxEl = checkboxContainerEl.createEl('input', {type: 'checkbox'});
-							checkboxEl.checked = thisPlugin._draggingEnabled;
+
+							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' });
+							const checkboxEl = checkboxContainerEl.createEl('input', { type: 'checkbox' });
+							checkboxEl.checked = thisPlugin.draggingEnabled;
 						});
 					}
 					menu.addItem((item: MenuItem) => {

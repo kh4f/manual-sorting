@@ -39,6 +39,8 @@
 	"dependencies": {
 		"i18next": "^24.2.2",
 		"monkey-around": "^3.0.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
 		"sortablejs": "^1.15.6"
 	},
 	"overrides": {

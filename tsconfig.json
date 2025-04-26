@@ -21,6 +21,7 @@
 	"types": [
 	  "obsidian-typings"
 	],
+	"jsx": "react-jsx",
   },
   "include": [
     "**/*.ts"

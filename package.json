@@ -25,6 +25,8 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^22.13.1",
+		"@types/react": "^19.1.2",
+		"@types/react-dom": "^19.1.2",
 		"@types/sortablejs": "^1.15.8",
 		"@typescript-eslint/eslint-plugin": "^8.24.0",
 		"@typescript-eslint/parser": "^8.24.0",

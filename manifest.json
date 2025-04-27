@@ -1,7 +1,7 @@
 {
 	"id": "manual-sorting",
 	"name": "Manual Sorting",
-	"version": "2.3.1",
+	"version": "2.3.2",
 	"minAppVersion": "0.15.0",
 	"description": "Drag'n'Drop sorting within file explorer.",
 	"author": "Kh4f",

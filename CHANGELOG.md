@@ -1,6 +1,14 @@
 # Changelog
 
 
+### [2.3.2](https://github.com/Kh4f/manual-sorting/compare/2.3.1...2.3.2) (2025-04-27)
+
+
+### 🩹 Bug Fixes
+
+* **dnd:** correct file/folder info tooltip behavior while dragging ([15f463a](https://github.com/Kh4f/manual-sorting/commit/15f463aa4c82981eb0aec1f87c7447c75a4ec898))
+* **dnd:** correct hover state after dragging ([916b773](https://github.com/Kh4f/manual-sorting/commit/916b7738efccb22a440d1ce1b7704101b2abdb43))
+
 ### [2.3.1](https://github.com/Kh4f/manual-sorting/compare/2.3.0...2.3.1) (2025-04-21)
 
 

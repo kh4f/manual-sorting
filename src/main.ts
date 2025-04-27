@@ -183,7 +183,7 @@ export default class ManualSortingPlugin extends Plugin {
 							thisPlugin._fileOrderManager.restoreOrder(itemContainer, elementFolderPath);
 						}
 						
-						function makeSortable(container: HTMLElement) {
+						const makeSortable = (container: HTMLElement) => {
 							if (Sortable.get(container)) return;
 							console.log(`Initiating Sortable on`, container);
 
@@ -309,6 +309,18 @@ export default class ManualSortingPlugin extends Plugin {
 										const fileTreeItem = fileExplorerView.fileItems[draggedItemPath] as TreeItem<FileTreeItem>;
 										fileTreeItem.setCollapsed = origSetCollapsed;
 									}
+
+									// Manually trigger the tooltip for the dragged item
+									const draggedItemSelf = evt.item.querySelector(".tree-item-self") as HTMLElement;
+									const hoverEvent = new MouseEvent("mouseover", { bubbles: true, cancelable: true });
+									draggedItemSelf.dispatchEvent(hoverEvent);
+
+									// Simulate hover on the dragged item
+									document.querySelector(".tree-item-self.hovered")?.classList.remove("hovered");
+									draggedItemSelf.classList.add("hovered");
+									draggedItemSelf.addEventListener("mouseleave", () => {
+										draggedItemSelf.classList.remove("hovered");
+									}, { once: true });
 								},
 								onUnchoose: () => {
 									console.log("Sortable: onUnchoose");
@@ -396,7 +408,17 @@ export default class ManualSortingPlugin extends Plugin {
 						thisPlugin._recentExplorerAction = 'sort';
 					}
 					original.apply(this, args);
-				}
+				},
+				onFileMouseover: (original) => function (event: MouseEvent, targetEl: HTMLElement) {
+					if (thisPlugin.isManualSortingEnabled()) {
+						// Set targetEl to the dragging element if it exists to ensure the tooltip is shown correctly
+						const draggingElement = document.querySelector(".manual-sorting-chosen");
+						if (draggingElement) {
+							targetEl = draggingElement as HTMLElement;
+						}
+					}
+					original.apply(this, [event, targetEl]);
+				},
 			})
 		);
 

@@ -3,9 +3,9 @@ import { IconBase } from "./IconBase";
 export const LockDragging = () => {
 	return (
 		<IconBase className="lock-dragging">
-			<circle cx="3" cy="4" r="1" fill="currentColor" />
-			<circle cx="3" cy="11" r="1" fill="currentColor" />
-			<circle cx="3" cy="18" r="1" fill="currentColor" />
+			<circle cx="3" cy="4" r="1" fill="currentColor" stroke="none" />
+			<circle cx="3" cy="11" r="1" fill="currentColor" stroke="none" />
+			<circle cx="3" cy="18" r="1" fill="currentColor" stroke="none" />
 			<path d="M6 4H13" />
 			<path d="M6 11H8" />
 			<path d="M6 18H7" />

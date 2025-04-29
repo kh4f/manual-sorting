@@ -1,5 +1,3 @@
-import React from "react";
-
 interface IconBaseProps extends React.SVGProps<SVGSVGElement> {
 	children: React.ReactNode;
 	className?: string;

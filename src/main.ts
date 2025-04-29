@@ -6,7 +6,7 @@ import { ResetOrderConfirmationModal } from './ResetOrderConfirmationModal';
 import { FileOrderManager } from './FileOrderManager';
 import { PluginSettings } from './types';
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from './constants';
-import { FolderSortToolbar } from './components/FolderSortToolbar';
+import { SortingModeBadge } from './components/SortingModeBadge';
 
 
 export default class ManualSortingPlugin extends Plugin {

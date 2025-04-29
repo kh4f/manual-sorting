@@ -1,6 +1,7 @@
 import * as Icons from "./icons"
 
-export const FolderSortToolbar = () => {
+
+export const SortingModeBadge = () => {
 	return (
 		<>
 			<Icons.SortAlphaAsc />

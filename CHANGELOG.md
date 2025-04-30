@@ -1,6 +1,13 @@
 # Changelog
 
 
+### [2.3.3](https://github.com/Kh4f/manual-sorting/compare/2.3.2...2.3.3) (2025-04-30)
+
+
+### 🩹 Bug Fixes
+
+* **mobile:** prevent tooltip and hover simulation after dragging ([f6de298](https://github.com/Kh4f/manual-sorting/commit/f6de2988e5a285023e6b6609100a692964cddf68))
+
 ### [2.3.2](https://github.com/Kh4f/manual-sorting/compare/2.3.1...2.3.2) (2025-04-27)
 
 

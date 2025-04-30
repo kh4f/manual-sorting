@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile } from 'obsidian';
+import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian';
 import { FileTreeItem, TreeItem, FileExplorerView } from 'obsidian-typings';
 import { around } from 'monkey-around';
 import Sortable, { SortableEvent } from 'sortablejs';
@@ -311,17 +311,19 @@ export default class ManualSortingPlugin extends Plugin {
 										fileTreeItem.setCollapsed = origSetCollapsed;
 									}
 
-									// Manually trigger the tooltip for the dragged item
-									const draggedItemSelf = evt.item.querySelector(".tree-item-self") as HTMLElement;
-									const hoverEvent = new MouseEvent("mouseover", { bubbles: true, cancelable: true });
-									draggedItemSelf.dispatchEvent(hoverEvent);
+									if (!Platform.isMobile) {
+										// Manually trigger the tooltip for the dragged item
+										const draggedItemSelf = evt.item.querySelector(".tree-item-self") as HTMLElement;
+										const hoverEvent = new MouseEvent("mouseover", { bubbles: true, cancelable: true });
+										draggedItemSelf.dispatchEvent(hoverEvent);
 
-									// Simulate hover on the dragged item
-									document.querySelector(".tree-item-self.hovered")?.classList.remove("hovered");
-									draggedItemSelf.classList.add("hovered");
-									draggedItemSelf.addEventListener("mouseleave", () => {
-										draggedItemSelf.classList.remove("hovered");
-									}, { once: true });
+										// Simulate hover on the dragged item
+										document.querySelector(".tree-item-self.hovered")?.classList.remove("hovered");
+										draggedItemSelf.classList.add("hovered");
+										draggedItemSelf.addEventListener("mouseleave", () => {
+											draggedItemSelf.classList.remove("hovered");
+										}, { once: true });
+									}
 								},
 								onUnchoose: () => {
 									console.log("Sortable: onUnchoose");

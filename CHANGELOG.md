@@ -1,6 +1,18 @@
 # Changelog
 
 
+## [2.4.0](https://github.com/Kh4f/manual-sorting/compare/2.3.3...2.4.0) (2025-05-04)
+
+### 🚀 Features
+
+* **dev:** add app reload button to file explorer header in dev mode ([6771a2e](https://github.com/Kh4f/manual-sorting/commit/6771a2e7c098a7f19876523c9d44ece5d427acde))
+
+
+### 🩹 Bug Fixes
+
+* **ui:** preserve scroll filler div at the top of tree-item containers when inserting new items ([01dd1ab](https://github.com/Kh4f/manual-sorting/commit/01dd1abd2091eeb1b5f6e0c96278d2f4512d07b2)), closes [#43](https://github.com/Kh4f/manual-sorting/issues/43)
+
+
 ### [2.3.3](https://github.com/Kh4f/manual-sorting/compare/2.3.2...2.3.3) (2025-04-30)
 
 

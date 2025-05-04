@@ -356,8 +356,12 @@ export default class ManualSortingPlugin extends Plugin {
 
 					for (const child of newChildren) {
 						if (!this.contains(child)) {
-							this.prepend(child);
 							if (child.classList.contains("tree-item")) {
+								// Fix #43: Obsidian has a top div in each .tree-item container to maintain correct scroll height
+								// so we leave it in place and insert the new item below it
+								const topmostTreeItem: HTMLElement | null = this.querySelector(".tree-item");
+								this.insertBefore(child, topmostTreeItem);
+
 								if (!(child.firstChild as HTMLElement)?.hasAttribute("data-path")) {
 									new MutationObserver((mutations, obs) => {
 										for (const mutation of mutations) {
@@ -371,6 +375,8 @@ export default class ManualSortingPlugin extends Plugin {
 								} else {
 									processNewItem(child);
 								}
+							} else {
+								this.prepend(child);
 							}
 						}
 					}

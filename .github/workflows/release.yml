@@ -20,8 +20,8 @@ jobs:
 
       - name: Build plugin
         run: |
-          npm install --legacy-peer-deps
-          npm run build
+          pnpm install --legacy-peer-deps
+          pnpm build
 
       - name: Extract release notes from CHANGELOG.md
         run: |

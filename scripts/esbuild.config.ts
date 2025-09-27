@@ -1,4 +1,4 @@
-import { BuildOptions } from "esbuild";
+import { type BuildOptions } from "esbuild";
 import builtins from "builtin-modules";
 
 const banner =

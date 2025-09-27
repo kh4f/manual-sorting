@@ -1,5 +1,5 @@
 import { TFolder } from 'obsidian';
-import { FileOrder } from '@/types';
+import { type FileOrder } from '@/types';
 import ManualSortingPlugin from '@/main';
 
 

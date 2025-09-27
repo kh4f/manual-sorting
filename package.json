@@ -54,8 +54,5 @@
 		"i18next": "^25.5.2",
 		"monkey-around": "^3.0.0",
 		"sortablejs": "^1.15.6"
-	},
-	"overrides": {
-		"i18next": "^24.2.2"
 	}
 }

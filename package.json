@@ -23,6 +23,8 @@
 	],
 	"author": "Kh4f",
 	"repository": "https://github.com/kh4f/manual-sorting",
+	"bugs": "https://github.com/kh4f/manual-sorting/issues",
+	"homepage": "https://github.com/kh4f/manual-sorting#readme",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^22.13.1",

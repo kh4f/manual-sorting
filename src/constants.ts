@@ -1,4 +1,4 @@
-import { PluginSettings } from './types';
+import { PluginSettings } from '@/types';
 
 
 export const MANUAL_SORTING_MODE_ID = 'manual-sorting';

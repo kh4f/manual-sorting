@@ -2,10 +2,10 @@ import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from
 import { FileTreeItem, TreeItem, FileExplorerView } from 'obsidian-typings';
 import { around } from 'monkey-around';
 import Sortable, { SortableEvent } from 'sortablejs';
-import { ResetOrderConfirmationModal } from './ResetOrderConfirmationModal';
-import { FileOrderManager } from './FileOrderManager';
-import { PluginSettings } from './types';
-import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from './constants';
+import { ResetOrderConfirmationModal } from '@/ResetOrderConfirmationModal';
+import { FileOrderManager } from '@/FileOrderManager';
+import { PluginSettings } from '@/types';
+import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants';
 
 
 export default class ManualSortingPlugin extends Plugin {

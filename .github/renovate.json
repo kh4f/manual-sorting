@@ -1,0 +1,49 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["mergeConfidence:all-badges"],
+	"ignorePaths": ["node_modules/**", "tests/**"],
+	"dependencyDashboard": true,
+	"rangeStrategy": "bump",
+	"prHourlyLimit": 0,
+	"semanticCommits": "enabled",
+	"commitMessageAction": "bump",
+	"commitMessageTopic": "`{{depName}}`",
+	"commitMessageExtra": "from {{currentVersion}} to {{newVersion}}",
+	"commitBody": "Signed-off-by: {{{gitAuthor}}}",
+	"branchTopic": "{{depNameSanitized}}-{{newVersion}}",
+	"packageRules": [
+		{
+            "matchUpdateTypes": "patch",
+            "automerge": true,
+			"automergeType": "branch",
+			"matchCurrentAge": "> 3 days"
+        },
+		{
+            "matchUpdateTypes": "minor",
+			"matchCurrentVersion": "!/^0/",
+            "automerge": true,
+			"automergeType": "branch",
+			"matchCurrentAge": "> 3 days"
+        },
+		{
+			"matchDepTypes": ["dependencies"],
+			"semanticCommitScope": "deps"
+		},
+		{
+			"matchDepTypes": ["devDependencies"],
+			"semanticCommitScope": "dev-deps"
+		},
+		{
+			"matchDepTypes": ["peerDependencies"],
+			"semanticCommitScope": "peer-deps"
+		},
+		{
+            "matchManagers": ["github-actions"],
+            "semanticCommitScope": "actions"
+		},
+		{
+			"matchDepNames": "pnpm",
+			"semanticCommitScope": "package-manager"
+		}
+	]
+}

@@ -1,6 +1,6 @@
 import { TFolder } from 'obsidian'
 import { type FileOrder } from '@/types'
-import ManualSortingPlugin from '@/main'
+import ManualSortingPlugin from '@/plugin'
 
 export class OrderManager {
 	constructor(private _plugin: ManualSortingPlugin) {}

@@ -22,7 +22,7 @@
 		"drag-and-drop"
 	],
 	"author": "Kh4f",
-	"repository": "Kh4f/manual-sorting",
+	"repository": "https://github.com/kh4f/manual-sorting",
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^22.13.1",

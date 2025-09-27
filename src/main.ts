@@ -2,7 +2,7 @@ import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from
 import type { FileTreeItem, TreeItem, FileExplorerView } from 'obsidian-typings';
 import { around } from 'monkey-around';
 import Sortable, { type SortableEvent } from 'sortablejs';
-import { ResetOrderConfirmationModal } from '@/ResetOrderConfirmationModal';
+import { ResetOrderModal } from '@/reset-order-modal';
 import { FileOrderManager } from '@/FileOrderManager';
 import { type PluginSettings } from '@/types';
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants';
@@ -665,7 +665,7 @@ export default class ManualSortingPlugin extends Plugin {
 							.onClick(async () => {
 								const fileExplorerView = thisPlugin.getFileExplorerView();
 								const prevSelectedSortOrder = fileExplorerView.sortOrder;
-								new ResetOrderConfirmationModal(thisPlugin.app, prevSelectedSortOrder, async () => {
+								new ResetOrderModal(thisPlugin.app, prevSelectedSortOrder, async () => {
 									thisPlugin._fileOrderManager.resetOrder();
 									await thisPlugin._fileOrderManager.updateOrder();
 									if (thisPlugin.isManualSortingEnabled()) {

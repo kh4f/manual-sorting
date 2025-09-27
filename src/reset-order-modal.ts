@@ -1,6 +1,6 @@
 import { App, ButtonComponent, Modal } from 'obsidian';
 
-export class ResetOrderConfirmationModal extends Modal {
+export class ResetOrderModal extends Modal {
     constructor(app: App, prevSelectedSortOrder: string, onSubmit: () => void) {
         super(app);
         this.setTitle("Manual sorting");

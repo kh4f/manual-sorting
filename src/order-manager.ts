@@ -1,5 +1,5 @@
 import { TFolder } from 'obsidian'
-import { type FileOrder } from '@/types'
+import { type FileOrder } from '@/types.d'
 import ManualSortingPlugin from '@/plugin'
 
 export class OrderManager {

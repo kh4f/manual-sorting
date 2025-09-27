@@ -4,7 +4,7 @@ import { around } from 'monkey-around'
 import Sortable, { type SortableEvent } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
-import { type PluginSettings } from '@/types'
+import { type PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 
 export default class ManualSortingPlugin extends Plugin {

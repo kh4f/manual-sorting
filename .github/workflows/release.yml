@@ -21,7 +21,7 @@ jobs:
       - name: Build plugin
         run: |
           pnpm install --legacy-peer-deps
-          pnpm build
+          pnpm build:prod
 
       - name: Extract release notes from CHANGELOG.md
         run: |

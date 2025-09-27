@@ -4,7 +4,7 @@
 	"version": "2.4.0",
 	"minAppVersion": "0.15.0",
 	"description": "Drag'n'Drop sorting within file explorer.",
-	"author": "Kh4f",
-	"authorUrl": "https://github.com/Kh4f",
+	"author": "kh4f",
+	"authorUrl": "https://github.com/kh4f",
 	"isDesktopOnly": false
 }

@@ -3,7 +3,7 @@ import { type FileOrder } from '@/types';
 import ManualSortingPlugin from '@/main';
 
 
-export class FileOrderManager {
+export class OrderManager {
 
 	constructor(private _plugin: ManualSortingPlugin) {}
 

@@ -3,13 +3,13 @@ import type { FileTreeItem, TreeItem, FileExplorerView } from 'obsidian-typings'
 import { around } from 'monkey-around';
 import Sortable, { type SortableEvent } from 'sortablejs';
 import { ResetOrderModal } from '@/reset-order-modal';
-import { FileOrderManager } from '@/FileOrderManager';
+import { OrderManager } from '@/order-manager';
 import { type PluginSettings } from '@/types';
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants';
 
 
 export default class ManualSortingPlugin extends Plugin {
-	private _fileOrderManager: FileOrderManager;
+	private _orderManager: OrderManager;
 	private _explorerUnpatchFunctions: Function[] = [];
 	private _unpatchMenu: Function | null = null;
 	private _itemBeingCreatedManually: boolean = false;
@@ -67,8 +67,8 @@ export default class ManualSortingPlugin extends Plugin {
 		}
 		await this.patchFileExplorer(fileExplorerView);
 
-		this._fileOrderManager = new FileOrderManager(this);
-		await this._fileOrderManager.updateOrder();
+		this._orderManager = new OrderManager(this);
+		await this._orderManager.updateOrder();
 
 		this.isManualSortingEnabled() && this.reloadExplorerPlugin();
 		
@@ -142,7 +142,7 @@ export default class ManualSortingPlugin extends Plugin {
 								const itemObject = thisPlugin.app.vault.getAbstractFileByPath(childPath);
 								if (!itemObject) {
 									console.warn("Item not exists in vault, removing its DOM element:", childPath);
-									childPath && thisPlugin._fileOrderManager.updateOrder();
+									childPath && thisPlugin._orderManager.updateOrder();
 									this.removeChild(child);
 								} else {
 									const actualParentPath = childElement.parentElement?.previousElementSibling?.getAttribute("data-path") || "/";
@@ -170,7 +170,7 @@ export default class ManualSortingPlugin extends Plugin {
 						if (thisPlugin._itemBeingCreatedManually) {
 							console.log('Item is being created manually');
 							thisPlugin._itemBeingCreatedManually = false;
-							thisPlugin._fileOrderManager.updateOrder();
+							thisPlugin._orderManager.updateOrder();
 						}
 
 						if (itemContainer.classList.contains("all-children-loaded")) {
@@ -189,7 +189,7 @@ export default class ManualSortingPlugin extends Plugin {
 						if (childrenCount === expectedChildrenCount) {
 							itemContainer.classList.add("all-children-loaded");
 							console.warn(`All children loaded for ${elementFolderPath}`);
-							thisPlugin._fileOrderManager.restoreOrder(itemContainer, elementFolderPath);
+							thisPlugin._orderManager.restoreOrder(itemContainer, elementFolderPath);
 						}
 						
 						const makeSortable = (container: HTMLElement) => {
@@ -303,7 +303,7 @@ export default class ManualSortingPlugin extends Plugin {
 									}
 
 									const newDraggbleIndex = draggedOverElementPath ? 0 : evt.newDraggableIndex as number;
-									thisPlugin._fileOrderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex);
+									thisPlugin._orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex);
 									thisPlugin.app.fileManager.renameFile(movedItem, itemNewPath);
 
 									const fileExplorerView = thisPlugin.getFileExplorerView();
@@ -403,9 +403,9 @@ export default class ManualSortingPlugin extends Plugin {
 					if (thisPlugin.isManualSortingEnabled()) {
 						const oldDirPath = oldPath.substring(0, oldPath.lastIndexOf("/")) || "/";
 						if (!thisPlugin.settings.draggingEnabled && oldDirPath !== file.parent?.path) {
-							thisPlugin._fileOrderManager.moveFile(oldPath, file.path, 0);
+							thisPlugin._orderManager.moveFile(oldPath, file.path, 0);
 						}
-						thisPlugin._fileOrderManager.renameItem(oldPath, file.path);
+						thisPlugin._orderManager.renameItem(oldPath, file.path);
 					}
 				},
 				setSortOrder: (original) => function (sortOrder: string) {
@@ -485,7 +485,7 @@ export default class ManualSortingPlugin extends Plugin {
 							this.app.workspace.setActiveLeaf(o.leaf, {
 								focus: !0
 							});
-							const flattenPaths = thisPlugin._fileOrderManager.getFlattenPaths();
+							const flattenPaths = thisPlugin._orderManager.getFlattenPaths();
 							const itemsBetween = getItemsBetween(flattenPaths, r.file.path, t.file.path);
 							for (var a = 0, s = r ? itemsBetween : [t]; a < s.length; a++) {
 								var l = s[a];
@@ -637,7 +637,7 @@ export default class ManualSortingPlugin extends Plugin {
 								if (!thisPlugin.isManualSortingEnabled()) {
 									thisPlugin.settings.selectedSortOrder = MANUAL_SORTING_MODE_ID;
 									thisPlugin.saveSettings();
-									await thisPlugin._fileOrderManager.updateOrder();
+									await thisPlugin._orderManager.updateOrder();
 									thisPlugin.reloadExplorerPlugin();
 								}
 							});
@@ -666,8 +666,8 @@ export default class ManualSortingPlugin extends Plugin {
 								const fileExplorerView = thisPlugin.getFileExplorerView();
 								const prevSelectedSortOrder = fileExplorerView.sortOrder;
 								new ResetOrderModal(thisPlugin.app, prevSelectedSortOrder, async () => {
-									thisPlugin._fileOrderManager.resetOrder();
-									await thisPlugin._fileOrderManager.updateOrder();
+									thisPlugin._orderManager.resetOrder();
+									await thisPlugin._orderManager.updateOrder();
 									if (thisPlugin.isManualSortingEnabled()) {
 										thisPlugin.reloadExplorerPlugin();
 									}

@@ -4,6 +4,8 @@
 	"description": "An Obsidian plugin that adds manual drag&drop sorting to the file explorer.",
 	"main": "main.js",
 	"type": "module",
+	"engines": { "node": "^24.9.0" },
+	"packageManager": "pnpm@10.17.1",
 	"scripts": {
 		"dev": "tsx scripts/esbuild-runner.ts",
 		"build": "tsx scripts/esbuild-runner.ts --production",

@@ -23,19 +23,14 @@ jobs:
           pnpm install --legacy-peer-deps
           pnpm build:prod
 
-      - name: Extract release notes from CHANGELOG.md
-        run: |
-          awk '/^#.*[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+/{if (p) exit; p=1} p' CHANGELOG.md > RELEASE.md
-
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag="${GITHUB_REF#refs/tags/}"
-          RELEASE_NOTES=$(cat RELEASE.md)
 
           gh release create "$tag" \
             --title="$tag" \
-            --notes "$RELEASE_NOTES" \
+            --notes "$(pnpm --silent release:github)" \
             --draft \
             main.js manifest.json styles.css

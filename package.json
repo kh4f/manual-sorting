@@ -27,9 +27,8 @@
 		"build:dev": "tsdown",
 		"build:watch": "tsdown --watch src",
 		"build:prod": "tsdown --prod",
-		"release": "standard-version",
-		"bump": "standard-version --skip.tag",
-		"tag": "standard-version --skip.bump --skip.changelog --skip.commit"
+		"release": "relion",
+		"release:github": "relion -p github"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.36.0",
@@ -45,7 +44,7 @@
 		"jiti": "^2.6.0",
 		"obsidian": "latest",
 		"obsidian-typings": "latest",
-		"standard-version": "^9.5.0",
+		"relion": "^0.17.1",
 		"tsdown": "^0.15.5",
 		"tslib": "^2.8.1",
 		"tsx": "^4.20.6",

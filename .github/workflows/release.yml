@@ -1,36 +1,41 @@
-name: Release Plugin
+name: Release
 
-on:
-  push:
-    tags:
-      - "*"
+on: { push: { tags: '*' } }
 
 jobs:
-  build:
+  release:
+    name: Release & Publish
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # for creating a GitHub release
+    env:
+      TAG: ${{ github.ref_name }}
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
+        # fetch full history for correct commits parsing by relion
+        with: { fetch-depth: 0 }
 
-      - name: Use Node.js
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with: { version: 10.17.1 }
+
+      - name: Setup Node.js
         uses: actions/setup-node@v5
-        with:
-          node-version: "18.x"
+        with: { node-version: 24.9.0, cache: pnpm }
 
-      - name: Build plugin
-        run: |
-          pnpm install --legacy-peer-deps
-          pnpm build:prod
+      - name: Install deps
+        run: pnpm install
 
-      - name: Create release
+      - name: Build
+        run: pnpm build:prod
+
+      - name: Create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
-
-          gh release create "$tag" \
-            --title="$tag" \
+          gh release create $TAG \
+            --title $TAG \
             --notes "$(pnpm --silent release:github)" \
             --draft \
             main.js manifest.json styles.css

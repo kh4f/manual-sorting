@@ -7,7 +7,7 @@ export class OrderManager {
 
 	resetOrder() {
 		this._plugin.settings.customFileOrder = { '/': [] }
-		this._plugin.saveSettings()
+		void this._plugin.saveSettings()
 	}
 
 	async updateOrder() {
@@ -16,7 +16,7 @@ export class OrderManager {
 		const savedOrder = this._plugin.settings.customFileOrder
 		const newOrder = await this._matchSavedOrder(currentOrder, savedOrder)
 		this._plugin.settings.customFileOrder = newOrder
-		this._plugin.saveSettings()
+		void this._plugin.saveSettings()
 		console.log('Order updated:', this._plugin.settings.customFileOrder)
 	}
 
@@ -82,7 +82,7 @@ export class OrderManager {
 
 		data[newDir].splice(newDraggbleIndex, 0, newPath)
 
-		this._plugin.saveSettings()
+		void this._plugin.saveSettings()
 	}
 
 	async renameItem(oldPath: string, newPath: string) {
@@ -105,7 +105,7 @@ export class OrderManager {
 			data[newPath] = data[newPath].map((path: string) => path.replace(oldPath, newPath))
 		}
 
-		this._plugin.saveSettings()
+		void this._plugin.saveSettings()
 	}
 
 	async restoreOrder(container: Element, folderPath: string) {

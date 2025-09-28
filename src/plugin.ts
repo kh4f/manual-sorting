@@ -20,7 +20,7 @@ export default class ManualSortingPlugin extends Plugin {
 		if (this.isDevMode()) console.log('Loading Manual Sorting in dev mode')
 		await this.loadSettings()
 		this.app.workspace.onLayoutReady(() => {
-			this.initialize()
+			void this.initialize()
 		})
 	}
 
@@ -37,7 +37,7 @@ export default class ManualSortingPlugin extends Plugin {
 	async onunload() {
 		this._explorerUnpatchFunctions.forEach(unpatch => unpatch())
 		this._explorerUnpatchFunctions = []
-		if (this.isManualSortingEnabled()) this.reloadExplorerPlugin()
+		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
 		if (this._unpatchMenu?.()) this._unpatchMenu = null
 	}
 
@@ -55,8 +55,8 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async initialize() {
 		const prevManualSortingEnabledStatus = this.isManualSortingEnabled()
-		this.patchSortable()
-		this.patchSortOrderMenu()
+		void this.patchSortable()
+		void this.patchSortOrderMenu()
 
 		await this.waitForExplorer()
 		const fileExplorerView = this.getFileExplorerView()
@@ -69,7 +69,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this._orderManager = new OrderManager(this)
 		await this._orderManager.updateOrder()
 
-		if (this.isManualSortingEnabled()) this.reloadExplorerPlugin()
+		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
 
 		this.registerEvent(this.app.vault.on('create', (treeItem) => {
 			if (this.isManualSortingEnabled()) {
@@ -142,7 +142,7 @@ export default class ManualSortingPlugin extends Plugin {
 								const itemObject = thisPlugin.app.vault.getAbstractFileByPath(childPath)
 								if (!itemObject) {
 									console.warn('Item not exists in vault, removing its DOM element:', childPath)
-									if (childPath) thisPlugin._orderManager.updateOrder()
+									if (childPath) void thisPlugin._orderManager.updateOrder()
 									this.removeChild(child)
 								} else {
 									const actualParentPath = childElement.parentElement?.previousElementSibling?.getAttribute('data-path') || '/'
@@ -170,7 +170,7 @@ export default class ManualSortingPlugin extends Plugin {
 						if (thisPlugin._itemBeingCreatedManually) {
 							console.log('Item is being created manually')
 							thisPlugin._itemBeingCreatedManually = false
-							thisPlugin._orderManager.updateOrder()
+							void thisPlugin._orderManager.updateOrder()
 						}
 
 						if (itemContainer.classList.contains('all-children-loaded')) {
@@ -189,7 +189,7 @@ export default class ManualSortingPlugin extends Plugin {
 						if (childrenCount === expectedChildrenCount) {
 							itemContainer.classList.add('all-children-loaded')
 							console.warn(`All children loaded for ${elementFolderPath}`)
-							thisPlugin._orderManager.restoreOrder(itemContainer, elementFolderPath)
+							void thisPlugin._orderManager.restoreOrder(itemContainer, elementFolderPath)
 						}
 
 						const makeSortable = (container: HTMLElement) => {
@@ -303,8 +303,8 @@ export default class ManualSortingPlugin extends Plugin {
 									}
 
 									const newDraggbleIndex = draggedOverElementPath ? 0 : evt.newDraggableIndex!
-									thisPlugin._orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex)
-									thisPlugin.app.fileManager.renameFile(movedItem, itemNewPath)
+									void thisPlugin._orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex)
+									void thisPlugin.app.fileManager.renameFile(movedItem, itemNewPath)
 
 									const fileExplorerView = thisPlugin.getFileExplorerView()
 
@@ -403,9 +403,9 @@ export default class ManualSortingPlugin extends Plugin {
 					if (thisPlugin.isManualSortingEnabled()) {
 						const oldDirPath = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 						if (!thisPlugin.settings.draggingEnabled && oldDirPath !== file.parent?.path) {
-							thisPlugin._orderManager.moveFile(oldPath, file.path, 0)
+							void thisPlugin._orderManager.moveFile(oldPath, file.path, 0)
 						}
-						thisPlugin._orderManager.renameItem(oldPath, file.path)
+						void thisPlugin._orderManager.renameItem(oldPath, file.path)
 					}
 				},
 				setSortOrder: original => function (sortOrder: string) {
@@ -416,9 +416,9 @@ export default class ManualSortingPlugin extends Plugin {
 
 					console.log('Sort order changed to:', sortOrder)
 					if (prevManualSortingEnabledStatus) {
-						thisPlugin.reloadExplorerPlugin()
+						void thisPlugin.reloadExplorerPlugin()
 					}
-					thisPlugin.saveSettings()
+					void thisPlugin.saveSettings()
 				},
 				sort: original => function (...args: any) {
 					if (thisPlugin.isManualSortingEnabled()) {
@@ -547,7 +547,7 @@ export default class ManualSortingPlugin extends Plugin {
 			const explorerEl = await this.waitForExplorer()
 			explorerEl.toggleClass('manual-sorting-enabled', this.isManualSortingEnabled())
 		}
-		if (this.isManualSortingEnabled()) toggleSortingClass()
+		if (this.isManualSortingEnabled()) void toggleSortingClass()
 
 		const configureAutoScrolling = async () => {
 			let scrollInterval: number | null = null
@@ -596,7 +596,7 @@ export default class ManualSortingPlugin extends Plugin {
 				}
 			}
 		}
-		if (this.isManualSortingEnabled()) configureAutoScrolling()
+		if (this.isManualSortingEnabled()) void configureAutoScrolling()
 
 		// [Dev mode] Add reload button to file explorer header instead of auto-reveal button
 		const addReloadNavButton = async () => {
@@ -607,12 +607,12 @@ export default class ManualSortingPlugin extends Plugin {
 				this.app.commands.executeCommandById('app:reload')
 			})
 		}
-		if (this.isDevMode()) addReloadNavButton()
+		if (this.isDevMode()) void addReloadNavButton()
 
 		if (this.app.plugins.getPlugin('folder-notes')) {
 			console.log('Reloading Folder Notes plugin')
 			await this.app.plugins.disablePlugin('folder-notes')
-			this.app.plugins.enablePlugin('folder-notes')
+			void this.app.plugins.enablePlugin('folder-notes')
 		}
 	}
 
@@ -638,9 +638,9 @@ export default class ManualSortingPlugin extends Plugin {
 							.onClick(async () => {
 								if (!thisPlugin.isManualSortingEnabled()) {
 									thisPlugin.settings.selectedSortOrder = MANUAL_SORTING_MODE_ID
-									thisPlugin.saveSettings()
+									void thisPlugin.saveSettings()
 									await thisPlugin._orderManager.updateOrder()
-									thisPlugin.reloadExplorerPlugin()
+									void thisPlugin.reloadExplorerPlugin()
 								}
 							})
 					})
@@ -651,8 +651,8 @@ export default class ManualSortingPlugin extends Plugin {
 								.setSection(sortingMenuSection)
 								.onClick(() => {
 									thisPlugin.settings.draggingEnabled = !thisPlugin.settings.draggingEnabled
-									thisPlugin.saveSettings()
-									thisPlugin.toogleDragging()
+									void thisPlugin.saveSettings()
+									void thisPlugin.toogleDragging()
 								})
 
 							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' })
@@ -671,7 +671,7 @@ export default class ManualSortingPlugin extends Plugin {
 									thisPlugin._orderManager.resetOrder()
 									await thisPlugin._orderManager.updateOrder()
 									if (thisPlugin.isManualSortingEnabled()) {
-										thisPlugin.reloadExplorerPlugin()
+										void thisPlugin.reloadExplorerPlugin()
 									}
 								}).open()
 							})

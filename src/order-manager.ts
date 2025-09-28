@@ -10,17 +10,17 @@ export class OrderManager {
 		void this._plugin.saveSettings()
 	}
 
-	async updateOrder() {
+	updateOrder() {
 		console.log('Updating order...')
-		const currentOrder = await this._getCurrentOrder()
+		const currentOrder = this._getCurrentOrder()
 		const savedOrder = this._plugin.settings.customFileOrder
-		const newOrder = await this._matchSavedOrder(currentOrder, savedOrder)
+		const newOrder = this._matchSavedOrder(currentOrder, savedOrder)
 		this._plugin.settings.customFileOrder = newOrder
 		void this._plugin.saveSettings()
 		console.log('Order updated:', this._plugin.settings.customFileOrder)
 	}
 
-	private async _getCurrentOrder() {
+	private _getCurrentOrder() {
 		const currentData: Record<string, string[]> = {}
 		const explorerView = this._plugin.getFileExplorerView()
 
@@ -41,7 +41,7 @@ export class OrderManager {
 		return currentData
 	}
 
-	private async _matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
+	private _matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
 		const result: FileOrder = {}
 
 		for (const folder in currentOrder) {
@@ -63,7 +63,7 @@ export class OrderManager {
 		return result
 	}
 
-	async moveFile(oldPath: string, newPath: string, newDraggbleIndex: number) {
+	moveFile(oldPath: string, newPath: string, newDraggbleIndex: number) {
 		console.log(`Moving from "${oldPath}" to "${newPath}" at index ${newDraggbleIndex}`)
 		const data = this._plugin.settings.customFileOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
@@ -85,7 +85,7 @@ export class OrderManager {
 		void this._plugin.saveSettings()
 	}
 
-	async renameItem(oldPath: string, newPath: string) {
+	renameItem(oldPath: string, newPath: string) {
 		if (oldPath === newPath) return
 		console.log(`Renaming "${oldPath}" to "${newPath}"`)
 		const data = this._plugin.settings.customFileOrder

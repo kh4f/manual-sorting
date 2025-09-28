@@ -30,6 +30,12 @@ jobs:
       - name: Build
         run: pnpm build:prod
 
+      - name: Create release archive
+        run: |
+          ARCHIVE_NAME=${GITHUB_REPOSITORY##*/}-$TAG.zip
+          echo ARCHIVE_NAME=$ARCHIVE_NAME >> $GITHUB_ENV
+          zip -r $ARCHIVE_NAME manifest.json main.js styles.css
+
       - name: Create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,4 +44,4 @@ jobs:
             --title $TAG \
             --notes "$(pnpm --silent release:github)" \
             --draft \
-            main.js manifest.json styles.css
+            main.js manifest.json styles.css $ARCHIVE_NAME

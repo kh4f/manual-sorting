@@ -1,7 +1,19 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'relion'
 
 export default defineConfig({
-	bump: true,
+	bump: [
+		{
+			file: 'manifest.json',
+			pattern: /(version": )".*"/,
+			replacement: `$1"{{newVersion}}"`,
+		},
+		{
+			file: 'versions.json',
+			pattern: /(.*")/s,
+			replacement: `$1,\n\t"{{newVersion}}": "${/(^.*?minAppVersion": ")(.*?)(")/s.exec(readFileSync('manifest.json', 'utf8'))?.[2]}"`,
+		},
+	],
 	changelog: true,
 	commit: { gpgSign: true },
 	tag: { gpgSign: true },

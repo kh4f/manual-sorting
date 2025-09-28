@@ -102,7 +102,8 @@ export default class ManualSortingPlugin extends Plugin {
 			const getExplorer = () => document.querySelector('[data-type="file-explorer"] .nav-files-container')
 			const explorer = getExplorer()
 			if (explorer) {
-				resolve(explorer); return
+				resolve(explorer)
+				return
 			}
 
 			const observer = new MutationObserver((_, obs) => {

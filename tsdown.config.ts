@@ -12,4 +12,5 @@ export default defineConfig({
 	outDir: '.',
 	clean: false,
 	external: ['obsidian'],
+	noExternal: ['sortablejs', 'monkey-around'],
 })

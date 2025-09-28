@@ -17,7 +17,7 @@ export default class ManualSortingPlugin extends Plugin {
 	public settings: PluginSettings
 
 	async onload() {
-		this.isDevMode() && console.log('Loading Manual Sorting in dev mode')
+		if (this.isDevMode()) console.log('Loading Manual Sorting in dev mode')
 		await this.loadSettings()
 		this.app.workspace.onLayoutReady(() => {
 			this.initialize()
@@ -37,8 +37,8 @@ export default class ManualSortingPlugin extends Plugin {
 	async onunload() {
 		this._explorerUnpatchFunctions.forEach(unpatch => unpatch())
 		this._explorerUnpatchFunctions = []
-		this.isManualSortingEnabled() && this.reloadExplorerPlugin()
-		this._unpatchMenu?.() && (this._unpatchMenu = null)
+		if (this.isManualSortingEnabled()) this.reloadExplorerPlugin()
+		if (this._unpatchMenu?.()) this._unpatchMenu = null
 	}
 
 	isDevMode = () => {
@@ -69,7 +69,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this._orderManager = new OrderManager(this)
 		await this._orderManager.updateOrder()
 
-		this.isManualSortingEnabled() && this.reloadExplorerPlugin()
+		if (this.isManualSortingEnabled()) this.reloadExplorerPlugin()
 
 		this.registerEvent(this.app.vault.on('create', (treeItem) => {
 			if (this.isManualSortingEnabled()) {
@@ -113,7 +113,7 @@ export default class ManualSortingPlugin extends Plugin {
 				}
 			})
 			const workspace = document.querySelector('.workspace')
-			workspace && observer.observe(workspace, { childList: true, subtree: true })
+			if (workspace) observer.observe(workspace, { childList: true, subtree: true })
 		})
 	};
 
@@ -142,7 +142,7 @@ export default class ManualSortingPlugin extends Plugin {
 								const itemObject = thisPlugin.app.vault.getAbstractFileByPath(childPath)
 								if (!itemObject) {
 									console.warn('Item not exists in vault, removing its DOM element:', childPath)
-									childPath && thisPlugin._orderManager.updateOrder()
+									if (childPath) thisPlugin._orderManager.updateOrder()
 									this.removeChild(child)
 								} else {
 									const actualParentPath = childElement.parentElement?.previousElementSibling?.getAttribute('data-path') || '/'
@@ -547,7 +547,7 @@ export default class ManualSortingPlugin extends Plugin {
 			const explorerEl = await this.waitForExplorer()
 			explorerEl.toggleClass('manual-sorting-enabled', this.isManualSortingEnabled())
 		}
-		this.isManualSortingEnabled() && toggleSortingClass()
+		if (this.isManualSortingEnabled()) toggleSortingClass()
 
 		const configureAutoScrolling = async () => {
 			let scrollInterval: number | null = null
@@ -596,7 +596,7 @@ export default class ManualSortingPlugin extends Plugin {
 				}
 			}
 		}
-		this.isManualSortingEnabled() && configureAutoScrolling()
+		if (this.isManualSortingEnabled()) configureAutoScrolling()
 
 		// [Dev mode] Add reload button to file explorer header instead of auto-reveal button
 		const addReloadNavButton = async () => {
@@ -607,7 +607,7 @@ export default class ManualSortingPlugin extends Plugin {
 				this.app.commands.executeCommandById('app:reload')
 			})
 		}
-		this.isDevMode() && addReloadNavButton()
+		if (this.isDevMode()) addReloadNavButton()
 
 		if (this.app.plugins.getPlugin('folder-notes')) {
 			console.log('Reloading Folder Notes plugin')

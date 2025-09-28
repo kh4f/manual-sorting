@@ -20,6 +20,7 @@ export default defineConfig([
 		],
 		rules: {
 			'@typescript-eslint/restrict-template-expressions': 'off',
+			'@typescript-eslint/no-dynamic-delete': 'off',
 		},
 		languageOptions: {
 			parserOptions: {

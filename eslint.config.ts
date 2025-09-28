@@ -18,6 +18,9 @@ export default defineConfig([
 			tseslint.configs.strictTypeChecked,
 			tseslint.configs.stylisticTypeChecked,
 		],
+		rules: {
+			'@typescript-eslint/restrict-template-expressions': 'off',
+		},
 		languageOptions: {
 			parserOptions: {
 				projectService: true,

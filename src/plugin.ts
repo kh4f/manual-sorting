@@ -9,8 +9,8 @@ import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 
 export default class ManualSortingPlugin extends Plugin {
 	private _orderManager: OrderManager
-	private _explorerUnpatchFunctions: Function[] = []
-	private _unpatchMenu: Function | null = null
+	private _explorerUnpatchFunctions: ReturnType<typeof around>[] = []
+	private _unpatchMenu: ReturnType<typeof around> | null = null
 	private _itemBeingCreatedManually = false
 	private _recentExplorerAction = ''
 	private _sortableInstances: Sortable[] = []

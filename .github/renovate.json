@@ -16,14 +16,14 @@
             "matchUpdateTypes": "patch",
             "automerge": true,
 			"automergeType": "branch",
-			"matchCurrentAge": "> 3 days"
+			"minimumReleaseAge": "3 days"
         },
 		{
             "matchUpdateTypes": "minor",
 			"matchCurrentVersion": "!/^0/",
             "automerge": true,
 			"automergeType": "branch",
-			"matchCurrentAge": "> 3 days"
+			"minimumReleaseAge": "3 days"
         },
 		{
 			"matchDepTypes": ["dependencies"],

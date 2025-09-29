@@ -8,13 +8,13 @@ import { type PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 
 export default class ManualSortingPlugin extends Plugin {
-	private _orderManager: OrderManager
+	private _orderManager!: OrderManager
 	private _explorerUnpatchFunctions: ReturnType<typeof around>[] = []
 	private _unpatchMenu: ReturnType<typeof around> | null = null
 	private _itemBeingCreatedManually = false
 	private _recentExplorerAction = ''
 	private _sortableInstances: Sortable[] = []
-	public settings: PluginSettings
+	public settings!: PluginSettings
 
 	async onload() {
 		if (this.isDevMode()) console.log('Loading Manual Sorting in dev mode')

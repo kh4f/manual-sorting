@@ -30,6 +30,9 @@ jobs:
       - name: Build
         run: pnpm build:prod
 
+      - name: Lint
+        run: pnpm lint
+
       - name: Create release archive
         run: |
           ARCHIVE_NAME=${GITHUB_REPOSITORY##*/}-$TAG.zip

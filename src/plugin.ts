@@ -122,7 +122,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const thisPlugin = this
 
 		this._explorerUnpatchFunctions.push(
-			around((Object.getPrototypeOf(fileExplorerView.tree.infinityScroll.rootEl) as InfinityScrollRootEl).childrenEl, {
+			around(Object.getPrototypeOf((fileExplorerView.tree?.infinityScroll.rootEl as InfinityScrollRootEl).childrenEl) as HTMLElement, {
 				setChildrenInPlace: original => function (this: HTMLElement, newChildren: HTMLElement[]) {
 					const isInExplorer = !!this.closest('[data-type="file-explorer"]')
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')

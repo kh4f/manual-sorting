@@ -38,7 +38,10 @@ export default class ManualSortingPlugin extends Plugin {
 		this._explorerUnpatchFunctions.forEach(unpatch => unpatch())
 		this._explorerUnpatchFunctions = []
 		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
-		if (this._unpatchMenu?.()) this._unpatchMenu = null
+		if (this._unpatchMenu) {
+			this._unpatchMenu()
+			this._unpatchMenu = null
+		}
 	}
 
 	isDevMode = () => {

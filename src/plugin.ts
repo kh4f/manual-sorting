@@ -515,7 +515,7 @@ export default class ManualSortingPlugin extends Plugin {
 							!0
 					}
 					return this.clearSelectedDoms(),
-					this.setFocusedItem(null),
+					this.setFocusedItem(undefined as unknown as FileTreeItem | FolderTreeItem),
 					this.activeDom = t,
 					!1
 				},

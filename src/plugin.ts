@@ -326,7 +326,8 @@ export default class ManualSortingPlugin extends Plugin {
 
 									if (!Platform.isMobile) {
 										// Manually trigger the tooltip for the dragged item
-										const draggedItemSelf = evt.item.querySelector('.tree-item-self')!
+										const draggedItemSelf = evt.item.querySelector('.tree-item-self')
+										if (!draggedItemSelf) return
 										const hoverEvent = new MouseEvent('mouseover', { bubbles: true, cancelable: true })
 										draggedItemSelf.dispatchEvent(hoverEvent)
 

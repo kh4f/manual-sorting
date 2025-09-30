@@ -398,7 +398,7 @@ export default class ManualSortingPlugin extends Plugin {
 		)
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf(fileExplorerView), {
+			around(Object.getPrototypeOf(fileExplorerView) as FileExplorerView, {
 				onRename: original => function (this: FileExplorerView, file: TAbstractFile, oldPath: string) {
 					original.apply(this, [file, oldPath])
 					if (thisPlugin.isManualSortingEnabled()) {
@@ -441,7 +441,7 @@ export default class ManualSortingPlugin extends Plugin {
 		)
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf(fileExplorerView.tree), {
+			around(Object.getPrototypeOf(fileExplorerView.tree) as FileExplorerView['tree'], {
 				setFocusedItem: original => function (this: FileExplorerView['tree'], ...args: any) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						thisPlugin._recentExplorerAction = 'setFocusedItem'
@@ -514,7 +514,7 @@ export default class ManualSortingPlugin extends Plugin {
 		)
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf(fileExplorerView.tree?.infinityScroll), {
+			around(Object.getPrototypeOf(fileExplorerView.tree?.infinityScroll) as InfinityScroll, {
 				scrollIntoView: original => function (this: InfinityScroll, ...args: any) {
 					const targetElement = args[0].el
 					const isInExplorer = !!targetElement.closest('[data-type="file-explorer"]')

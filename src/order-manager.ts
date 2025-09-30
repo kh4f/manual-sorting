@@ -45,7 +45,7 @@ export class OrderManager {
 		const result: FileOrder = {}
 
 		for (const folder in currentOrder) {
-			if (savedOrder[folder]) {
+			if (folder in savedOrder) {
 				const prevOrder = savedOrder[folder]
 				const currentFiles = currentOrder[folder]
 				// Leave the files that have already been saved
@@ -69,7 +69,7 @@ export class OrderManager {
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
 
-		if (data[oldDir]) {
+		if (oldDir in data) {
 			data[oldDir] = data[oldDir].filter((path: string) => path !== oldPath)
 		} else {
 			console.warn(`[moveFile] folder "${oldDir}" not found in data.`)
@@ -91,13 +91,13 @@ export class OrderManager {
 		const data = this._plugin.settings.customFileOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 
-		if (data[oldDir]) {
+		if (oldDir in data) {
 			data[oldDir] = data[oldDir].map((path: string) => (path === oldPath ? newPath : path))
 		} else {
 			console.warn(`[renameItem] folder "${oldDir}" not found in data.`)
 		}
 
-		const itemIsFolder = !!data[oldPath]
+		const itemIsFolder = oldPath in data
 		if (itemIsFolder) {
 			console.log(`[renameItem] "${oldPath}" is a folder. Renaming its children as well.`)
 			data[newPath] = data[oldPath]
@@ -111,7 +111,7 @@ export class OrderManager {
 	async restoreOrder(container: Element, folderPath: string) {
 		const savedData = this._plugin.settings.customFileOrder
 		console.log(`Restoring order for "${folderPath}"`)
-		const savedOrder = savedData?.[folderPath]
+		const savedOrder = folderPath in savedData ? savedData[folderPath] : null
 		if (!savedOrder) return
 
 		const explorer = await this._plugin.waitForExplorer()
@@ -142,10 +142,10 @@ export class OrderManager {
 		function flattenPaths(obj: Record<string, string[]>, path = '/'): string[] {
 			const result = []
 
-			if (obj[path]) {
+			if (path in obj) {
 				for (const item of obj[path]) {
 					result.push(item)
-					if (obj[item]) {
+					if (item in obj) {
 						result.push(...flattenPaths(obj, item))
 					}
 				}

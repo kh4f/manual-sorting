@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian'
-import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl } from 'obsidian-typings'
+import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import Sortable, { type SortableEvent } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
@@ -381,9 +381,9 @@ export default class ManualSortingPlugin extends Plugin {
 						}
 					}
 				},
-				detach: original => function (this: HTMLElement, ...args: any) {
+				detach: original => function (this: HTMLElement) {
 					if (!thisPlugin.isManualSortingEnabled()) {
-						original.apply(this, args)
+						original.apply(this)
 						return
 					}
 					const itemNode = this
@@ -392,7 +392,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 					// Prevent detaching of existing items
 					if (!itemObject) {
-						original.apply(this, args)
+						original.apply(this)
 						return
 					}
 				},
@@ -423,11 +423,11 @@ export default class ManualSortingPlugin extends Plugin {
 					}
 					void thisPlugin.saveSettings()
 				},
-				sort: original => function (this: FileExplorerView, ...args: any) {
+				sort: original => function (this: FileExplorerView) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						thisPlugin._recentExplorerAction = 'sort'
 					}
-					original.apply(this, args)
+					original.apply(this)
 				},
 				onFileMouseover: original => function (this: FileExplorerView, event: MouseEvent, targetEl: HTMLElement) {
 					if (thisPlugin.isManualSortingEnabled()) {

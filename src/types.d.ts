@@ -29,6 +29,10 @@ declare module 'obsidian-typings' {
 	interface InfinityScrollRootEl {
 		childrenEl: HTMLElement
 	}
+	
+	interface TreeItem {
+		setCollapsed(collapsed: boolean, check: boolean): Promise<void>
+	}
 }
 
 interface SortablePrototype extends Sortable {

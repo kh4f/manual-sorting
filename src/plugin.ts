@@ -199,7 +199,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 							const minSwapThreshold = 0.3
 							const maxSwapThreshold = 2
-							let origSetCollapsed: (collapsed: boolean, check: boolean) => Promise<undefined>
+							let origSetCollapsed: TreeItem['setCollapsed']
 
 							function adjustSwapThreshold(item: HTMLElement) {
 								const previousItem = item.previousElementSibling
@@ -256,10 +256,10 @@ export default class ManualSortingPlugin extends Plugin {
 									const itemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
 									const itemObject = thisPlugin.app.vault.getAbstractFileByPath(itemPath)
 									if (itemObject instanceof TFolder) {
-										const fileTreeItem = thisPlugin.getFileExplorerView().fileItems[itemPath] as TreeItem<FileTreeItem>
+										const fileTreeItem = thisPlugin.getFileExplorerView().fileItems[itemPath] as TreeItem
 										fileTreeItem.setCollapsed(true, true)
 										origSetCollapsed || (origSetCollapsed = fileTreeItem.setCollapsed)
-										fileTreeItem.setCollapsed = () => undefined
+										fileTreeItem.setCollapsed = () => Promise.resolve()
 									}
 								},
 								onChange: (evt: SortableEvent) => {

@@ -121,7 +121,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const thisPlugin = this
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf((fileExplorerView.tree?.infinityScroll.rootEl as InfinityScrollRootEl).childrenEl) as HTMLElement, {
+			around(Object.getPrototypeOf((fileExplorerView.tree.infinityScroll.rootEl as InfinityScrollRootEl).childrenEl) as HTMLElement, {
 				setChildrenInPlace: original => function (this: HTMLElement, newChildren: HTMLElement[]) {
 					const isInExplorer = !!this.closest('[data-type="file-explorer"]')
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')
@@ -272,7 +272,7 @@ export default class ManualSortingPlugin extends Plugin {
 									const draggedOverElement = document.querySelector('.is-being-dragged-over')
 									const draggedItemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
 									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement | null)?.getAttribute('data-path')
-									const destinationPath = draggedOverElementPath || evt.to?.previousElementSibling?.getAttribute('data-path') || '/'
+									const destinationPath = draggedOverElementPath || evt.to.previousElementSibling?.getAttribute('data-path') || '/'
 
 									const movedItem = thisPlugin.app.vault.getAbstractFileByPath(draggedItemPath)!
 									const targetFolder = thisPlugin.app.vault.getFolderByPath(destinationPath)
@@ -310,7 +310,7 @@ export default class ManualSortingPlugin extends Plugin {
 									const fileExplorerView = thisPlugin.getFileExplorerView()
 
 									// Obsidian doesn't automatically call onRename in some cases - needed here to ensure the DOM reflects file structure changes
-									if (movedItem?.path === itemNewPath) {
+									if (movedItem.path === itemNewPath) {
 										console.warn('Calling onRename manually for', movedItem, itemNewPath)
 										fileExplorerView.onRename(movedItem, draggedItemPath)
 									}
@@ -389,7 +389,7 @@ export default class ManualSortingPlugin extends Plugin {
 						return
 					}
 					const itemNode = this
-					const itemPath = itemNode?.firstChild?.getAttribute?.('data-path')
+					const itemPath = itemNode.firstChild?.getAttribute?.('data-path')
 					const itemObject = thisPlugin.app.vault.getAbstractFileByPath(itemPath)
 
 					// Prevent detaching of existing items
@@ -519,7 +519,7 @@ export default class ManualSortingPlugin extends Plugin {
 		)
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf(fileExplorerView.tree?.infinityScroll) as InfinityScroll, {
+			around(Object.getPrototypeOf(fileExplorerView.tree.infinityScroll) as InfinityScroll, {
 				scrollIntoView: original => function (this: InfinityScroll, target: { el: HTMLElement }, ...args: unknown[]) {
 					const targetElement = target.el
 					const isInExplorer = !!targetElement.closest('[data-type="file-explorer"]')

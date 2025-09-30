@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian'
-import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll } from 'obsidian-typings'
+import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import Sortable, { type SortableEvent } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
@@ -122,7 +122,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const thisPlugin = this
 
 		this._explorerUnpatchFunctions.push(
-			around(Object.getPrototypeOf((fileExplorerView.tree?.infinityScroll.rootEl as { childrenEl: HTMLElement }).childrenEl), {
+			around((Object.getPrototypeOf(fileExplorerView.tree.infinityScroll.rootEl) as InfinityScrollRootEl).childrenEl, {
 				setChildrenInPlace: original => function (this: HTMLElement, newChildren: HTMLElement[]) {
 					const isInExplorer = !!this.closest('[data-type="file-explorer"]')
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')

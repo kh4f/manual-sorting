@@ -19,6 +19,10 @@ declare module 'obsidian-typings' {
 		updateShowUnsupportedFiles(): void
 		sortOrder: string
 	}
+
+	interface InfinityScrollRootEl {
+		childrenEl: HTMLElement
+	}
 }
 
 interface SortablePrototype extends Sortable {

@@ -128,7 +128,8 @@ export default class ManualSortingPlugin extends Plugin {
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')
 
 					if (!thisPlugin.isManualSortingEnabled() || !isFileTreeItem && !isInExplorer) {
-						return original.apply(this, [newChildren])
+						original.apply(this, [newChildren])
+						return
 					}
 
 					const currentChildren = Array.from(this.children)
@@ -383,7 +384,8 @@ export default class ManualSortingPlugin extends Plugin {
 				},
 				detach: original => function (this: HTMLElement, ...args: any) {
 					if (!thisPlugin.isManualSortingEnabled()) {
-						return original.apply(this, args)
+						original.apply(this, args)
+						return
 					}
 					const itemNode = this
 					const itemPath = itemNode?.firstChild?.getAttribute?.('data-path')
@@ -391,7 +393,8 @@ export default class ManualSortingPlugin extends Plugin {
 
 					// Prevent detaching of existing items
 					if (!itemObject) {
-						return original.apply(this, args)
+						original.apply(this, args)
+						return
 					}
 				},
 			}),
@@ -450,7 +453,8 @@ export default class ManualSortingPlugin extends Plugin {
 				},
 				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem<FileTreeItem>) {
 					if (!thisPlugin.isManualSortingEnabled()) {
-						return original.apply(this, [e, t])
+						original.apply(this, [e, t])
+						return
 					}
 
 					function getItemsBetween(allPaths: string[], path1: string, path2: string) {

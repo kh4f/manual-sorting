@@ -18,6 +18,6 @@ export default defineConfig({
 	outDir: '.',
 	clean: false,
 	external: ['obsidian'],
-	noExternal: ['sortablejs', 'monkey-around'],
+	noExternal: ['sortablejs', 'monkey-around', 'i18next'],
 	env: { DEV: !isProd },
 })

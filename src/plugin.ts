@@ -345,7 +345,9 @@ export default class ManualSortingPlugin extends Plugin {
 											})
 
 											document.dispatchEvent(dropEvent)
-										} catch {}
+										} catch {
+											// Ignore errors from dispatching drop event
+										}
 									}
 								},
 							})

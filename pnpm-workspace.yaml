@@ -2,3 +2,4 @@ onlyBuiltDependencies:
   - electron
   - esbuild
   - obsidian-typings
+  - simple-git-hooks

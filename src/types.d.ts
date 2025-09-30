@@ -15,7 +15,6 @@ declare module 'obsidian-typings' {
 		headerDom: { addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => void): HTMLElement }
 		onRename(file: TAbstractFile, oldPath: string): void
 		updateShowUnsupportedFiles(): void
-		sortOrder: string
 	}
 
 	interface InfinityScroll {

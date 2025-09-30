@@ -498,8 +498,8 @@ export default class ManualSortingPlugin extends Plugin {
 								focus: !0,
 							})
 							const flattenPaths = thisPlugin._orderManager.getFlattenPaths()
-							const itemsBetween = getItemsBetween(flattenPaths, r.file.path, t.file.path)
-							for (let a = 0, s = r ? itemsBetween : [t]; a < s.length; a++) {
+							const itemsBetween = r ? getItemsBetween(flattenPaths, r.file.path, t.file.path) : [t]
+							for (let a = 0, s = itemsBetween; a < s.length; a++) {
 								const l = s[a]
 								this.selectItem(l)
 							}

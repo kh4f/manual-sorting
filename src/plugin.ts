@@ -631,7 +631,8 @@ export default class ManualSortingPlugin extends Plugin {
 				) {
 					const menu = this
 					if (thisPlugin.isManualSortingEnabled()) {
-						menu.items.find((item: { checked: boolean }) => item.checked).setChecked(false)
+						const checkedItem = menu.items.find((item): item is MenuItem => item instanceof MenuItem && item.checked === true)
+						if (checkedItem) checkedItem.setChecked(false)
 					}
 
 					const sortingMenuSection = MANUAL_SORTING_MODE_ID

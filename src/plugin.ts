@@ -393,9 +393,9 @@ export default class ManualSortingPlugin extends Plugin {
 						original.apply(this)
 						return
 					}
-					const itemNode = this
-					const itemPath = (itemNode.firstChild as HTMLElement | null)?.getAttribute('data-path') ?? ''
-					const itemObject = thisPlugin.app.vault.getAbstractFileByPath(itemPath)
+					const firstChild = this.firstChild
+					const path = (firstChild instanceof HTMLElement) ? firstChild.getAttribute('data-path') : ''
+					const itemObject = thisPlugin.app.vault.getAbstractFileByPath(path || '')
 
 					// Prevent detaching of existing items
 					if (!itemObject) {

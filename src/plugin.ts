@@ -321,7 +321,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 									if (movedItem instanceof TFolder) {
 										const fileTreeItem = fileExplorerView.fileItems[draggedItemPath] as TreeItem
-										fileTreeItem.setCollapsed = origSetCollapsed
+										if (origSetCollapsed) fileTreeItem.setCollapsed = origSetCollapsed
 									}
 
 									if (!Platform.isMobile) {

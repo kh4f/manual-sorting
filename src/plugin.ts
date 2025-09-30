@@ -6,7 +6,6 @@ import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
 import type { PluginSettings, SortablePrototype } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
-import i18next from 'i18next'
 
 export default class ManualSortingPlugin extends Plugin {
 	private _orderManager!: OrderManager

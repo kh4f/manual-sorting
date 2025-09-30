@@ -1,5 +1,10 @@
 import { IconName, TAbstractFile } from 'obsidian'
 import type Sortable from 'sortablejs'
+import type { i18n } from 'i18next'
+
+declare global {
+	const i18next: i18n
+}
 
 export interface PluginSettings {
 	customFileOrder: FileOrder

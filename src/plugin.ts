@@ -519,12 +519,13 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree?.infinityScroll) as InfinityScroll, {
-				scrollIntoView: original => function (this: InfinityScroll, ...args: any) {
-					const targetElement = args[0].el
+				scrollIntoView: original => function (this: InfinityScroll, target: { el: HTMLElement }, ...args: unknown[]) {
+					const targetElement = target.el
 					const isInExplorer = !!targetElement.closest('[data-type="file-explorer"]')
 
 					if (!thisPlugin.isManualSortingEnabled() || !isInExplorer) {
-						return original.apply(this, args)
+						original.apply(this, [target, ...args])
+						return
 					}
 
 					if (thisPlugin._recentExplorerAction) {

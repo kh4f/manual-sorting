@@ -20,6 +20,10 @@ declare module 'obsidian-typings' {
 		sortOrder: string
 	}
 
+	interface InfinityScroll {
+		scrollIntoView(target: { el: HTMLElement }, ...args: unknown[]): void
+	}
+
 	interface InfinityScrollRootEl {
 		childrenEl: HTMLElement
 	}

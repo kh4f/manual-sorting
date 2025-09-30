@@ -199,7 +199,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 							const minSwapThreshold = 0.3
 							const maxSwapThreshold = 2
-							let origSetCollapsed: TreeItem['setCollapsed']
+							let origSetCollapsed: TreeItem['setCollapsed'] | null = null
 
 							function adjustSwapThreshold(item: HTMLElement) {
 								const previousItem = item.previousElementSibling
@@ -258,7 +258,7 @@ export default class ManualSortingPlugin extends Plugin {
 									if (itemObject instanceof TFolder) {
 										const fileTreeItem = thisPlugin.getFileExplorerView().fileItems[itemPath] as TreeItem
 										fileTreeItem.setCollapsed(true, true)
-										origSetCollapsed || (origSetCollapsed = fileTreeItem.setCollapsed)
+										if (!origSetCollapsed) origSetCollapsed = fileTreeItem.setCollapsed.bind(fileTreeItem)
 										fileTreeItem.setCollapsed = () => void 0
 									}
 								},

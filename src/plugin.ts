@@ -559,10 +559,10 @@ export default class ManualSortingPlugin extends Plugin {
 			const explorer = await this.waitForExplorer()
 			if (!explorer) return
 
-			explorer.removeEventListener('dragover', handleDragOver)
+			explorer.removeEventListener('dragover', handleDragOver as EventListener)
 
 			if (!this.isManualSortingEnabled()) return
-			explorer.addEventListener('dragover', handleDragOver)
+			explorer.addEventListener('dragover', handleDragOver as EventListener)
 
 			function handleDragOver(event: DragEvent) {
 				event.preventDefault()

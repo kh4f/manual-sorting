@@ -274,7 +274,11 @@ export default class ManualSortingPlugin extends Plugin {
 									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement | null)?.getAttribute('data-path')
 									const destinationPath = draggedOverElementPath || evt.to.previousElementSibling?.getAttribute('data-path') || '/'
 
-									const movedItem = thisPlugin.app.vault.getAbstractFileByPath(draggedItemPath)!
+									const movedItem = thisPlugin.app.vault.getAbstractFileByPath(draggedItemPath)
+									if (!movedItem) {
+										console.warn(`Dragged item not found in vault: ${draggedItemPath}`)
+										return
+									}
 									const targetFolder = thisPlugin.app.vault.getFolderByPath(destinationPath)
 									const folderPathInItemNewPath = (targetFolder?.isRoot()) ? '' : (destinationPath + '/')
 									let itemNewPath = folderPathInItemNewPath + movedItem.name

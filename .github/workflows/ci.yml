@@ -27,4 +27,4 @@ jobs:
         run: pnpm build:prod
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm lint:fix

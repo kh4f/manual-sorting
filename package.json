@@ -27,6 +27,8 @@
 		"build:dev": "tsdown",
 		"build:watch": "tsdown --watch src",
 		"build:prod": "tsdown --prod",
+		"lint": "eslint",
+		"lint:fix": "eslint --fix",
 		"release": "relion",
 		"release:github": "relion -p github"
 	},

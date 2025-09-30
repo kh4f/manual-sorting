@@ -307,7 +307,7 @@ export default class ManualSortingPlugin extends Plugin {
 										console.log('New item path:', itemNewPath)
 									}
 
-									const newDraggbleIndex = draggedOverElementPath ? 0 : evt.newDraggableIndex!
+									const newDraggbleIndex = draggedOverElementPath ? 0 : (typeof evt.newDraggableIndex === 'number' ? evt.newDraggableIndex : 0)
 									thisPlugin._orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex)
 									void thisPlugin.app.fileManager.renameFile(movedItem, itemNewPath)
 

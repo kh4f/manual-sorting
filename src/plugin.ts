@@ -259,7 +259,7 @@ export default class ManualSortingPlugin extends Plugin {
 										const fileTreeItem = thisPlugin.getFileExplorerView().fileItems[itemPath] as TreeItem
 										fileTreeItem.setCollapsed(true, true)
 										origSetCollapsed || (origSetCollapsed = fileTreeItem.setCollapsed)
-										fileTreeItem.setCollapsed = () => Promise.resolve()
+										fileTreeItem.setCollapsed = () => void 0
 									}
 								},
 								onChange: (evt: SortableEvent) => {

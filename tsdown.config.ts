@@ -19,4 +19,5 @@ export default defineConfig({
 	clean: false,
 	external: ['obsidian'],
 	noExternal: ['sortablejs', 'monkey-around'],
+	env: { DEV: !isProd },
 })

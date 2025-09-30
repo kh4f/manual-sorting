@@ -17,7 +17,7 @@ export default class ManualSortingPlugin extends Plugin {
 	public settings!: PluginSettings
 
 	async onload() {
-		if (this.isDevMode()) console.log('Loading Manual Sorting in dev mode')
+		if (process.env.DEV) console.log('Loading Manual Sorting in dev mode')
 		await this.loadSettings()
 		this.app.workspace.onLayoutReady(() => {
 			void this.initialize()
@@ -42,10 +42,6 @@ export default class ManualSortingPlugin extends Plugin {
 			this._unpatchMenu()
 			this._unpatchMenu = null
 		}
-	}
-
-	isDevMode = () => {
-		return process.env.NODE_ENV === 'development'
 	}
 
 	getFileExplorerView = () => {
@@ -611,7 +607,7 @@ export default class ManualSortingPlugin extends Plugin {
 				this.app.commands.executeCommandById('app:reload')
 			})
 		}
-		if (this.isDevMode()) void addReloadNavButton()
+		if (process.env.DEV) void addReloadNavButton()
 
 		if (this.app.plugins.getPlugin('folder-notes')) {
 			console.log('Reloading Folder Notes plugin')

@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian'
-import type { FileTreeItem, TreeItem, FileExplorerView } from 'obsidian-typings'
+import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import Sortable, { type SortableEvent } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
@@ -122,7 +122,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf((fileExplorerView.tree?.infinityScroll.rootEl as { childrenEl: HTMLElement }).childrenEl), {
-				setChildrenInPlace: original => function (newChildren: HTMLElement[]) {
+				setChildrenInPlace: original => function (this: HTMLElement, newChildren: HTMLElement[]) {
 					const isInExplorer = !!this.closest('[data-type="file-explorer"]')
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')
 
@@ -380,7 +380,7 @@ export default class ManualSortingPlugin extends Plugin {
 						}
 					}
 				},
-				detach: original => function (...args: any) {
+				detach: original => function (this: HTMLElement, ...args: any) {
 					if (!thisPlugin.isManualSortingEnabled()) {
 						return original.apply(this, args)
 					}
@@ -398,7 +398,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView), {
-				onRename: original => function (file: TAbstractFile, oldPath: string) {
+				onRename: original => function (this: FileExplorerView, file: TAbstractFile, oldPath: string) {
 					original.apply(this, [file, oldPath])
 					if (thisPlugin.isManualSortingEnabled()) {
 						const oldDirPath = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
@@ -408,7 +408,7 @@ export default class ManualSortingPlugin extends Plugin {
 						thisPlugin._orderManager.renameItem(oldPath, file.path)
 					}
 				},
-				setSortOrder: original => function (sortOrder: string) {
+				setSortOrder: original => function (this: FileExplorerView, sortOrder: string) {
 					// this method is called only when selecting one of the standard sorting modes
 					original.call(this, sortOrder)
 					const prevManualSortingEnabledStatus = thisPlugin.isManualSortingEnabled()
@@ -420,13 +420,13 @@ export default class ManualSortingPlugin extends Plugin {
 					}
 					void thisPlugin.saveSettings()
 				},
-				sort: original => function (...args: any) {
+				sort: original => function (this: FileExplorerView, ...args: any) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						thisPlugin._recentExplorerAction = 'sort'
 					}
 					original.apply(this, args)
 				},
-				onFileMouseover: original => function (event: MouseEvent, targetEl: HTMLElement) {
+				onFileMouseover: original => function (this: FileExplorerView, event: MouseEvent, targetEl: HTMLElement) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						// Set targetEl to the dragging element if it exists to ensure the tooltip is shown correctly
 						const draggingElement = document.querySelector('.manual-sorting-chosen')
@@ -441,13 +441,13 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree), {
-				setFocusedItem: original => function (...args: any) {
+				setFocusedItem: original => function (this: FileExplorerView['tree'], ...args: any) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						thisPlugin._recentExplorerAction = 'setFocusedItem'
 					}
 					original.apply(this, args)
 				},
-				handleItemSelection: original => function (e: PointerEvent, t: TreeItem<FileTreeItem>) {
+				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem<FileTreeItem>) {
 					if (!thisPlugin.isManualSortingEnabled()) {
 						return original.apply(this, [e, t])
 					}
@@ -514,7 +514,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree?.infinityScroll), {
-				scrollIntoView: original => function (...args: any) {
+				scrollIntoView: original => function (this: InfinityScroll, ...args: any) {
 					const targetElement = args[0].el
 					const isInExplorer = !!targetElement.closest('[data-type="file-explorer"]')
 
@@ -619,7 +619,7 @@ export default class ManualSortingPlugin extends Plugin {
 	patchSortOrderMenu() {
 		const thisPlugin = this
 		this._unpatchMenu = around(Menu.prototype, {
-			showAtMouseEvent: original => function (...args) {
+			showAtMouseEvent: original => function (this: Menu, ...args) {
 				const openMenuButton = args[0].target as HTMLElement
 				if (openMenuButton.getAttribute('aria-label') === i18next.t('plugins.file-explorer.action-change-sort')
 					&& openMenuButton.classList.contains('nav-action-button')

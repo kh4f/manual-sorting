@@ -127,7 +127,7 @@ export default class ManualSortingPlugin extends Plugin {
 					const isInExplorer = !!this.closest('[data-type="file-explorer"]')
 					const isFileTreeItem = this.classList.value.includes('tree-item') && this.classList.value.includes('nav-')
 
-					if (!thisPlugin.isManualSortingEnabled() || !isFileTreeItem && !isInExplorer) {
+					if (!thisPlugin.isManualSortingEnabled() || (!isFileTreeItem && !isInExplorer)) {
 						original.apply(this, [newChildren])
 						return
 					}

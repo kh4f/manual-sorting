@@ -444,11 +444,11 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this._explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree) as FileExplorerView['tree'], {
-				setFocusedItem: original => function (this: FileExplorerView['tree'], ...args: any) {
+				setFocusedItem: original => function (this: FileExplorerView['tree'], node: FileTreeItem | FolderTreeItem, scrollIntoView?: boolean) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						thisPlugin._recentExplorerAction = 'setFocusedItem'
 					}
-					original.apply(this, args)
+					original.apply(this, [node, scrollIntoView])
 				},
 				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem<FileTreeItem>) {
 					if (!thisPlugin.isManualSortingEnabled()) {

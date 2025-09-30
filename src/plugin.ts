@@ -241,7 +241,7 @@ export default class ManualSortingPlugin extends Plugin {
 								delay: 100,
 								delayOnTouchOnly: true,
 
-								setData: function (dataTransfer: DataTransfer, dragEl: HTMLElement) {
+								setData: function (dataTransfer: DataTransfer) {
 									dataTransfer.setData('string', 'text/plain')
 									dataTransfer.setData('string', 'text/uri-list')
 									dataTransfer.effectAllowed = 'all'

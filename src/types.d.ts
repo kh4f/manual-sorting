@@ -12,9 +12,7 @@ export type FileOrder = Record<string, string[]>
 declare module 'obsidian-typings' {
 	interface FileExplorerView {
 		autoRevealButtonEl: HTMLDivElement
-		headerDom: {
-			addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => any): HTMLElement
-		}
+		headerDom: { addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => void): HTMLElement }
 		onRename(file: TAbstractFile, oldPath: string): void
 		updateShowUnsupportedFiles(): void
 		sortOrder: string

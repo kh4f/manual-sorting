@@ -1,0 +1,18 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Obsidian",
+			"type": "chrome",
+			"request": "launch",
+			"runtimeExecutable": "${env:LOCALAPPDATA}/Programs/Obsidian/Obsidian.exe",
+			"port": 9222,
+		},
+		{
+			"name": "Attach to Obsidian",
+			"type": "chrome",
+			"request": "attach",
+			"port": 9222,
+		}
+	]
+}

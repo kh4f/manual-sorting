@@ -456,7 +456,7 @@ export default class ManualSortingPlugin extends Plugin {
 					}
 					original.apply(this, [node, scrollIntoView])
 				},
-				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem) {
+				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: FileTreeItem | FolderTreeItem) {
 					if (!thisPlugin.isManualSortingEnabled()) {
 						original.apply(this, [e, t])
 						return

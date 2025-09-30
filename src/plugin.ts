@@ -316,7 +316,7 @@ export default class ManualSortingPlugin extends Plugin {
 									}
 
 									if (movedItem instanceof TFolder) {
-										const fileTreeItem = fileExplorerView.fileItems[draggedItemPath] as TreeItem<FileTreeItem>
+										const fileTreeItem = fileExplorerView.fileItems[draggedItemPath] as TreeItem
 										fileTreeItem.setCollapsed = origSetCollapsed
 									}
 
@@ -452,7 +452,7 @@ export default class ManualSortingPlugin extends Plugin {
 					}
 					original.apply(this, [node, scrollIntoView])
 				},
-				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem<FileTreeItem>) {
+				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: TreeItem) {
 					if (!thisPlugin.isManualSortingEnabled()) {
 						original.apply(this, [e, t])
 						return

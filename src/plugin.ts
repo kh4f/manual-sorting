@@ -557,7 +557,6 @@ export default class ManualSortingPlugin extends Plugin {
 		const configureAutoScrolling = async () => {
 			let scrollInterval: number | null = null
 			const explorer = await this.waitForExplorer()
-			if (!explorer) return
 
 			explorer.removeEventListener('dragover', handleDragOver as EventListener)
 

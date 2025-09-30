@@ -137,7 +137,7 @@ export default class ManualSortingPlugin extends Plugin {
 					for (const child of currentChildren) {
 						const childElement = child as HTMLElement
 						if (!newChildrenSet.has(childElement)) {
-							const childPath = (childElement.firstElementChild as HTMLElement)?.getAttribute('data-path')
+							const childPath = (childElement.firstElementChild as HTMLElement | null)?.getAttribute('data-path')
 							if (childPath && childElement.classList.contains('tree-item')) {
 								// Check if the item still exists in the vault
 								const itemObject = thisPlugin.app.vault.getAbstractFileByPath(childPath)
@@ -162,7 +162,7 @@ export default class ManualSortingPlugin extends Plugin {
 					}
 
 					const processNewItem = (addedItem: HTMLElement) => {
-						const path = (addedItem.firstChild as HTMLElement)?.getAttribute('data-path')
+						const path = (addedItem.firstChild as HTMLElement | null)?.getAttribute('data-path')
 						console.log(`Adding`, addedItem, path)
 						const itemContainer: HTMLElement = this
 						const elementFolderPath = path?.substring(0, path.lastIndexOf('/')) || '/'
@@ -253,7 +253,7 @@ export default class ManualSortingPlugin extends Plugin {
 								},
 								onStart: (evt: SortableEvent) => {
 									console.log('Sortable: onStart')
-									const itemPath = (evt.item.firstChild as HTMLElement)?.getAttribute('data-path') || ''
+									const itemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
 									const itemObject = thisPlugin.app.vault.getAbstractFileByPath(itemPath)
 									if (itemObject instanceof TFolder) {
 										const fileTreeItem = thisPlugin.getFileExplorerView().fileItems[itemPath] as TreeItem<FileTreeItem>
@@ -270,8 +270,8 @@ export default class ManualSortingPlugin extends Plugin {
 								onEnd: (evt: SortableEvent) => {
 									console.log('Sortable: onEnd')
 									const draggedOverElement = document.querySelector('.is-being-dragged-over')
-									const draggedItemPath = (evt.item.firstChild as HTMLElement)?.getAttribute('data-path') || ''
-									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement)?.getAttribute('data-path')
+									const draggedItemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
+									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement | null)?.getAttribute('data-path')
 									const destinationPath = draggedOverElementPath || evt.to?.previousElementSibling?.getAttribute('data-path') || '/'
 
 									const movedItem = thisPlugin.app.vault.getAbstractFileByPath(draggedItemPath)!
@@ -364,7 +364,7 @@ export default class ManualSortingPlugin extends Plugin {
 								const topmostTreeItem: HTMLElement | null = this.querySelector('.tree-item')
 								this.insertBefore(child, topmostTreeItem)
 
-								if (!(child.firstChild as HTMLElement)?.hasAttribute('data-path')) {
+								if (!(child.firstChild as HTMLElement | null)?.hasAttribute('data-path')) {
 									new MutationObserver((mutations, obs) => {
 										for (const mutation of mutations) {
 											if (mutation.attributeName === 'data-path') {

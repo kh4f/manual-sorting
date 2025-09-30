@@ -22,5 +22,5 @@ declare module 'obsidian-typings' {
 }
 
 interface SortablePrototype extends Sortable {
-	_onDragOver(this: SortablePrototype, evt: DragEvent): unknown
+	_onDragOver(this: this, evt: DragEvent): unknown
 }

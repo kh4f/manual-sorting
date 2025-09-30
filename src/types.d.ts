@@ -1,4 +1,5 @@
 import { IconName, TAbstractFile } from 'obsidian'
+import type Sortable from 'sortablejs'
 
 export interface PluginSettings {
 	customFileOrder: FileOrder
@@ -18,4 +19,8 @@ declare module 'obsidian-typings' {
 		updateShowUnsupportedFiles(): void
 		sortOrder: string
 	}
+}
+
+interface SortablePrototype extends Sortable {
+	_onDragOver(this: SortablePrototype, evt: DragEvent): unknown
 }

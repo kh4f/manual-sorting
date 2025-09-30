@@ -4,7 +4,7 @@ import { around } from 'monkey-around'
 import Sortable, { type SortableEvent } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
-import { type PluginSettings } from '@/types.d'
+import type { PluginSettings, SortablePrototype } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 
 export default class ManualSortingPlugin extends Plugin {
@@ -85,8 +85,8 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	patchSortable() {
-		around((Sortable.prototype as any), {
-			_onDragOver: (original: any) => function (evt: DragEvent) {
+		around((Sortable.prototype as SortablePrototype), {
+			_onDragOver: original => function (evt: DragEvent) {
 				if (!this.el.children.length) {
 					console.warn('Container is empty, skipping onDragOver()')
 					return

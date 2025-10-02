@@ -3,26 +3,26 @@ import { type FileOrder } from '@/types.d'
 import ManualSortingPlugin from '@/plugin'
 
 export class OrderManager {
-	constructor(private _plugin: ManualSortingPlugin) {}
+	constructor(private plugin: ManualSortingPlugin) {}
 
 	resetOrder() {
-		this._plugin.settings.customFileOrder = { '/': [] }
-		void this._plugin.saveSettings()
+		this.plugin.settings.customFileOrder = { '/': [] }
+		void this.plugin.saveSettings()
 	}
 
 	updateOrder() {
 		console.log('Updating order...')
-		const currentOrder = this._getCurrentOrder()
-		const savedOrder = this._plugin.settings.customFileOrder
-		const newOrder = this._matchSavedOrder(currentOrder, savedOrder)
-		this._plugin.settings.customFileOrder = newOrder
-		void this._plugin.saveSettings()
-		console.log('Order updated:', this._plugin.settings.customFileOrder)
+		const currentOrder = this.getCurrentOrder()
+		const savedOrder = this.plugin.settings.customFileOrder
+		const newOrder = this.matchSavedOrder(currentOrder, savedOrder)
+		this.plugin.settings.customFileOrder = newOrder
+		void this.plugin.saveSettings()
+		console.log('Order updated:', this.plugin.settings.customFileOrder)
 	}
 
-	private _getCurrentOrder() {
+	private getCurrentOrder() {
 		const currentData: Record<string, string[]> = {}
-		const explorerView = this._plugin.getFileExplorerView()
+		const explorerView = this.plugin.getFileExplorerView()
 
 		const indexFolder = (folder: TFolder) => {
 			const sortedItems = explorerView.getSortedFolderItems(folder)
@@ -37,11 +37,11 @@ export class OrderManager {
 			}
 		}
 
-		indexFolder(this._plugin.app.vault.root)
+		indexFolder(this.plugin.app.vault.root)
 		return currentData
 	}
 
-	private _matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
+	private matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
 		const result: FileOrder = {}
 
 		for (const folder in currentOrder) {
@@ -65,7 +65,7 @@ export class OrderManager {
 
 	moveFile(oldPath: string, newPath: string, newDraggbleIndex: number) {
 		console.log(`Moving from "${oldPath}" to "${newPath}" at index ${newDraggbleIndex}`)
-		const data = this._plugin.settings.customFileOrder
+		const data = this.plugin.settings.customFileOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
 
@@ -82,13 +82,13 @@ export class OrderManager {
 
 		data[newDir].splice(newDraggbleIndex, 0, newPath)
 
-		void this._plugin.saveSettings()
+		void this.plugin.saveSettings()
 	}
 
 	renameItem(oldPath: string, newPath: string) {
 		if (oldPath === newPath) return
 		console.log(`Renaming "${oldPath}" to "${newPath}"`)
-		const data = this._plugin.settings.customFileOrder
+		const data = this.plugin.settings.customFileOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 
 		if (oldDir in data) {
@@ -105,16 +105,16 @@ export class OrderManager {
 			data[newPath] = data[newPath].map((path: string) => path.replace(oldPath, newPath))
 		}
 
-		void this._plugin.saveSettings()
+		void this.plugin.saveSettings()
 	}
 
 	async restoreOrder(container: Element, folderPath: string) {
-		const savedData = this._plugin.settings.customFileOrder
+		const savedData = this.plugin.settings.customFileOrder
 		console.log(`Restoring order for "${folderPath}"`)
 		const savedOrder = folderPath in savedData ? savedData[folderPath] : null
 		if (!savedOrder) return
 
-		const explorer = await this._plugin.waitForExplorer()
+		const explorer = await this.plugin.waitForExplorer()
 		const scrollTop = explorer.scrollTop
 
 		const itemsByPath = new Map<string, Element>()
@@ -153,6 +153,6 @@ export class OrderManager {
 			return result
 		}
 
-		return flattenPaths(this._plugin.settings.customFileOrder)
+		return flattenPaths(this.plugin.settings.customFileOrder)
 	}
 }

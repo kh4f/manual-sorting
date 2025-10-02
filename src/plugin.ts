@@ -1,10 +1,10 @@
 import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian'
 import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
 import { around } from 'monkey-around'
-import Sortable, { type SortableEvent } from 'sortablejs'
+import Sortable, { type SortableEvent, type SortablePrototype } from 'sortablejs'
 import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
-import type { PluginSettings, SortablePrototype } from '@/types.d'
+import type { PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 
 export default class ManualSortingPlugin extends Plugin {

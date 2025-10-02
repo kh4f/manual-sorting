@@ -6,8 +6,8 @@ import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
 import type { PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
-import { Logger } from './utils/logger'
-import { SettingsTab } from './settings-tab'
+import { Logger } from '@/utils/logger'
+import { SettingsTab } from '@/settings-tab'
 
 export default class ManualSortingPlugin extends Plugin {
 	private orderManager!: OrderManager

@@ -34,9 +34,7 @@ export class OrderManager {
 
 			for (const item of sortedItems) {
 				const itemObject = item.file
-				if (itemObject instanceof TFolder) {
-					indexFolder(itemObject)
-				}
+				if (itemObject instanceof TFolder) indexFolder(itemObject)
 			}
 		}
 
@@ -123,17 +121,13 @@ export class OrderManager {
 		const itemsByPath = new Map<string, Element>()
 		Array.from(container.children).forEach((child: Element) => {
 			const path = child.firstElementChild?.getAttribute('data-path')
-			if (path) {
-				itemsByPath.set(path, child)
-			}
+			if (path) itemsByPath.set(path, child)
 		})
 
 		const fragment = document.createDocumentFragment()
 		savedOrder.forEach((path: string) => {
 			const element = itemsByPath.get(path)
-			if (element) {
-				fragment.appendChild(element)
-			}
+			if (element) fragment.appendChild(element)
 		})
 
 		container.appendChild(fragment)
@@ -148,9 +142,7 @@ export class OrderManager {
 			if (path in obj) {
 				for (const item of obj[path]) {
 					result.push(item)
-					if (item in obj) {
-						result.push(...flattenPaths(obj, item))
-					}
+					if (item in obj) result.push(...flattenPaths(obj, item))
 				}
 			}
 			return result

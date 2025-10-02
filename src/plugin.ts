@@ -63,9 +63,7 @@ export default class ManualSortingPlugin extends Plugin {
 		await this.waitForExplorer()
 		const fileExplorerView = this.getFileExplorerView()
 		// fix for Obsidian not saving the last selected sorting mode
-		if (!prevManualSortingEnabledStatus) {
-			fileExplorerView.setSortOrder(this.settings.selectedSortOrder)
-		}
+		if (!prevManualSortingEnabledStatus) fileExplorerView.setSortOrder(this.settings.selectedSortOrder)
 		this.patchFileExplorer(fileExplorerView)
 
 		this.orderManager = new OrderManager(this)
@@ -210,21 +208,15 @@ export default class ManualSortingPlugin extends Plugin {
 								const nextItem = item.nextElementSibling
 
 								const adjacentNavFolders = []
-								if (previousItem?.classList.contains('nav-folder')) {
-									adjacentNavFolders.push(previousItem)
-								}
-								if (nextItem?.classList.contains('nav-folder')) {
-									adjacentNavFolders.push(nextItem)
-								}
+								if (previousItem?.classList.contains('nav-folder')) adjacentNavFolders.push(previousItem)
+								if (nextItem?.classList.contains('nav-folder')) adjacentNavFolders.push(nextItem)
 
 								if (adjacentNavFolders.length > 0) {
 									sortableInstance.options.swapThreshold = minSwapThreshold
 
 									adjacentNavFolders.forEach(navFolder => {
 										const childrenContainer = navFolder.querySelector('.tree-item-children')
-										if (childrenContainer) {
-											makeSortable(childrenContainer as HTMLElement)
-										}
+										if (childrenContainer) makeSortable(childrenContainer as HTMLElement)
 									})
 								} else {
 									sortableInstance.options.swapThreshold = maxSwapThreshold
@@ -427,24 +419,18 @@ export default class ManualSortingPlugin extends Plugin {
 					thisPlugin.settings.selectedSortOrder = sortOrder
 
 					thisPlugin.log.info('Sort order changed to:', sortOrder)
-					if (prevManualSortingEnabledStatus) {
-						void thisPlugin.reloadExplorerPlugin()
-					}
+					if (prevManualSortingEnabledStatus) void thisPlugin.reloadExplorerPlugin()
 					void thisPlugin.saveSettings()
 				},
 				sort: original => function (this: FileExplorerView) {
-					if (thisPlugin.isManualSortingEnabled()) {
-						thisPlugin.recentExplorerAction = 'sort'
-					}
+					if (thisPlugin.isManualSortingEnabled()) thisPlugin.recentExplorerAction = 'sort'
 					original.apply(this)
 				},
 				onFileMouseover: original => function (this: FileExplorerView, event: MouseEvent, targetEl: HTMLElement) {
 					if (thisPlugin.isManualSortingEnabled()) {
 						// Set targetEl to the dragging element if it exists to ensure the tooltip is shown correctly
 						const draggingElement = document.querySelector('.manual-sorting-chosen')
-						if (draggingElement) {
-							targetEl = draggingElement as HTMLElement
-						}
+						if (draggingElement) targetEl = draggingElement as HTMLElement
 					}
 					original.apply(this, [event, targetEl])
 				},
@@ -454,9 +440,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.explorerUnpatchFunctions.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree) as FileExplorerView['tree'], {
 				setFocusedItem: original => function (this: FileExplorerView['tree'], node: FileTreeItem | FolderTreeItem, scrollIntoView?: boolean) {
-					if (thisPlugin.isManualSortingEnabled()) {
-						thisPlugin.recentExplorerAction = 'setFocusedItem'
-					}
+					if (thisPlugin.isManualSortingEnabled()) thisPlugin.recentExplorerAction = 'setFocusedItem'
 					original.apply(this, [node, scrollIntoView])
 				},
 				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: FileTreeItem | FolderTreeItem) {
@@ -469,9 +453,7 @@ export default class ManualSortingPlugin extends Plugin {
 						const index1 = allPaths.indexOf(path1)
 						const index2 = allPaths.indexOf(path2)
 
-						if (index1 === -1 || index2 === -1) {
-							return []
-						}
+						if (index1 === -1 || index2 === -1) return []
 
 						const startIndex = Math.min(index1, index2)
 						const endIndex = Math.max(index1, index2)
@@ -508,8 +490,7 @@ export default class ManualSortingPlugin extends Plugin {
 							}
 							return !0
 						}
-						if (t.selfEl.hasClass('is-being-renamed'))
-							return !0
+						if (t.selfEl.hasClass('is-being-renamed')) return !0
 						if (t.selfEl.hasClass('is-active'))
 							return this.app.workspace.setActiveLeaf(o.leaf, {
 								focus: !0,
@@ -578,13 +559,9 @@ export default class ManualSortingPlugin extends Plugin {
 				const scrollZone = 50
 				const scrollSpeed = 5
 
-				if (event.clientY < rect.top + scrollZone) {
-					startScrolling(-scrollSpeed)
-				} else if (event.clientY > rect.bottom - scrollZone) {
-					startScrolling(scrollSpeed)
-				} else {
-					stopScrolling()
-				}
+				if (event.clientY < rect.top + scrollZone) startScrolling(-scrollSpeed)
+				else if (event.clientY > rect.bottom - scrollZone) startScrolling(scrollSpeed)
+				else stopScrolling()
 			}
 
 			document.addEventListener('dragend', stopScrolling)
@@ -684,9 +661,7 @@ export default class ManualSortingPlugin extends Plugin {
 								new ResetOrderModal(thisPlugin.app, prevSelectedSortOrder, () => {
 									thisPlugin.orderManager.resetOrder()
 									thisPlugin.orderManager.updateOrder()
-									if (thisPlugin.isManualSortingEnabled()) {
-										void thisPlugin.reloadExplorerPlugin()
-									}
+									if (thisPlugin.isManualSortingEnabled()) void thisPlugin.reloadExplorerPlugin()
 								}).open()
 							})
 					})

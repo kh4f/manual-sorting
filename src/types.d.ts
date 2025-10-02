@@ -17,9 +17,13 @@ export type FileOrder = Record<string, string[]>
 declare module 'obsidian-typings' {
 	interface FileExplorerView {
 		autoRevealButtonEl: HTMLDivElement
-		headerDom: { addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => void): HTMLElement }
+		headerDom: HeaderDom
 		onRename(file: TAbstractFile, oldPath: string): void
 		updateShowUnsupportedFiles(): void
+	}
+
+	interface HeaderDom {
+		addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => void): HTMLElement
 	}
 
 	interface InfinityScroll {

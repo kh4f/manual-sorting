@@ -44,3 +44,7 @@ declare module 'sortablejs' {
 		_onDragOver(this: this, evt: DragEvent): unknown
 	}
 }
+
+export type LogLevel = 'debug' | 'silent'
+
+export type LogMethod = 'log' | 'warn' | 'error'

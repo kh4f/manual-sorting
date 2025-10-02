@@ -6,6 +6,7 @@ import { ResetOrderModal } from '@/reset-order-modal'
 import { OrderManager } from '@/order-manager'
 import type { PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
+import { Logger } from './utils/logger'
 
 export default class ManualSortingPlugin extends Plugin {
 	private orderManager!: OrderManager
@@ -14,10 +15,14 @@ export default class ManualSortingPlugin extends Plugin {
 	private itemBeingCreatedManually = false
 	private recentExplorerAction = ''
 	private sortableInstances: Sortable[] = []
+	private log = new Logger('core', '#ff4e37')
 	public settings!: PluginSettings
 
 	async onload() {
-		if (process.env.DEV) console.log('Loading Manual Sorting in dev mode')
+		if (process.env.DEV) {
+			Logger.logLevel = 'debug'
+			this.log.info('Loading Manual Sorting in dev mode')
+		}
 		await this.loadSettings()
 		this.app.workspace.onLayoutReady(() => {
 			void this.initialize()
@@ -26,12 +31,12 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<PluginSettings>)
-		console.log('Settings loaded:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+		this.log.info('Settings loaded:', this.settings, 'Custom file order:', this.settings.customFileOrder)
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings)
-		console.log('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+		this.log.info('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
 	}
 
 	onunload() {
@@ -72,7 +77,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 		this.registerEvent(this.app.vault.on('create', (treeItem) => {
 			if (this.isManualSortingEnabled()) {
-				console.log('Manually created item:', treeItem)
+				this.log.info('Manually created item:', treeItem)
 				this.itemBeingCreatedManually = true
 			}
 		}))
@@ -85,10 +90,11 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	patchSortable() {
+		const thisPlugin = this
 		around((Sortable.prototype as SortablePrototype), {
 			_onDragOver: original => function (evt: DragEvent) {
 				if (!this.el.children.length) {
-					console.warn('Container is empty, skipping onDragOver()')
+					thisPlugin.log.warn('Container is empty, skipping onDragOver()')
 					return
 				}
 				return original.call(this, evt)
@@ -142,7 +148,7 @@ export default class ManualSortingPlugin extends Plugin {
 								// Check if the item still exists in the vault
 								const itemObject = thisPlugin.app.vault.getAbstractFileByPath(childPath)
 								if (!itemObject) {
-									console.warn('Item not exists in vault, removing its DOM element:', childPath)
+									thisPlugin.log.warn('Item not exists in vault, removing its DOM element:', childPath)
 									if (childPath) thisPlugin.orderManager.updateOrder()
 									this.removeChild(child)
 								} else {
@@ -150,7 +156,7 @@ export default class ManualSortingPlugin extends Plugin {
 									const itemObjectParentPath = itemObject.parent?.path
 
 									if ((itemObjectParentPath !== actualParentPath) && !thisPlugin.settings.draggingEnabled) {
-										console.warn('Item not in the right place, removing its DOM element:', childPath)
+										thisPlugin.log.warn('Item not in the right place, removing its DOM element:', childPath)
 										this.removeChild(childElement)
 										// Sync file explorer DOM tree
 										const fileExplorerView = thisPlugin.getFileExplorerView()
@@ -163,19 +169,19 @@ export default class ManualSortingPlugin extends Plugin {
 
 					const processNewItem = (addedItem: HTMLElement) => {
 						const path = (addedItem.firstChild as HTMLElement | null)?.getAttribute('data-path')
-						console.log(`Adding`, addedItem, path)
+						thisPlugin.log.info(`Adding`, addedItem, path)
 						const itemContainer: HTMLElement = this
 						const elementFolderPath = path?.substring(0, path.lastIndexOf('/')) || '/'
-						console.log(`Item container:`, itemContainer, elementFolderPath)
+						thisPlugin.log.info(`Item container:`, itemContainer, elementFolderPath)
 
 						if (thisPlugin.itemBeingCreatedManually) {
-							console.log('Item is being created manually')
+							thisPlugin.log.info('Item is being created manually')
 							thisPlugin.itemBeingCreatedManually = false
 							thisPlugin.orderManager.updateOrder()
 						}
 
 						if (itemContainer.classList.contains('all-children-loaded')) {
-							console.warn(`All children already loaded for ${elementFolderPath}. Skipping...`)
+							thisPlugin.log.warn(`All children already loaded for ${elementFolderPath}. Skipping...`)
 							return
 						}
 
@@ -185,17 +191,17 @@ export default class ManualSortingPlugin extends Plugin {
 						const childrenCount = dataPathValues.length
 
 						const expectedChildrenCount = thisPlugin.app.vault.getFolderByPath(elementFolderPath)?.children.length
-						console.log(`Children count: ${childrenCount}, Expected children count: ${expectedChildrenCount}`)
+						thisPlugin.log.info(`Children count: ${childrenCount}, Expected children count: ${expectedChildrenCount}`)
 
 						if (childrenCount === expectedChildrenCount) {
 							itemContainer.classList.add('all-children-loaded')
-							console.warn(`All children loaded for ${elementFolderPath}`)
+							thisPlugin.log.warn(`All children loaded for ${elementFolderPath}`)
 							void thisPlugin.orderManager.restoreOrder(itemContainer, elementFolderPath)
 						}
 
 						const makeSortable = (container: HTMLElement) => {
 							if (Sortable.get(container)) return
-							console.log(`Initiating Sortable on`, container)
+							thisPlugin.log.info(`Initiating Sortable on`, container)
 
 							const minSwapThreshold = 0.3
 							const maxSwapThreshold = 2
@@ -247,12 +253,12 @@ export default class ManualSortingPlugin extends Plugin {
 									dataTransfer.effectAllowed = 'all'
 								},
 								onChoose: (evt: SortableEvent) => {
-									console.log('Sortable: onChoose')
+									thisPlugin.log.info('Sortable: onChoose')
 									const dragged = evt.item
 									adjustSwapThreshold(dragged)
 								},
 								onStart: (evt: SortableEvent) => {
-									console.log('Sortable: onStart')
+									thisPlugin.log.info('Sortable: onStart')
 									const itemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
 									const itemObject = thisPlugin.app.vault.getAbstractFileByPath(itemPath)
 									if (itemObject instanceof TFolder) {
@@ -263,12 +269,12 @@ export default class ManualSortingPlugin extends Plugin {
 									}
 								},
 								onChange: (evt: SortableEvent) => {
-									console.log('Sortable: onChange')
+									thisPlugin.log.info('Sortable: onChange')
 									const dragged = evt.item
 									adjustSwapThreshold(dragged)
 								},
 								onEnd: (evt: SortableEvent) => {
-									console.log('Sortable: onEnd')
+									thisPlugin.log.info('Sortable: onEnd')
 									const draggedOverElement = document.querySelector('.is-being-dragged-over')
 									const draggedItemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
 									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement | null)?.getAttribute('data-path')
@@ -276,7 +282,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 									const movedItem = thisPlugin.app.vault.getAbstractFileByPath(draggedItemPath)
 									if (!movedItem) {
-										console.warn(`Dragged item not found in vault: ${draggedItemPath}`)
+										thisPlugin.log.warn(`Dragged item not found in vault: ${draggedItemPath}`)
 										return
 									}
 									const targetFolder = thisPlugin.app.vault.getFolderByPath(destinationPath)
@@ -284,7 +290,7 @@ export default class ManualSortingPlugin extends Plugin {
 									let itemNewPath = folderPathInItemNewPath + movedItem.name
 
 									if (draggedItemPath !== itemNewPath && thisPlugin.app.vault.getAbstractFileByPath(itemNewPath)) {
-										console.warn(`Name conflict detected. Path: ${itemNewPath} already exists. Resolving...`)
+										thisPlugin.log.warn(`Name conflict detected. Path: ${itemNewPath} already exists. Resolving...`)
 
 										const generateUniqueFilePath = (path: string): string => {
 											const fullName = movedItem.name
@@ -304,7 +310,7 @@ export default class ManualSortingPlugin extends Plugin {
 										}
 
 										itemNewPath = generateUniqueFilePath(itemNewPath)
-										console.log('New item path:', itemNewPath)
+										thisPlugin.log.info('New item path:', itemNewPath)
 									}
 
 									const newDraggbleIndex = draggedOverElementPath ? 0 : (typeof evt.newDraggableIndex === 'number' ? evt.newDraggableIndex : 0)
@@ -315,7 +321,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 									// Obsidian doesn't automatically call onRename in some cases - needed here to ensure the DOM reflects file structure changes
 									if (movedItem.path === itemNewPath) {
-										console.warn('Calling onRename manually for', movedItem, itemNewPath)
+										thisPlugin.log.warn('Calling onRename manually for', movedItem, itemNewPath)
 										fileExplorerView.onRename(movedItem, draggedItemPath)
 									}
 
@@ -340,7 +346,7 @@ export default class ManualSortingPlugin extends Plugin {
 									}
 								},
 								onUnchoose: () => {
-									console.log('Sortable: onUnchoose')
+									thisPlugin.log.info('Sortable: onUnchoose')
 									if (thisPlugin.settings.draggingEnabled) {
 										try {
 											const dropEvent = new DragEvent('drop', {
@@ -424,7 +430,7 @@ export default class ManualSortingPlugin extends Plugin {
 					const prevManualSortingEnabledStatus = thisPlugin.isManualSortingEnabled()
 					thisPlugin.settings.selectedSortOrder = sortOrder
 
-					console.log('Sort order changed to:', sortOrder)
+					thisPlugin.log.info('Sort order changed to:', sortOrder)
 					if (prevManualSortingEnabledStatus) {
 						void thisPlugin.reloadExplorerPlugin()
 					}
@@ -553,7 +559,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const fileExplorerPlugin = this.app.internalPlugins.plugins['file-explorer']
 		fileExplorerPlugin.disable()
 		await fileExplorerPlugin.enable()
-		console.log('File Explorer plugin reloaded')
+		this.log.info('File Explorer plugin reloaded')
 
 		const toggleSortingClass = async () => {
 			const explorerEl = await this.waitForExplorer()
@@ -621,7 +627,7 @@ export default class ManualSortingPlugin extends Plugin {
 		if (process.env.DEV) void addReloadNavButton()
 
 		if (this.app.plugins.getPlugin('folder-notes')) {
-			console.log('Reloading Folder Notes plugin')
+			this.log.info('Reloading Folder Notes plugin')
 			await this.app.plugins.disablePlugin('folder-notes')
 			void this.app.plugins.enablePlugin('folder-notes')
 		}

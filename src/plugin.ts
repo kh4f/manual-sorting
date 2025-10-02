@@ -7,6 +7,7 @@ import { OrderManager } from '@/order-manager'
 import type { PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 import { Logger } from './utils/logger'
+import { SettingsTab } from './settings'
 
 export default class ManualSortingPlugin extends Plugin {
 	private orderManager!: OrderManager
@@ -19,11 +20,12 @@ export default class ManualSortingPlugin extends Plugin {
 	public settings!: PluginSettings
 
 	async onload() {
+		await this.loadSettings()
+		this.addSettingTab(new SettingsTab(this.app, this))
 		if (process.env.DEV) {
-			Logger.logLevel = 'debug'
+			Logger.logLevel = this.settings.debugMode ? 'debug' : 'silent'
 			this.log.info('Loading Manual Sorting in dev mode')
 		}
-		await this.loadSettings()
 		this.app.workspace.onLayoutReady(() => {
 			void this.initialize()
 		})

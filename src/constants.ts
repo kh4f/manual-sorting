@@ -6,4 +6,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	customFileOrder: { '/': [] },
 	draggingEnabled: true,
 	selectedSortOrder: 'manual-sorting',
+	debugMode: false,
 }

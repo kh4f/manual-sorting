@@ -10,6 +10,7 @@ export interface PluginSettings {
 	customFileOrder: FileOrder
 	selectedSortOrder: string
 	draggingEnabled: boolean
+	debugMode: boolean
 }
 
 export type FileOrder = Record<string, string[]>

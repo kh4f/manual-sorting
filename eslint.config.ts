@@ -48,6 +48,7 @@ export default defineConfig([
 			'@stylistic/linebreak-style': ['error', 'unix'],
 			'@stylistic/eol-last': ['error', 'never'],
 			'@stylistic/brace-style': ['error', '1tbs'],
+			'@stylistic/arrow-parens': ['error', 'as-needed'],
 		},
 	},
 ])

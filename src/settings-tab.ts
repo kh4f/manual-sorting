@@ -15,7 +15,7 @@ export class SettingsTab extends PluginSettingTab {
 			.setDesc('Show debug logs in the console.')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.debugMode)
-				.onChange(async (enableDebugMode) => {
+				.onChange(async enableDebugMode => {
 					this.plugin.settings.debugMode = enableDebugMode
 					Logger.logLevel = enableDebugMode ? 'debug' : 'silent'
 					await this.plugin.saveSettings()

@@ -26,9 +26,7 @@ export default class ManualSortingPlugin extends Plugin {
 			Logger.logLevel = this.settings.debugMode ? 'debug' : 'silent'
 			this.log.info('Loading Manual Sorting in dev mode')
 		}
-		this.app.workspace.onLayoutReady(() => {
-			void this.initialize()
-		})
+		this.app.workspace.onLayoutReady(() => this.initialize())
 	}
 
 	async loadSettings() {
@@ -51,13 +49,11 @@ export default class ManualSortingPlugin extends Plugin {
 		}
 	}
 
-	getFileExplorerView = () => {
-		return this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
-	}
+	getFileExplorerView = () =>
+		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
 
-	isManualSortingEnabled = () => {
-		return this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
-	}
+	isManualSortingEnabled = () =>
+		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
 
 	async initialize() {
 		const prevManualSortingEnabledStatus = this.isManualSortingEnabled()
@@ -77,7 +73,7 @@ export default class ManualSortingPlugin extends Plugin {
 
 		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
 
-		this.registerEvent(this.app.vault.on('create', (treeItem) => {
+		this.registerEvent(this.app.vault.on('create', treeItem => {
 			if (this.isManualSortingEnabled()) {
 				this.log.info('Manually created item:', treeItem)
 				this.itemBeingCreatedManually = true
@@ -86,9 +82,9 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	toogleDragging() {
-		this.sortableInstances.forEach((sortableInstance) => {
-			sortableInstance.option('disabled', !this.settings.draggingEnabled)
-		})
+		this.sortableInstances.forEach(sortableInstance =>
+			sortableInstance.option('disabled', !this.settings.draggingEnabled),
+		)
 	}
 
 	patchSortable() {
@@ -105,7 +101,7 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async waitForExplorer() {
-		return new Promise<Element>((resolve) => {
+		return new Promise<Element>(resolve => {
 			const getExplorer = () => document.querySelector('[data-type="file-explorer"] .nav-files-container')
 			const explorer = getExplorer()
 			if (explorer) {
@@ -224,7 +220,7 @@ export default class ManualSortingPlugin extends Plugin {
 								if (adjacentNavFolders.length > 0) {
 									sortableInstance.options.swapThreshold = minSwapThreshold
 
-									adjacentNavFolders.forEach((navFolder) => {
+									adjacentNavFolders.forEach(navFolder => {
 										const childrenContainer = navFolder.querySelector('.tree-item-children')
 										if (childrenContainer) {
 											makeSortable(childrenContainer as HTMLElement)
@@ -342,9 +338,7 @@ export default class ManualSortingPlugin extends Plugin {
 										// Simulate hover on the dragged item
 										document.querySelector('.tree-item-self.hovered')?.classList.remove('hovered')
 										draggedItemSelf.classList.add('hovered')
-										draggedItemSelf.addEventListener('mouseleave', () => {
-											draggedItemSelf.classList.remove('hovered')
-										}, { once: true })
+										draggedItemSelf.addEventListener('mouseleave', () => draggedItemSelf.classList.remove('hovered'), { once: true })
 									}
 								},
 								onUnchoose: () => {

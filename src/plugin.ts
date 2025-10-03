@@ -86,7 +86,7 @@ export default class ManualSortingPlugin extends Plugin {
 	isManualSortingEnabled = () =>
 		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
 
-	toogleDragging() {
+	toggleDragging() {
 		this.sortableInstances.forEach(sortableInstance =>
 			sortableInstance.option('disabled', !this.settings.draggingEnabled),
 		)
@@ -576,7 +576,7 @@ export default class ManualSortingPlugin extends Plugin {
 								.onClick(() => {
 									thisPlugin.settings.draggingEnabled = !thisPlugin.settings.draggingEnabled
 									void thisPlugin.saveSettings()
-									thisPlugin.toogleDragging()
+									thisPlugin.toggleDragging()
 								})
 
 							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' })

@@ -39,6 +39,13 @@ export default class ManualSortingPlugin extends Plugin {
 		this.log.info('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
 	}
 
+	async onExternalSettingsChange() {
+		await this.loadSettings()
+		await this.saveSettings()
+		this.log.warn('Settings changed externally')
+		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
+	}
+
 	onunload() {
 		this.explorerUnpatchFunctions.forEach(unpatch => unpatch())
 		this.explorerUnpatchFunctions = []

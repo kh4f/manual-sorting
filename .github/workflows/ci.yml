@@ -3,7 +3,7 @@ name: CI
 on: { push: { branches: '**' } }
 
 jobs:
-  check:
+  ci:
     name: Checks
     runs-on: ubuntu-latest
     steps:

@@ -29,23 +29,6 @@ export default class ManualSortingPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(() => this.initialize())
 	}
 
-	async loadSettings() {
-		this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData() as Partial<PluginSettings>) }
-		this.log.info('Settings loaded:', this.settings, 'Custom file order:', this.settings.customFileOrder)
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings)
-		this.log.info('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
-	}
-
-	async onExternalSettingsChange() {
-		await this.loadSettings()
-		await this.saveSettings()
-		this.log.warn('Settings changed externally')
-		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
-	}
-
 	onunload() {
 		this.explorerUnpatchFunctions.forEach(unpatch => unpatch())
 		this.explorerUnpatchFunctions = []
@@ -55,12 +38,6 @@ export default class ManualSortingPlugin extends Plugin {
 			this.unpatchMenu = null
 		}
 	}
-
-	getFileExplorerView = () =>
-		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
-
-	isManualSortingEnabled = () =>
-		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
 
 	async initialize() {
 		const prevManualSortingEnabledStatus = this.isManualSortingEnabled()
@@ -86,23 +63,33 @@ export default class ManualSortingPlugin extends Plugin {
 		}))
 	}
 
+	async loadSettings() {
+		this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData() as Partial<PluginSettings>) }
+		this.log.info('Settings loaded:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings)
+		this.log.info('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+	}
+
+	async onExternalSettingsChange() {
+		await this.loadSettings()
+		await this.saveSettings()
+		this.log.warn('Settings changed externally')
+		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
+	}
+
+	getFileExplorerView = () =>
+		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
+
+	isManualSortingEnabled = () =>
+		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
+
 	toogleDragging() {
 		this.sortableInstances.forEach(sortableInstance =>
 			sortableInstance.option('disabled', !this.settings.draggingEnabled),
 		)
-	}
-
-	patchSortable() {
-		const thisPlugin = this
-		around((Sortable.prototype as SortablePrototype), {
-			_onDragOver: original => function (evt: DragEvent) {
-				if (!this.el.children.length) {
-					thisPlugin.log.warn('Container is empty, skipping onDragOver()')
-					return
-				}
-				return original.call(this, evt)
-			},
-		})
 	}
 
 	async waitForExplorer() {
@@ -125,6 +112,19 @@ export default class ManualSortingPlugin extends Plugin {
 			if (workspace) observer.observe(workspace, { childList: true, subtree: true })
 		})
 	};
+
+	patchSortable() {
+		const thisPlugin = this
+		around((Sortable.prototype as SortablePrototype), {
+			_onDragOver: original => function (evt: DragEvent) {
+				if (!this.el.children.length) {
+					thisPlugin.log.warn('Container is empty, skipping onDragOver()')
+					return
+				}
+				return original.call(this, evt)
+			},
+		})
+	}
 
 	patchFileExplorer(fileExplorerView: FileExplorerView) {
 		const thisPlugin = this
@@ -539,6 +539,74 @@ export default class ManualSortingPlugin extends Plugin {
 		)
 	}
 
+	patchSortOrderMenu() {
+		const thisPlugin = this
+		this.unpatchMenu = around(Menu.prototype, {
+			showAtMouseEvent: original => function (this: Menu, ...args) {
+				const openMenuButton = args[0].target as HTMLElement
+				if (openMenuButton.getAttribute('aria-label') === i18next.t('plugins.file-explorer.action-change-sort')
+					&& openMenuButton.classList.contains('nav-action-button')
+				) {
+					const menu = this
+					if (thisPlugin.isManualSortingEnabled()) {
+						const checkedItem = menu.items.find((item): item is MenuItem => item instanceof MenuItem && item.checked === true)
+						if (checkedItem) checkedItem.setChecked(false)
+					}
+
+					const sortingMenuSection = MANUAL_SORTING_MODE_ID
+					menu.addItem((item: MenuItem) => {
+						item.setTitle('Manual sorting')
+							.setIcon('pin')
+							.setChecked(thisPlugin.isManualSortingEnabled())
+							.setSection(sortingMenuSection)
+							.onClick(() => {
+								if (!thisPlugin.isManualSortingEnabled()) {
+									thisPlugin.settings.selectedSortOrder = MANUAL_SORTING_MODE_ID
+									void thisPlugin.saveSettings()
+									thisPlugin.orderManager.updateOrder()
+									void thisPlugin.reloadExplorerPlugin()
+								}
+							})
+					})
+					if (thisPlugin.isManualSortingEnabled()) {
+						menu.addItem((item: MenuItem) => {
+							item.setTitle('Dragging')
+								.setIcon('move')
+								.setSection(sortingMenuSection)
+								.onClick(() => {
+									thisPlugin.settings.draggingEnabled = !thisPlugin.settings.draggingEnabled
+									void thisPlugin.saveSettings()
+									thisPlugin.toogleDragging()
+								})
+
+							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' })
+							const checkboxEl = checkboxContainerEl.createEl('input', { type: 'checkbox' })
+							checkboxEl.checked = thisPlugin.settings.draggingEnabled
+						})
+					}
+					menu.addItem((item: MenuItem) => {
+						item.setTitle('Reset order')
+							.setIcon('trash-2')
+							.setSection(sortingMenuSection)
+							.onClick(() => {
+								const fileExplorerView = thisPlugin.getFileExplorerView()
+								const prevSelectedSortOrder = fileExplorerView.sortOrder
+								new ResetOrderModal(thisPlugin.app, prevSelectedSortOrder, () => {
+									thisPlugin.orderManager.resetOrder()
+									thisPlugin.orderManager.updateOrder()
+									if (thisPlugin.isManualSortingEnabled()) void thisPlugin.reloadExplorerPlugin()
+								}).open()
+							})
+					})
+					const menuItems = menu.items
+					const menuSeparator = menuItems.splice(8, 1)[0]
+					menuItems.splice(0, 0, menuSeparator)
+				}
+				return original.apply(this, args)
+			},
+		})
+	}
+
 	async reloadExplorerPlugin() {
 		const fileExplorerPlugin = this.app.internalPlugins.plugins['file-explorer']
 		fileExplorerPlugin.disable()
@@ -611,73 +679,5 @@ export default class ManualSortingPlugin extends Plugin {
 			await this.app.plugins.disablePlugin('folder-notes')
 			void this.app.plugins.enablePlugin('folder-notes')
 		}
-	}
-
-	patchSortOrderMenu() {
-		const thisPlugin = this
-		this.unpatchMenu = around(Menu.prototype, {
-			showAtMouseEvent: original => function (this: Menu, ...args) {
-				const openMenuButton = args[0].target as HTMLElement
-				if (openMenuButton.getAttribute('aria-label') === i18next.t('plugins.file-explorer.action-change-sort')
-					&& openMenuButton.classList.contains('nav-action-button')
-				) {
-					const menu = this
-					if (thisPlugin.isManualSortingEnabled()) {
-						const checkedItem = menu.items.find((item): item is MenuItem => item instanceof MenuItem && item.checked === true)
-						if (checkedItem) checkedItem.setChecked(false)
-					}
-
-					const sortingMenuSection = MANUAL_SORTING_MODE_ID
-					menu.addItem((item: MenuItem) => {
-						item.setTitle('Manual sorting')
-							.setIcon('pin')
-							.setChecked(thisPlugin.isManualSortingEnabled())
-							.setSection(sortingMenuSection)
-							.onClick(() => {
-								if (!thisPlugin.isManualSortingEnabled()) {
-									thisPlugin.settings.selectedSortOrder = MANUAL_SORTING_MODE_ID
-									void thisPlugin.saveSettings()
-									thisPlugin.orderManager.updateOrder()
-									void thisPlugin.reloadExplorerPlugin()
-								}
-							})
-					})
-					if (thisPlugin.isManualSortingEnabled()) {
-						menu.addItem((item: MenuItem) => {
-							item.setTitle('Dragging')
-								.setIcon('move')
-								.setSection(sortingMenuSection)
-								.onClick(() => {
-									thisPlugin.settings.draggingEnabled = !thisPlugin.settings.draggingEnabled
-									void thisPlugin.saveSettings()
-									thisPlugin.toogleDragging()
-								})
-
-							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' })
-							const checkboxEl = checkboxContainerEl.createEl('input', { type: 'checkbox' })
-							checkboxEl.checked = thisPlugin.settings.draggingEnabled
-						})
-					}
-					menu.addItem((item: MenuItem) => {
-						item.setTitle('Reset order')
-							.setIcon('trash-2')
-							.setSection(sortingMenuSection)
-							.onClick(() => {
-								const fileExplorerView = thisPlugin.getFileExplorerView()
-								const prevSelectedSortOrder = fileExplorerView.sortOrder
-								new ResetOrderModal(thisPlugin.app, prevSelectedSortOrder, () => {
-									thisPlugin.orderManager.resetOrder()
-									thisPlugin.orderManager.updateOrder()
-									if (thisPlugin.isManualSortingEnabled()) void thisPlugin.reloadExplorerPlugin()
-								}).open()
-							})
-					})
-					const menuItems = menu.items
-					const menuSeparator = menuItems.splice(8, 1)[0]
-					menuItems.splice(0, 0, menuSeparator)
-				}
-				return original.apply(this, args)
-			},
-		})
 	}
 }

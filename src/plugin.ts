@@ -111,7 +111,7 @@ export default class ManualSortingPlugin extends Plugin {
 			const workspace = document.querySelector('.workspace')
 			if (workspace) observer.observe(workspace, { childList: true, subtree: true })
 		})
-	};
+	}
 
 	patchSortable() {
 		const thisPlugin = this

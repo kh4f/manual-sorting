@@ -41,7 +41,7 @@
 		"eslint": "^9.36.0",
 		"globals": "^16.4.0",
 		"i18next": "^25.5.2",
-		"jiti": "^2.6.0",
+		"jiti": "^2.6.1",
 		"lint-staged": "^16.2.3",
 		"obsidian": "^1.10.0",
 		"obsidian-typings": "^4.58.0",

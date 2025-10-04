@@ -72,7 +72,6 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async onExternalSettingsChange() {
 		await this.loadSettings()
-		await this.saveSettings()
 		this.log.warn('Settings changed externally')
 		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
 	}

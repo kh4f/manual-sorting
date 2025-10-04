@@ -49,8 +49,8 @@ importers:
         specifier: ^4.58.0
         version: 4.58.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
-        specifier: ^0.17.1
-        version: 0.17.1
+        specifier: ^0.18.0
+        version: 0.18.0
       simple-git-hooks:
         specifier: ^2.13.1
         version: 2.13.1
@@ -2006,8 +2006,8 @@ packages:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
     engines: {node: '>= 14.18.0'}
 
-  relion@0.17.1:
-    resolution: {integrity: sha512-yiXAwY3vJR64zC9vs2fPExvKZMNEwG5ne7NkoIwZ58NgdLPOQo2m5SpK1Et1wu7iNbT0xtYRQdsQhIUiJAC1dw==}
+  relion@0.18.0:
+    resolution: {integrity: sha512-LV/KrP3tY3ezXwsjXZzC44ps1S542nETZQ52snZW3Rmq+E4DtraM46mcs3KAlmQryRUzXelWj3vaq4rcxglzGg==}
     engines: {node: ^24.9.0}
     hasBin: true
 
@@ -4364,7 +4364,7 @@ snapshots:
 
   readdirp@4.1.2: {}
 
-  relion@0.17.1:
+  relion@0.18.0:
     dependencies:
       cleye: 1.3.4
       handlebars: 4.7.8

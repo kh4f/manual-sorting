@@ -2,12 +2,11 @@ import { Menu, MenuItem, Plugin, Keymap, TFolder, TAbstractFile, Platform } from
 import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import Sortable, { type SortableEvent, type SortablePrototype } from 'sortablejs'
-import { ResetOrderModal } from '@/reset-order-modal'
+import { SettingsTab, ResetOrderModal } from '@/components'
 import { OrderManager } from '@/order-manager'
 import type { PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 import { Logger } from '@/utils/logger'
-import { SettingsTab } from '@/settings-tab'
 
 export default class ManualSortingPlugin extends Plugin {
 	private orderManager!: OrderManager

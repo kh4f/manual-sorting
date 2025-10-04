@@ -4,7 +4,7 @@ import { around } from 'monkey-around'
 import Sortable, { type SortableEvent, type SortablePrototype } from 'sortablejs'
 import { SettingsTab, ResetOrderModal } from '@/components'
 import { OrderManager } from '@/order-manager'
-import type { PluginSettings } from '@/types.d'
+import type { LogLevel, PluginSettings } from '@/types.d'
 import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 import { Logger } from '@/utils/logger'
 
@@ -20,11 +20,9 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings()
+		this.setLogLevel(this.settings.debugMode ? 'debug' : 'silent')
+		if (process.env.DEV) this.log.info('Loading Manual Sorting in dev mode')
 		this.addSettingTab(new SettingsTab(this.app, this))
-		if (process.env.DEV) {
-			Logger.logLevel = this.settings.debugMode ? 'debug' : 'silent'
-			this.log.info('Loading Manual Sorting in dev mode')
-		}
 		this.app.workspace.onLayoutReady(() => this.initialize())
 	}
 
@@ -84,6 +82,14 @@ export default class ManualSortingPlugin extends Plugin {
 
 	isManualSortingEnabled = () =>
 		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
+
+	setLogLevel(logLevel: LogLevel) {
+		Logger.logLevel = logLevel
+		if (logLevel === 'debug') {
+			this.settings.debugMode = true
+			void this.saveSettings()
+		}
+	}
 
 	toggleDragging() {
 		this.sortableInstances.forEach(sortableInstance =>

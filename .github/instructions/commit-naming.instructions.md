@@ -79,11 +79,7 @@ The type of the change. Allowed types (with commit examples):
   - ci(release): add `--no-git-checks` flag to npm publish command  
   - ci(checks): add initial CI workflow
 
-12. **release** (package release)  
-  - release(relion): v2.0.0
-  - release(verdox): v0.1.0
-
-13. **revert** (commit revert)  
+12. **revert** (commit revert)  
   - revert(cli): remove experimental `--main-profile` flag  
 
 	This reverts commit abc1234.

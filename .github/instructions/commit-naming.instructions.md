@@ -63,30 +63,17 @@ The type of the change. Allowed types (with commit examples):
   - chore(package): update lint script to use `eslint` instead of `next lint`
   - chore(nextjs): add postinstall patch to prevent Next.js from modifying tsconfig
 
-8. **types** (type definitions)  
-  - types(changelog): extend `ResolvedChangelogSection` from `ChangelogSectionDefinition`
-  - types(options): add missing `configFile` property to `ResolvedOptions`
-
-9. **test** (test change)  
+8. **test** (test change)  
   - test(utils): add unit tests for version manager
   - test(cli): include `-d` flag for changelog generation in dry run mode
 
-10. **build** (build system change)  
+9. **build** (build system change)  
   - build(tsdown): add `tsdown` build script and configuration
   - build(vite): update `vite` config for production build
 
-11. **ci** (CI change)  
+10. **ci** (CI change)  
   - ci(release): add `--no-git-checks` flag to npm publish command  
   - ci(checks): add initial CI workflow
-
-12. **revert** (commit revert)  
-  - revert(cli): remove experimental `--main-profile` flag  
-
-	This reverts commit abc1234.
-
-  - revert(defaults): restore default settings for `verbose` option  
-
-	This reverts commit def5678.
 
 #### Scope
 The area of the codebase affected (e.g., component, module, feature). Scope is always required.

@@ -57,12 +57,12 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData() as Partial<PluginSettings>) }
-		this.log.info('Settings loaded:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+		this.log.info('Settings loaded:', this.settings)
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings)
-		this.log.info('Settings saved:', this.settings, 'Custom file order:', this.settings.customFileOrder)
+		this.log.info('Settings saved:', this.settings)
 	}
 
 	async onExternalSettingsChange() {

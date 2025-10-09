@@ -17,6 +17,7 @@ export default defineConfig({
 	newTagPrefix: '',
 	_local: {
 		bump: ['package.json', manifestBumper, versionsBumper],
+		changelog: { review: true },
 		commit: { gpgSign: true },
 		tag: { gpgSign: true },
 	},

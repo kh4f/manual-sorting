@@ -1,6 +1,25 @@
 # Changelog
 
 
+## &ensp; [` 📦 2.5.0  `](https://github.com/kh4f/manual-sorting/compare/2.4.0...2.5.0)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features
+- **settings**: 
+  - add `newItemsPosition` option to control default position for new items [`f1f3bdf`](https://github.com/kh4f/manual-sorting/commit/f1f3bdf) ([#45](https://github.com/kh4f/manual-sorting/issues/45))
+  - add settings tab with debug mode toggle [`09d296f`](https://github.com/kh4f/manual-sorting/commit/09d296f)
+- **plugin**: add live file explorer refresh on external settings changes [`5d59d2a`](https://github.com/kh4f/manual-sorting/commit/5d59d2a) ([#63](https://github.com/kh4f/manual-sorting/issues/63))
+- **logger**: implement centralized logging system [`46f8c2e`](https://github.com/kh4f/manual-sorting/commit/46f8c2e)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **plugin**: 
+  - enable `debugMode` by default in dev environment on first launch [`a34f29a`](https://github.com/kh4f/manual-sorting/commit/a34f29a)
+  - prevent `getAttribute` error on non-HTMLElement `firstChild` [`06ee68f`](https://github.com/kh4f/manual-sorting/commit/06ee68f)
+  - replace external `i18next` with Obsidian's built-in global [`841cc79`](https://github.com/kh4f/manual-sorting/commit/841cc79)
+  - use `childrenEl` prototype for patching explorer [`7b3d993`](https://github.com/kh4f/manual-sorting/commit/7b3d993)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/2.4.0...2.5.0) &ensp;•&ensp; _Oct 9, 2025_
+
+
 ## [2.4.0](https://github.com/Kh4f/manual-sorting/compare/2.3.3...2.4.0) (2025-05-04)
 
 ### 🚀 Features

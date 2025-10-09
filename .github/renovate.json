@@ -43,11 +43,13 @@
 		},
 		{
 			"matchDepNames": "pnpm",
-			"semanticCommitScope": "package-manager"
+			"semanticCommitScope": "package-manager",
+			"commitMessageTopic": "`{{depName}}`"
 		},
 		{
 			"matchDepTypes": ["engines"],
-			"semanticCommitScope": "engine"
+			"semanticCommitScope": "engine",
+			"commitMessageTopic": "`{{depName}}`"
 		}
 	]
 }

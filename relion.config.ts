@@ -14,14 +14,13 @@ const versionsBumper: Bumper = {
 }
 
 export default defineConfig({
-	bump: ['package.json', manifestBumper, versionsBumper],
-	commit: { gpgSign: true },
-	tag: { gpgSign: true },
 	newTagPrefix: '',
+	_local: {
+		bump: ['package.json', manifestBumper, versionsBumper],
+		commit: { gpgSign: true },
+		tag: { gpgSign: true },
+	},
 	_github: {
-		bump: false,
-		commit: false,
-		tag: false,
 		logLevel: 'silent',
 		context: {
 			commitHyperlink: false,

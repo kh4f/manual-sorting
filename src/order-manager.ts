@@ -54,7 +54,11 @@ export class OrderManager {
 				// Add new files to the beginning of the list
 				const newFiles = currentFiles.filter(file => !prevOrder.includes(file))
 				// Combine and remove duplicates
-				result[folder] = Array.from(new Set([...newFiles, ...existingFiles]))
+				if (this.plugin.settings.newItemsPosition === 'top') {
+					result[folder] = Array.from(new Set([...newFiles, ...existingFiles]))
+				} else {
+					result[folder] = Array.from(new Set([...existingFiles, ...newFiles]))
+				}
 			} else {
 				// Remove duplicates from current folder
 				result[folder] = Array.from(new Set(currentOrder[folder]))

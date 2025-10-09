@@ -214,7 +214,9 @@ export class Patcher {
 										patcher.log.info('New item path:', itemNewPath)
 									}
 
-									const newDraggbleIndex = draggedOverElementPath ? 0 : (typeof evt.newDraggableIndex === 'number' ? evt.newDraggableIndex : 0)
+									const newDraggbleIndex = draggedOverElementPath
+										? plugin.settings.newItemsPosition === 'top' ? 0 : Infinity
+										: (typeof evt.newDraggableIndex === 'number' ? evt.newDraggableIndex : 0)
 									plugin.orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex)
 									void plugin.app.fileManager.renameFile(movedItem, itemNewPath)
 
@@ -272,7 +274,8 @@ export class Patcher {
 								// Fix #43: Obsidian has a top div in each .tree-item container to maintain correct scroll height
 								// so we leave it in place and insert the new item below it
 								const topmostTreeItem: HTMLElement | null = this.querySelector('.tree-item')
-								this.insertBefore(child, topmostTreeItem)
+								if (plugin.settings.newItemsPosition === 'top') this.insertBefore(child, topmostTreeItem)
+								else this.append(child)
 
 								if (!(child.firstChild as HTMLElement | null)?.hasAttribute('data-path')) {
 									new MutationObserver((mutations, obs) => {
@@ -288,7 +291,8 @@ export class Patcher {
 									processNewItem(child)
 								}
 							} else {
-								this.prepend(child)
+								if (plugin.settings.newItemsPosition === 'top') this.prepend(child)
+								else this.append(child)
 							}
 						}
 					}
@@ -318,7 +322,7 @@ export class Patcher {
 					if (plugin.isManualSortingEnabled()) {
 						const oldDirPath = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 						if (!plugin.settings.draggingEnabled && oldDirPath !== file.parent?.path) {
-							plugin.orderManager.moveFile(oldPath, file.path, 0)
+							plugin.orderManager.moveFile(oldPath, file.path, plugin.settings.newItemsPosition === 'top' ? 0 : Infinity)
 						}
 						plugin.orderManager.renameItem(oldPath, file.path)
 					}

@@ -7,4 +7,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	draggingEnabled: true,
 	selectedSortOrder: 'manual-sorting',
 	debugMode: !!process.env.DEV,
+	newItemsPosition: 'top',
 }

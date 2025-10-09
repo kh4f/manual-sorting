@@ -11,6 +11,7 @@ export interface PluginSettings {
 	selectedSortOrder: string
 	draggingEnabled: boolean
 	debugMode: boolean
+	newItemsPosition: 'top' | 'bottom'
 }
 
 export type FileOrder = Record<string, string[]>

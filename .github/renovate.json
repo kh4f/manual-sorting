@@ -44,6 +44,10 @@
 		{
 			"matchDepNames": "pnpm",
 			"semanticCommitScope": "package-manager"
+		},
+		{
+			"matchDepTypes": ["engines"],
+			"semanticCommitScope": "engine"
 		}
 	]
 }

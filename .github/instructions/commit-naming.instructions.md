@@ -118,15 +118,15 @@ If the commit references an Issue/PR (I’ll let you know), include a footer.
 - ```md
   fix(root): add `suppressHydrationWarning` property to `html` tag
   
-  Fixes #12 (error during hydration)
-  Refs #34 (conflict with chrome extension)
+  Fixes #12
+  Refs #34
   ```
 - ```md
   feat(config)!: add support for multiple profiles with CLI `--profile` flag
   
   BREAKING CHANGE: Changed alias for 'prerelease' option to 'P' to reserve 'p' for the new '--profile' option.
   
-  Refs #45 (add support for multiple profiles)
+  Refs #45
   ```
 - ```md
   refactor(options)!: remove `packageFiles` option and related logic

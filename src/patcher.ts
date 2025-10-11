@@ -291,8 +291,7 @@ export class Patcher {
 									processNewItem(child)
 								}
 							} else {
-								if (plugin.settings.newItemsPosition === 'top') this.prepend(child)
-								else this.append(child)
+								this.prepend(child)
 							}
 						}
 					}

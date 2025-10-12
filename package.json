@@ -29,6 +29,7 @@
 		"build:prod": "tsdown --prod",
 		"lint": "eslint",
 		"lint:fix": "eslint --fix",
+		"bench": "vitest bench --run",
 		"release": "relion -p local",
 		"release:github": "relion -p github",
 		"prepare": "simple-git-hooks"

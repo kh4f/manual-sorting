@@ -20,7 +20,7 @@
 	"engines": {
 		"node": "^24.10.0"
 	},
-	"packageManager": "pnpm@10.18.1",
+	"packageManager": "pnpm@10.18.2",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

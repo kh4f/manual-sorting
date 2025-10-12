@@ -81,30 +81,19 @@ export class Patcher {
 						const elementFolderPath = path?.substring(0, path.lastIndexOf('/')) || '/'
 						patcher.log.info(`Item container:`, itemContainer, elementFolderPath)
 
-						if (plugin.itemBeingCreatedManually) {
-							patcher.log.info('Item is being created manually')
-							plugin.itemBeingCreatedManually = false
+						if (path && !plugin.settings.customFileOrder[elementFolderPath].includes(path)) {
+							patcher.log.info('Item not found in custom order, updating order...')
 							plugin.orderManager.updateOrder()
 						}
 
-						if (itemContainer.classList.contains('all-children-loaded')) {
-							patcher.log.warn(`All children already loaded for ${elementFolderPath}. Skipping...`)
-							return
-						}
-
-						const dataPathValues = Array.from(itemContainer.children)
-							.filter(item => item.firstElementChild?.hasAttribute('data-path'))
-							.map(item => item.firstElementChild?.getAttribute('data-path'))
-						const childrenCount = dataPathValues.length
-
-						const expectedChildrenCount = plugin.app.vault.getFolderByPath(elementFolderPath)?.children.length
-						patcher.log.info(`Children count: ${childrenCount}, Expected children count: ${expectedChildrenCount}`)
-
-						if (childrenCount === expectedChildrenCount) {
-							itemContainer.classList.add('all-children-loaded')
-							patcher.log.warn(`All children loaded for ${elementFolderPath}`)
-							void plugin.orderManager.restoreOrder(itemContainer, elementFolderPath)
-						}
+						const expectedOrderMap = new Map(plugin.settings.customFileOrder[elementFolderPath].map((path, index) => [path, index]))
+						const nextSibling = [...itemContainer.children].find(sibling => {
+							const siblingPath = (sibling.firstElementChild as HTMLElement | null)?.getAttribute('data-path')
+							if (!siblingPath || !path) return false
+							return (expectedOrderMap.get(siblingPath) ?? -1) > (expectedOrderMap.get(path) ?? -1)
+						}) ?? null
+						this.insertBefore(addedItem, nextSibling)
+						patcher.log.info('Inserted item:', addedItem, 'Before:', nextSibling)
 
 						const makeSortable = (container: HTMLElement) => {
 							if (Sortable.get(container)) return
@@ -271,12 +260,6 @@ export class Patcher {
 					for (const child of newChildren) {
 						if (!this.contains(child)) {
 							if (child.classList.contains('tree-item')) {
-								// Fix #43: Obsidian has a top div in each .tree-item container to maintain correct scroll height
-								// so we leave it in place and insert the new item below it
-								const topmostTreeItem: HTMLElement | null = this.querySelector('.tree-item')
-								if (plugin.settings.newItemsPosition === 'top') this.insertBefore(child, topmostTreeItem)
-								else this.append(child)
-
 								if (!(child.firstChild as HTMLElement | null)?.hasAttribute('data-path')) {
 									new MutationObserver((mutations, obs) => {
 										for (const mutation of mutations) {

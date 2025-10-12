@@ -12,7 +12,6 @@ export default class ManualSortingPlugin extends Plugin {
 	public orderManager!: OrderManager
 	private patcher = new Patcher(this)
 	private log = new Logger('core', '#ff4e37')
-	public itemBeingCreatedManually = false
 	public recentExplorerAction = ''
 	public sortableInstances: Sortable[] = []
 	public settings!: PluginSettings
@@ -46,13 +45,6 @@ export default class ManualSortingPlugin extends Plugin {
 		this.orderManager.updateOrder()
 
 		if (this.isManualSortingEnabled()) void this.reloadExplorerPlugin()
-
-		this.registerEvent(this.app.vault.on('create', treeItem => {
-			if (this.isManualSortingEnabled()) {
-				this.log.info('Manually created item:', treeItem)
-				this.itemBeingCreatedManually = true
-			}
-		}))
 	}
 
 	async loadSettings() {

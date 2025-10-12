@@ -113,32 +113,6 @@ export class OrderManager {
 		void this.plugin.saveSettings()
 	}
 
-	async restoreOrder(container: Element, folderPath: string) {
-		const savedData = this.plugin.settings.customFileOrder
-		this.log.info(`Restoring order for "${folderPath}"`)
-		const savedOrder = folderPath in savedData ? savedData[folderPath] : null
-		if (!savedOrder) return
-
-		const explorer = await this.plugin.waitForExplorer()
-		const scrollTop = explorer.scrollTop
-
-		const itemsByPath = new Map<string, Element>()
-		Array.from(container.children).forEach((child: Element) => {
-			const path = child.firstElementChild?.getAttribute('data-path')
-			if (path) itemsByPath.set(path, child)
-		})
-
-		const fragment = document.createDocumentFragment()
-		savedOrder.forEach((path: string) => {
-			const element = itemsByPath.get(path)
-			if (element) fragment.appendChild(element)
-		})
-
-		container.appendChild(fragment)
-		explorer.scrollTop = scrollTop
-		this.log.info(`Order restored for "${folderPath}"`)
-	}
-
 	getFlattenPaths() {
 		function flattenPaths(obj: Record<string, string[]>, path = '/'): string[] {
 			const result = []

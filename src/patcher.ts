@@ -76,7 +76,7 @@ export class Patcher {
 
 					const processNewItem = (addedItem: HTMLElement) => {
 						const path = (addedItem.firstChild as HTMLElement | null)?.getAttribute('data-path')
-						patcher.log.info(`Adding`, addedItem, path)
+						patcher.log.info(`Processing item`, addedItem, path)
 						const itemContainer: HTMLElement = this
 						const elementFolderPath = path?.substring(0, path.lastIndexOf('/')) || '/'
 						patcher.log.info(`Item container:`, itemContainer, elementFolderPath)

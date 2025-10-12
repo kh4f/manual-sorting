@@ -18,6 +18,23 @@ describe.for([10, 100, 500, 1000])('DOM element ordering strategies ($0 elements
 		document.body.innerHTML = ''
 	})
 
+	bench('incremental insertion with O(1) Map lookup', () => {
+		const container = createContainer()
+		const elements = createElementArray(totalElements)
+
+		// Create a Map for O(1) lookup instead of O(n) indexOf
+		const orderMap = new Map(expectedOrder.map((id, index) => [id, index]))
+
+		loadElementsRandomly(elements, el => {
+			// find the next sibling in the desired order and insert before it
+			const nextSibling = [...container.children].find(c => (orderMap.get(c.id) ?? -1) > (orderMap.get(el.id) ?? -1)) ?? null
+			container.insertBefore(el, nextSibling)
+		})
+
+		assertOrder(container, expectedOrder)
+		document.body.innerHTML = ''
+	})
+
 	bench('post-processing reordering', () => {
 		const container = createContainer()
 		const elements = createElementArray(totalElements)

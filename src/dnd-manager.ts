@@ -18,7 +18,7 @@ export class DndManager {
 	}
 
 	makeSortable(container: HTMLElement) {
-		this.log.info(`Initiating Sortable on`, container)
+		this.log.info(`Initializing Sortable on`, container)
 
 		let origSetCollapsed: TreeItem['setCollapsed'] | null = null
 

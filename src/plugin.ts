@@ -1,6 +1,5 @@
 import { Plugin } from 'obsidian'
 import type { FileExplorerView } from 'obsidian-typings'
-import Sortable from 'sortablejs'
 import { SettingsTab } from '@/components'
 import { OrderManager } from '@/order-manager'
 import type { LogLevel, PluginSettings } from '@/types.d'
@@ -13,7 +12,6 @@ export default class ManualSortingPlugin extends Plugin {
 	private patcher = new Patcher(this)
 	private log = new Logger('core', '#ff4e37')
 	public recentExplorerAction = ''
-	public sortableInstances: Sortable[] = []
 	public settings!: PluginSettings
 
 	async onload() {
@@ -75,12 +73,6 @@ export default class ManualSortingPlugin extends Plugin {
 			this.settings.debugMode = true
 			void this.saveSettings()
 		}
-	}
-
-	toggleDragging() {
-		this.sortableInstances.forEach(sortableInstance =>
-			sortableInstance.option('disabled', !this.settings.draggingEnabled),
-		)
 	}
 
 	async waitForExplorer() {

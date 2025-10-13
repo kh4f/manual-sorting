@@ -1,18 +1,22 @@
-import { Menu, MenuItem, Keymap, TFolder, TAbstractFile, Platform } from 'obsidian'
-import type { FileTreeItem, TreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
+import { Menu, MenuItem, Keymap, TAbstractFile } from 'obsidian'
+import type { FileTreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
 import { around } from 'monkey-around'
-import Sortable, { type SortableEvent, type SortablePrototype } from 'sortablejs'
+import Sortable, { type SortablePrototype } from 'sortablejs'
 import { ResetOrderModal } from '@/components'
 import { MANUAL_SORTING_MODE_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
+import { DndManager } from '@/dnd-manager'
 import { Logger } from '@/utils/logger'
 
 export class Patcher {
 	private explorerUninstallers: ReturnType<typeof around>[] = []
 	private menuUninstaller: ReturnType<typeof around> | null = null
+	private dndManager: DndManager
 	private log = new Logger('patcher', '#65a3ff')
 
-	constructor(private plugin: ManualSortingPlugin) {}
+	constructor(private plugin: ManualSortingPlugin) {
+		this.dndManager = new DndManager(plugin)
+	}
 
 	patchSortable() {
 		const patcher = this
@@ -95,166 +99,7 @@ export class Patcher {
 						this.insertBefore(addedItem, nextSibling)
 						patcher.log.info('Inserted item:', addedItem, 'Before:', nextSibling)
 
-						const makeSortable = (container: HTMLElement) => {
-							if (Sortable.get(container)) return
-							patcher.log.info(`Initiating Sortable on`, container)
-
-							const minSwapThreshold = 0.3
-							const maxSwapThreshold = 2
-							let origSetCollapsed: TreeItem['setCollapsed'] | null = null
-
-							function adjustSwapThreshold(item: HTMLElement) {
-								const previousItem = item.previousElementSibling
-								const nextItem = item.nextElementSibling
-
-								const adjacentNavFolders = []
-								if (previousItem?.classList.contains('nav-folder')) adjacentNavFolders.push(previousItem)
-								if (nextItem?.classList.contains('nav-folder')) adjacentNavFolders.push(nextItem)
-
-								if (adjacentNavFolders.length > 0) {
-									sortableInstance.options.swapThreshold = minSwapThreshold
-
-									adjacentNavFolders.forEach(navFolder => {
-										const childrenContainer = navFolder.querySelector('.tree-item-children')
-										if (childrenContainer) makeSortable(childrenContainer as HTMLElement)
-									})
-								} else {
-									sortableInstance.options.swapThreshold = maxSwapThreshold
-								}
-							}
-
-							const sortableInstance = new Sortable(container, {
-								group: 'nested',
-								draggable: '.tree-item',
-								chosenClass: 'manual-sorting-chosen',
-								ghostClass: 'manual-sorting-ghost',
-
-								animation: 100,
-								swapThreshold: maxSwapThreshold,
-								fallbackOnBody: true,
-								disabled: !plugin.settings.draggingEnabled,
-
-								delay: 100,
-								delayOnTouchOnly: true,
-
-								setData: function (dataTransfer: DataTransfer) {
-									dataTransfer.setData('string', 'text/plain')
-									dataTransfer.setData('string', 'text/uri-list')
-									dataTransfer.effectAllowed = 'all'
-								},
-								onChoose: (evt: SortableEvent) => {
-									patcher.log.info('Sortable: onChoose')
-									const dragged = evt.item
-									adjustSwapThreshold(dragged)
-								},
-								onStart: (evt: SortableEvent) => {
-									patcher.log.info('Sortable: onStart')
-									const itemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
-									const itemObject = plugin.app.vault.getAbstractFileByPath(itemPath)
-									if (itemObject instanceof TFolder) {
-										const fileTreeItem = plugin.getFileExplorerView().fileItems[itemPath] as TreeItem
-										fileTreeItem.setCollapsed(true, true)
-										if (!origSetCollapsed) origSetCollapsed = fileTreeItem.setCollapsed.bind(fileTreeItem)
-										fileTreeItem.setCollapsed = () => void 0
-									}
-								},
-								onChange: (evt: SortableEvent) => {
-									patcher.log.info('Sortable: onChange')
-									const dragged = evt.item
-									adjustSwapThreshold(dragged)
-								},
-								onEnd: (evt: SortableEvent) => {
-									patcher.log.info('Sortable: onEnd')
-									const draggedOverElement = document.querySelector('.is-being-dragged-over')
-									const draggedItemPath = (evt.item.firstChild as HTMLElement | null)?.getAttribute('data-path') || ''
-									const draggedOverElementPath = (draggedOverElement?.firstChild as HTMLElement | null)?.getAttribute('data-path')
-									const destinationPath = draggedOverElementPath || evt.to.previousElementSibling?.getAttribute('data-path') || '/'
-
-									const movedItem = plugin.app.vault.getAbstractFileByPath(draggedItemPath)
-									if (!movedItem) {
-										patcher.log.warn(`Dragged item not found in vault: ${draggedItemPath}`)
-										return
-									}
-									const targetFolder = plugin.app.vault.getFolderByPath(destinationPath)
-									const folderPathInItemNewPath = (targetFolder?.isRoot()) ? '' : (destinationPath + '/')
-									let itemNewPath = folderPathInItemNewPath + movedItem.name
-
-									if (draggedItemPath !== itemNewPath && plugin.app.vault.getAbstractFileByPath(itemNewPath)) {
-										patcher.log.warn(`Name conflict detected. Path: ${itemNewPath} already exists. Resolving...`)
-
-										const generateUniqueFilePath = (path: string): string => {
-											const fullName = movedItem.name
-											const lastDotIndex = fullName.lastIndexOf('.')
-											const name = lastDotIndex === -1 ? fullName : fullName.slice(0, lastDotIndex)
-											const extension = lastDotIndex === -1 ? '' : fullName.slice(lastDotIndex + 1)
-											let revisedPath = path
-											let counter = 1
-
-											while (plugin.app.vault.getAbstractFileByPath(revisedPath)) {
-												const newName = `${name} ${counter}${extension ? '.' + extension : ''}`
-												revisedPath = folderPathInItemNewPath + newName
-												counter++
-											}
-
-											return revisedPath
-										}
-
-										itemNewPath = generateUniqueFilePath(itemNewPath)
-										patcher.log.info('New item path:', itemNewPath)
-									}
-
-									const newDraggbleIndex = draggedOverElementPath
-										? plugin.settings.newItemsPosition === 'top' ? 0 : Infinity
-										: (typeof evt.newDraggableIndex === 'number' ? evt.newDraggableIndex : 0)
-									plugin.orderManager.moveFile(draggedItemPath, itemNewPath, newDraggbleIndex)
-									void plugin.app.fileManager.renameFile(movedItem, itemNewPath)
-
-									const fileExplorerView = plugin.getFileExplorerView()
-
-									// Obsidian doesn't automatically call onRename in some cases - needed here to ensure the DOM reflects file structure changes
-									if (movedItem.path === itemNewPath) {
-										patcher.log.warn('Calling onRename manually for', movedItem, itemNewPath)
-										fileExplorerView.onRename(movedItem, draggedItemPath)
-									}
-
-									if (movedItem instanceof TFolder) {
-										const fileTreeItem = fileExplorerView.fileItems[draggedItemPath] as TreeItem
-										if (origSetCollapsed) fileTreeItem.setCollapsed = origSetCollapsed
-									}
-
-									if (!Platform.isMobile) {
-										// Manually trigger the tooltip for the dragged item
-										const draggedItemSelf = evt.item.querySelector('.tree-item-self')
-										if (!draggedItemSelf) return
-										const hoverEvent = new MouseEvent('mouseover', { bubbles: true, cancelable: true })
-										draggedItemSelf.dispatchEvent(hoverEvent)
-
-										// Simulate hover on the dragged item
-										document.querySelector('.tree-item-self.hovered')?.classList.remove('hovered')
-										draggedItemSelf.classList.add('hovered')
-										draggedItemSelf.addEventListener('mouseleave', () => draggedItemSelf.classList.remove('hovered'), { once: true })
-									}
-								},
-								onUnchoose: () => {
-									patcher.log.info('Sortable: onUnchoose')
-									if (plugin.settings.draggingEnabled) {
-										try {
-											const dropEvent = new DragEvent('drop', {
-												bubbles: true,
-												cancelable: true,
-												dataTransfer: new DataTransfer(),
-											})
-
-											document.dispatchEvent(dropEvent)
-										} catch {
-											// Ignore errors from dispatching drop event
-										}
-									}
-								},
-							})
-							plugin.sortableInstances.push(sortableInstance)
-						}
-						makeSortable(itemContainer)
+						if (!Sortable.get(itemContainer)) patcher.dndManager.makeSortable(itemContainer)
 					}
 
 					for (const child of newChildren) {
@@ -430,6 +275,7 @@ export class Patcher {
 	}
 
 	patchSortOrderMenu() {
+		const patcher = this
 		const plugin = this.plugin
 
 		this.menuUninstaller = around(Menu.prototype, {
@@ -467,7 +313,7 @@ export class Patcher {
 								.onClick(() => {
 									plugin.settings.draggingEnabled = !plugin.settings.draggingEnabled
 									void plugin.saveSettings()
-									plugin.toggleDragging()
+									patcher.dndManager.toggleDragging()
 								})
 
 							const checkboxContainerEl = item.dom.createEl('div', { cls: 'menu-item-icon dragging-enabled-checkbox' })

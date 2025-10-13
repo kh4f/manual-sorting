@@ -47,7 +47,7 @@
 		"lint-staged": "^16.2.3",
 		"obsidian": "^1.10.0",
 		"obsidian-typings": "^4.58.0",
-		"relion": "^0.20.0",
+		"relion": "^0.21.0",
 		"simple-git-hooks": "^2.13.1",
 		"tsdown": "^0.15.6",
 		"tsx": "^4.20.6",

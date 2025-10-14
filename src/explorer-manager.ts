@@ -7,18 +7,22 @@ export class ExplorerManager {
 
 	async waitForExplorerElement() {
 		return new Promise<Element>(resolve => {
-			const getExplorer = () => document.querySelector('[data-type="file-explorer"] .nav-files-container')
-			const explorer = getExplorer()
+			const explorer = document.querySelector('[data-type="file-explorer"] .nav-files-container')
 			if (explorer) {
 				resolve(explorer)
 				return
 			}
 
-			new MutationObserver((_, obs) => {
-				const explorer = getExplorer()
-				if (explorer) {
-					obs.disconnect()
-					resolve(explorer)
+			new MutationObserver((mutations, obs) => {
+				for (const mutation of mutations) {
+					for (const node of mutation.addedNodes) {
+						if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
+							this.log.info('File Explorer mounted', node)
+							obs.disconnect()
+							resolve(node)
+							return
+						}
+					}
 				}
 			}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
 		})

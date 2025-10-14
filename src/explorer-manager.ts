@@ -35,7 +35,7 @@ export class ExplorerManager {
 					}
 				}
 			}
-		}).observe(document.body, { childList: true, subtree: true })
+		}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
 	}
 
 	async refreshExplorer(reloadPlugin = true) {

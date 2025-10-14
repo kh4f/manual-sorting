@@ -33,12 +33,12 @@ export class ExplorerManager {
 		this.log.info('File Explorer plugin reloaded')
 
 		if (this.plugin.isManualSortingEnabled()) {
-			await this.updateManualSortingClass()
+			void this.updateManualSortingClass()
 			void this.setupAutoScrolling()
 		}
 
 		void this.addAppReloadButton()
-		await this.reloadFolderNotesPlugin()
+		void this.reloadFolderNotesPlugin()
 	}
 
 	private async updateManualSortingClass() {

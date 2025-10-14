@@ -34,7 +34,7 @@ export class ExplorerManager {
 
 		if (this.plugin.isManualSortingEnabled()) {
 			await this.updateManualSortingClass()
-			void this.configureAutoScrolling()
+			void this.setupAutoScrolling()
 		}
 
 		void this.addAppReloadButton()
@@ -46,7 +46,7 @@ export class ExplorerManager {
 		explorerEl.toggleClass('manual-sorting-enabled', this.plugin.isManualSortingEnabled())
 	}
 
-	private async configureAutoScrolling() {
+	private async setupAutoScrolling() {
 		let scrollInterval: number | null = null
 		const explorer = await this.waitForExplorerElement()
 

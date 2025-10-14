@@ -13,6 +13,7 @@ export class Patcher {
 	private menuUninstaller: ReturnType<typeof around> | null = null
 	private dndManager: DndManager
 	private log = new Logger('patcher', '#65a3ff')
+	private recentExplorerAction = ''
 
 	constructor(private plugin: ManualSortingPlugin) {
 		this.dndManager = new DndManager(plugin)
@@ -165,7 +166,7 @@ export class Patcher {
 					void plugin.saveSettings()
 				},
 				sort: original => function (this: FileExplorerView) {
-					if (plugin.isManualSortingEnabled()) plugin.recentExplorerAction = 'sort'
+					if (plugin.isManualSortingEnabled()) patcher.recentExplorerAction = 'sort'
 					original.apply(this)
 				},
 				onFileMouseover: original => function (this: FileExplorerView, event: MouseEvent, targetEl: HTMLElement) {
@@ -182,7 +183,7 @@ export class Patcher {
 		this.explorerUninstallers.push(
 			around(Object.getPrototypeOf(fileExplorerView.tree) as FileExplorerView['tree'], {
 				setFocusedItem: original => function (this: FileExplorerView['tree'], node: FileTreeItem | FolderTreeItem, scrollIntoView?: boolean) {
-					if (plugin.isManualSortingEnabled()) plugin.recentExplorerAction = 'setFocusedItem'
+					if (plugin.isManualSortingEnabled()) patcher.recentExplorerAction = 'setFocusedItem'
 					original.apply(this, [node, scrollIntoView])
 				},
 				handleItemSelection: original => function (this: FileExplorerView['tree'], e: PointerEvent, t: FileTreeItem | FolderTreeItem) {
@@ -259,8 +260,8 @@ export class Patcher {
 						return
 					}
 
-					if (plugin.recentExplorerAction) {
-						plugin.recentExplorerAction = ''
+					if (patcher.recentExplorerAction) {
+						patcher.recentExplorerAction = ''
 						return
 					}
 

@@ -26,11 +26,8 @@ export class ExplorerManager {
 		})
 	}
 
-	async reloadFileExplorerPlugin() {
-		const fileExplorerPlugin = this.plugin.app.internalPlugins.plugins['file-explorer']
-		fileExplorerPlugin.disable()
-		await fileExplorerPlugin.enable()
-		this.log.info('File Explorer plugin reloaded')
+	async refreshFileExplorer() {
+		await this.reloadFileExplorerPlugin()
 
 		if (this.plugin.isManualSortingEnabled()) {
 			void this.updateManualSortingClass()
@@ -39,6 +36,13 @@ export class ExplorerManager {
 
 		void this.addAppReloadButton()
 		void this.reloadFolderNotesPlugin()
+	}
+
+	private async reloadFileExplorerPlugin() {
+		const fileExplorerPlugin = this.plugin.app.internalPlugins.plugins['file-explorer']
+		fileExplorerPlugin.disable()
+		await fileExplorerPlugin.enable()
+		this.log.info('File Explorer plugin reloaded')
 	}
 
 	private async updateManualSortingClass() {

@@ -54,12 +54,23 @@ export class ExplorerManager {
 		let scrollInterval: number | null = null
 		const explorer = await this.waitForExplorer()
 
-		explorer.removeEventListener('dragover', handleDragOver as EventListener)
+		const startScrolling = (speed: number) => {
+			if (scrollInterval) return
+			const scrollStep = () => {
+				explorer.scrollTop += speed
+				scrollInterval = requestAnimationFrame(scrollStep)
+			}
+			scrollInterval = requestAnimationFrame(scrollStep)
+		}
 
-		if (!this.plugin.isManualSortingEnabled()) return
-		explorer.addEventListener('dragover', handleDragOver as EventListener)
+		const stopScrolling = () => {
+			if (scrollInterval) {
+				cancelAnimationFrame(scrollInterval)
+				scrollInterval = null
+			}
+		}
 
-		function handleDragOver(event: DragEvent) {
+		const handleDragOver = (event: DragEvent) => {
 			event.preventDefault()
 			const rect = explorer.getBoundingClientRect()
 			const scrollZone = 50
@@ -70,27 +81,14 @@ export class ExplorerManager {
 			else stopScrolling()
 		}
 
+		explorer.removeEventListener('dragover', handleDragOver as EventListener)
+
+		if (!this.plugin.isManualSortingEnabled()) return
+		explorer.addEventListener('dragover', handleDragOver as EventListener)
+
 		document.addEventListener('dragend', stopScrolling)
 		document.addEventListener('drop', stopScrolling)
 		document.addEventListener('mouseleave', stopScrolling)
-
-		function startScrolling(speed: number) {
-			if (scrollInterval) return
-
-			function scrollStep() {
-				explorer.scrollTop += speed
-				scrollInterval = requestAnimationFrame(scrollStep)
-			}
-
-			scrollInterval = requestAnimationFrame(scrollStep)
-		}
-
-		function stopScrolling() {
-			if (scrollInterval) {
-				cancelAnimationFrame(scrollInterval)
-				scrollInterval = null
-			}
-		}
 	}
 
 	private async addReloadNavButton() {

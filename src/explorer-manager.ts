@@ -28,12 +28,8 @@ export class ExplorerManager {
 
 	async refreshFileExplorer() {
 		await this.reloadFileExplorerPlugin()
-
-		if (this.plugin.isManualSortingEnabled()) {
-			void this.updateManualSortingClass()
-			void this.setupAutoScrolling()
-		}
-
+		void this.updateManualSortingClass()
+		void this.setupAutoScrolling()
 		void this.addAppReloadButton()
 		void this.reloadFolderNotesPlugin()
 	}
@@ -51,6 +47,7 @@ export class ExplorerManager {
 	}
 
 	private async setupAutoScrolling() {
+		if (!this.plugin.isManualSortingEnabled()) return
 		let scrollInterval: number | null = null
 		const explorer = await this.waitForExplorerElement()
 

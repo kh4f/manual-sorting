@@ -15,13 +15,15 @@ const versionsBumper: Bumper = {
 
 export default defineConfig({
 	newTagPrefix: '',
-	_local: {
+	_default: {
+		lifecycle: 'all',
 		bump: ['package.json', manifestBumper, versionsBumper],
 		changelog: { review: true },
 		commit: { gpgSign: true },
 		tag: { gpgSign: true },
 	},
 	_github: {
+		lifecycle: ['changelog'],
 		logLevel: 'silent',
 		context: {
 			commitHyperlink: false,

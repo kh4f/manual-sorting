@@ -26,8 +26,22 @@ export class ExplorerManager {
 		})
 	}
 
-	async refreshFileExplorer() {
-		await this.reloadFileExplorerPlugin()
+	observeExplorerMount() {
+		new MutationObserver(mutations => {
+			for (const mutation of mutations) {
+				for (const node of mutation.addedNodes) {
+					if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
+						this.log.info('File Explorer mounted', node)
+						void this.refreshFileExplorer(false)
+						return
+					}
+				}
+			}
+		}).observe(document.body, { childList: true, subtree: true })
+	}
+
+	async refreshFileExplorer(reloadPlugin = true) {
+		if (reloadPlugin) await this.reloadFileExplorerPlugin()
 		void this.updateManualSortingClass()
 		void this.setupAutoScrolling()
 		void this.addAppReloadButton()

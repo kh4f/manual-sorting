@@ -37,7 +37,7 @@ export class ExplorerManager {
 			void this.configureAutoScrolling()
 		}
 
-		void this.addReloadNavButton()
+		void this.addAppReloadButton()
 		await this.reloadFolderNotesPlugin()
 	}
 
@@ -87,9 +87,9 @@ export class ExplorerManager {
 		document.addEventListener('mouseleave', stopScrolling)
 	}
 
-	private async addReloadNavButton() {
+	private async addAppReloadButton() {
 		if (!process.env.DEV) return
-		// Add reload button to file explorer header instead of auto-reveal button
+		// Add app reload button to file explorer header instead of auto-reveal button
 		await this.waitForExplorerElement()
 		const fileExplorerView = this.plugin.getFileExplorerView()
 		fileExplorerView.autoRevealButtonEl.style.display = 'none'

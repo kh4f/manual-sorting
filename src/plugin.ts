@@ -44,7 +44,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.orderManager.updateOrder()
 
 		if (this.isManualSortingEnabled()) await this.explorerManager.refreshExplorer()
-		this.explorerManager.observeExplorerMount()
+		this.explorerManager.refreshExplorerOnMount()
 	}
 
 	async loadSettings() {

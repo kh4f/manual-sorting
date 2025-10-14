@@ -6,41 +6,12 @@ export class ExplorerManager {
 	private log = new Logger('explorer-manager', '#bf77ff')
 
 	async waitForExplorerElement() {
-		return new Promise<Element>(resolve => {
-			const explorer = document.querySelector('[data-type="file-explorer"] .nav-files-container')
-			if (explorer) {
-				resolve(explorer)
-				return
-			}
-
-			new MutationObserver((mutations, obs) => {
-				for (const mutation of mutations) {
-					for (const node of mutation.addedNodes) {
-						if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
-							this.log.info('File Explorer mounted', node)
-							obs.disconnect()
-							resolve(node)
-							return
-						}
-					}
-				}
-			}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
+		return new Promise<HTMLElement>(resolve => {
+			this.observeExplorerMount(resolve, true)
 		})
 	}
 
-	observeExplorerMount() {
-		new MutationObserver(mutations => {
-			for (const mutation of mutations) {
-				for (const node of mutation.addedNodes) {
-					if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
-						this.log.info('File Explorer mounted', node)
-						void this.refreshExplorer(false)
-						return
-					}
-				}
-			}
-		}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
-	}
+	refreshExplorerOnMount = () => this.observeExplorerMount(() => void this.refreshExplorer(false))
 
 	async refreshExplorer(reloadPlugin = true) {
 		if (reloadPlugin) await this.reloadExplorerPlugin()
@@ -48,6 +19,26 @@ export class ExplorerManager {
 		void this.setupAutoScrolling()
 		void this.addAppReloadButton()
 		void this.reloadFolderNotesPlugin()
+	}
+
+	private observeExplorerMount(onMount: (el: HTMLElement) => void, disconnectOnMount = false) {
+		const target = document.querySelector('[data-type="file-explorer"] .nav-files-container')
+		if (target instanceof HTMLElement) {
+			onMount(target)
+			return
+		}
+		new MutationObserver((mutations, obs) => {
+			for (const mutation of mutations) {
+				for (const node of mutation.addedNodes) {
+					if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
+						if (disconnectOnMount) obs.disconnect()
+						this.log.info('File Explorer mounted', node)
+						onMount(node)
+						return
+					}
+				}
+			}
+		}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
 	}
 
 	private async reloadExplorerPlugin() {

@@ -94,6 +94,7 @@ export class ExplorerManager {
 		await this.waitForExplorerElement()
 		const fileExplorerView = this.plugin.getFileExplorerView()
 		fileExplorerView.autoRevealButtonEl.style.display = 'none'
+		if (fileExplorerView.headerDom.navButtonsEl.querySelector('.nav-action-button[aria-label="Reload app"]')) return
 		fileExplorerView.headerDom.addNavButton('rotate-ccw', 'Reload app', () => {
 			this.plugin.app.commands.executeCommandById('app:reload')
 		})

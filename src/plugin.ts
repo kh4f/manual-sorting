@@ -26,7 +26,7 @@ export default class ManualSortingPlugin extends Plugin {
 	onunload() {
 		this.patcher.unpatchFileExplorer()
 		this.patcher.unpatchSortOrderMenu()
-		if (this.isManualSortingEnabled()) void this.explorerManager.refreshFileExplorer()
+		if (this.isManualSortingEnabled()) void this.explorerManager.refreshExplorer()
 	}
 
 	async initialize() {
@@ -43,7 +43,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.orderManager = new OrderManager(this)
 		this.orderManager.updateOrder()
 
-		if (this.isManualSortingEnabled()) await this.explorerManager.refreshFileExplorer()
+		if (this.isManualSortingEnabled()) await this.explorerManager.refreshExplorer()
 		this.explorerManager.observeExplorerMount()
 	}
 
@@ -60,7 +60,7 @@ export default class ManualSortingPlugin extends Plugin {
 	async onExternalSettingsChange() {
 		await this.loadSettings()
 		this.log.warn('Settings changed externally')
-		if (this.isManualSortingEnabled()) void this.explorerManager.refreshFileExplorer()
+		if (this.isManualSortingEnabled()) void this.explorerManager.refreshExplorer()
 	}
 
 	getFileExplorerView = () =>

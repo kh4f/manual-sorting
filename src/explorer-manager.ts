@@ -32,7 +32,7 @@ export class ExplorerManager {
 				for (const node of mutation.addedNodes) {
 					if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
 						this.log.info('File Explorer mounted', node)
-						void this.refreshFileExplorer(false)
+						void this.refreshExplorer(false)
 						return
 					}
 				}
@@ -40,15 +40,15 @@ export class ExplorerManager {
 		}).observe(document.body, { childList: true, subtree: true })
 	}
 
-	async refreshFileExplorer(reloadPlugin = true) {
-		if (reloadPlugin) await this.reloadFileExplorerPlugin()
+	async refreshExplorer(reloadPlugin = true) {
+		if (reloadPlugin) await this.reloadExplorerPlugin()
 		void this.updateManualSortingClass()
 		void this.setupAutoScrolling()
 		void this.addAppReloadButton()
 		void this.reloadFolderNotesPlugin()
 	}
 
-	private async reloadFileExplorerPlugin() {
+	private async reloadExplorerPlugin() {
 		const fileExplorerPlugin = this.plugin.app.internalPlugins.plugins['file-explorer']
 		fileExplorerPlugin.disable()
 		await fileExplorerPlugin.enable()

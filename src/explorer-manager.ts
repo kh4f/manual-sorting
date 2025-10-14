@@ -33,7 +33,7 @@ export class ExplorerManager {
 		this.log.info('File Explorer plugin reloaded')
 
 		if (this.plugin.isManualSortingEnabled()) {
-			await this.toggleSortingClass()
+			await this.updateManualSortingClass()
 			void this.configureAutoScrolling()
 		}
 
@@ -43,7 +43,7 @@ export class ExplorerManager {
 		await this.reloadFolderNotesPlugin()
 	}
 
-	private async toggleSortingClass() {
+	private async updateManualSortingClass() {
 		const explorerEl = await this.waitForExplorerElement()
 		explorerEl.toggleClass('manual-sorting-enabled', this.plugin.isManualSortingEnabled())
 	}

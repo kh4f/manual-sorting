@@ -26,7 +26,7 @@ export class ExplorerManager {
 		})
 	}
 
-	async reloadExplorerPlugin() {
+	async reloadFileExplorerPlugin() {
 		const fileExplorerPlugin = this.plugin.app.internalPlugins.plugins['file-explorer']
 		fileExplorerPlugin.disable()
 		await fileExplorerPlugin.enable()

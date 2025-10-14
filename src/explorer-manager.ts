@@ -32,13 +32,10 @@ export class ExplorerManager {
 		await fileExplorerPlugin.enable()
 		this.log.info('File Explorer plugin reloaded')
 
-		const toggleSortingClass = async () => {
-			const explorerEl = await this.waitForExplorerElement()
-			explorerEl.toggleClass('manual-sorting-enabled', this.plugin.isManualSortingEnabled())
+		if (this.plugin.isManualSortingEnabled()) {
+			await this.toggleSortingClass()
+			void this.configureAutoScrolling()
 		}
-		if (this.plugin.isManualSortingEnabled()) void toggleSortingClass()
-
-		if (this.plugin.isManualSortingEnabled()) void this.configureAutoScrolling()
 
 		// [Dev mode] Add reload button to file explorer header instead of auto-reveal button
 		if (process.env.DEV) void this.addReloadNavButton()
@@ -48,6 +45,11 @@ export class ExplorerManager {
 			await this.plugin.app.plugins.disablePlugin('folder-notes')
 			void this.plugin.app.plugins.enablePlugin('folder-notes')
 		}
+	}
+
+	private async toggleSortingClass() {
+		const explorerEl = await this.waitForExplorerElement()
+		explorerEl.toggleClass('manual-sorting-enabled', this.plugin.isManualSortingEnabled())
 	}
 
 	private async configureAutoScrolling() {

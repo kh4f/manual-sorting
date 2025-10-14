@@ -40,11 +40,7 @@ export class ExplorerManager {
 		// [Dev mode] Add reload button to file explorer header instead of auto-reveal button
 		if (process.env.DEV) void this.addReloadNavButton()
 
-		if (this.plugin.app.plugins.getPlugin('folder-notes')) {
-			this.log.info('Reloading Folder Notes plugin')
-			await this.plugin.app.plugins.disablePlugin('folder-notes')
-			void this.plugin.app.plugins.enablePlugin('folder-notes')
-		}
+		await this.reloadFolderNotesPlugin()
 	}
 
 	private async toggleSortingClass() {
@@ -100,5 +96,13 @@ export class ExplorerManager {
 		fileExplorerView.headerDom.addNavButton('rotate-ccw', 'Reload app', () => {
 			this.plugin.app.commands.executeCommandById('app:reload')
 		})
+	}
+
+	private async reloadFolderNotesPlugin() {
+		if (this.plugin.app.plugins.getPlugin('folder-notes')) {
+			this.log.info('Reloading Folder Notes plugin')
+			await this.plugin.app.plugins.disablePlugin('folder-notes')
+			void this.plugin.app.plugins.enablePlugin('folder-notes')
+		}
 	}
 }

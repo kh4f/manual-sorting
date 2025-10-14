@@ -161,7 +161,7 @@ export class Patcher {
 					plugin.settings.selectedSortOrder = sortOrder
 
 					patcher.log.info('Sort order changed to:', sortOrder)
-					if (prevManualSortingEnabledStatus) void plugin.reloadExplorerPlugin()
+					if (prevManualSortingEnabledStatus) void plugin.explorerManager.reloadExplorerPlugin()
 					void plugin.saveSettings()
 				},
 				sort: original => function (this: FileExplorerView) {
@@ -301,7 +301,7 @@ export class Patcher {
 									plugin.settings.selectedSortOrder = MANUAL_SORTING_MODE_ID
 									void plugin.saveSettings()
 									plugin.orderManager.updateOrder()
-									void plugin.reloadExplorerPlugin()
+									void plugin.explorerManager.reloadExplorerPlugin()
 								}
 							})
 					})
@@ -331,7 +331,7 @@ export class Patcher {
 								new ResetOrderModal(plugin.app, prevSelectedSortOrder, () => {
 									plugin.orderManager.resetOrder()
 									plugin.orderManager.updateOrder()
-									if (plugin.isManualSortingEnabled()) void plugin.reloadExplorerPlugin()
+									if (plugin.isManualSortingEnabled()) void plugin.explorerManager.reloadExplorerPlugin()
 								}).open()
 							})
 					})

@@ -1,6 +1,19 @@
 # Changelog
 
 
+## &ensp; [` 📦 2.5.1  `](https://github.com/kh4f/manual-sorting/compare/2.5.0...2.5.1)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **explorer-manager**: 
+  - track file explorer mounting to correctly update related states [`7073d54`](https://github.com/kh4f/manual-sorting/commit/7073d54) ([#54](https://github.com/kh4f/manual-sorting/issues/54))
+  - prevent duplicate 'Reload app' button in file explorer header [`7ee34d1`](https://github.com/kh4f/manual-sorting/commit/7ee34d1)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚡ Performance
+- **patcher**: replace post-processing reordering with incremental insertion during load [`739d645`](https://github.com/kh4f/manual-sorting/commit/739d645) ([#34](https://github.com/kh4f/manual-sorting/issues/34), [#68](https://github.com/kh4f/manual-sorting/issues/68))
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/2.5.0...2.5.1) &ensp;•&ensp; _Oct 14, 2025_
+
+
 ## &ensp; [` 📦 2.5.0  `](https://github.com/kh4f/manual-sorting/compare/2.4.0...2.5.0)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features

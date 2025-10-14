@@ -14,15 +14,13 @@ export class ExplorerManager {
 				return
 			}
 
-			const observer = new MutationObserver((_, obs) => {
+			new MutationObserver((_, obs) => {
 				const explorer = getExplorer()
 				if (explorer) {
 					obs.disconnect()
 					resolve(explorer)
 				}
-			})
-			const workspace = document.querySelector('.workspace')
-			if (workspace) observer.observe(workspace, { childList: true, subtree: true })
+			}).observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
 		})
 	}
 

@@ -39,7 +39,8 @@
 		},
 		{
             "matchManagers": ["github-actions"],
-            "semanticCommitScope": "actions"
+            "semanticCommitScope": "actions",
+			"commitMessageTopic": "`{{depName}}`"
 		},
 		{
 			"matchDepNames": "pnpm",

@@ -5,7 +5,7 @@ export class ExplorerManager {
 	constructor(private plugin: ManualSortingPlugin) {}
 	private log = new Logger('explorer-manager', '#bf77ff')
 
-	async waitForExplorer() {
+	async waitForExplorerElement() {
 		return new Promise<Element>(resolve => {
 			const getExplorer = () => document.querySelector('[data-type="file-explorer"] .nav-files-container')
 			const explorer = getExplorer()
@@ -33,7 +33,7 @@ export class ExplorerManager {
 		this.log.info('File Explorer plugin reloaded')
 
 		const toggleSortingClass = async () => {
-			const explorerEl = await this.waitForExplorer()
+			const explorerEl = await this.waitForExplorerElement()
 			explorerEl.toggleClass('manual-sorting-enabled', this.plugin.isManualSortingEnabled())
 		}
 		if (this.plugin.isManualSortingEnabled()) void toggleSortingClass()
@@ -52,7 +52,7 @@ export class ExplorerManager {
 
 	private async configureAutoScrolling() {
 		let scrollInterval: number | null = null
-		const explorer = await this.waitForExplorer()
+		const explorer = await this.waitForExplorerElement()
 
 		const startScrolling = (speed: number) => {
 			if (scrollInterval) return
@@ -92,7 +92,7 @@ export class ExplorerManager {
 	}
 
 	private async addReloadNavButton() {
-		await this.waitForExplorer()
+		await this.waitForExplorerElement()
 		const fileExplorerView = this.plugin.getFileExplorerView()
 		fileExplorerView.autoRevealButtonEl.style.display = 'none'
 		fileExplorerView.headerDom.addNavButton('rotate-ccw', 'Reload app', () => {

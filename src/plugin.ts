@@ -35,7 +35,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.patcher.patchSortable()
 		this.patcher.patchSortOrderMenu()
 
-		await this.explorerManager.waitForExplorer()
+		await this.explorerManager.waitForExplorerElement()
 		const fileExplorerView = this.getFileExplorerView()
 		// fix for Obsidian not saving the last selected sorting mode
 		if (!prevManualSortingEnabledStatus) fileExplorerView.setSortOrder(this.settings.selectedSortOrder)

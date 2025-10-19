@@ -3,5 +3,10 @@ import { resolve } from 'node:path'
 
 export default defineConfig({
 	resolve: { alias: {	'@': resolve('src') } },
-	test: { environment: 'happy-dom' },
+	test: {
+		projects: [
+			'tests',
+			{ test: { include: ['benches'], environment: 'happy-dom' } },
+		],
+	},
 })

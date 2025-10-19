@@ -19,8 +19,8 @@ export class OrderManager {
 		const savedOrder = this.plugin.settings.customFileOrder
 		const newOrder = this.matchSavedOrder(currentOrder, savedOrder)
 		this.plugin.settings.customFileOrder = newOrder
-		void this.plugin.saveSettings()
 		this.log.info('Order updated:', this.plugin.settings.customFileOrder)
+		void this.plugin.saveSettings()
 	}
 
 	private getCurrentOrder() {

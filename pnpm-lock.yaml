@@ -34,7 +34,7 @@ importers:
         specifier: ^16.4.0
         version: 16.4.0
       happy-dom:
-        specifier: ^20.0.2
+        specifier: ^20.0.4
         version: 20.0.5
       i18next:
         specifier: ^25.6.0

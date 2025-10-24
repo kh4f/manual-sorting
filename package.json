@@ -52,7 +52,7 @@
 		"tsdown": "^0.15.9",
 		"tsx": "^4.20.6",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.46.1",
+		"typescript-eslint": "^8.46.2",
 		"vitest": "^4.0.1"
 	},
 	"dependencies": {

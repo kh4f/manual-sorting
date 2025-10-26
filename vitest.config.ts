@@ -6,7 +6,7 @@ export default defineConfig({
 	test: {
 		projects: [
 			'tests',
-			{ test: { include: ['benches'], environment: 'happy-dom' } },
+			{ test: { include: ['bench'], environment: 'happy-dom' } },
 		],
 	},
 })

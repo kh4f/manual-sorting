@@ -1,5 +1,6 @@
 import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils/logger'
+import { FILE_EXPLORER_SELECTOR } from '@/constants'
 
 export class ExplorerManager {
 	constructor(private plugin: ManualSortingPlugin) {}
@@ -22,7 +23,7 @@ export class ExplorerManager {
 	}
 
 	private observeExplorerMount(onMount: (el: HTMLElement) => void, disconnectOnMount = false) {
-		const target = document.querySelector('[data-type="file-explorer"] .nav-files-container')
+		const target = document.querySelector(FILE_EXPLORER_SELECTOR)
 		if (target instanceof HTMLElement) {
 			onMount(target)
 			return
@@ -30,7 +31,7 @@ export class ExplorerManager {
 		new MutationObserver((mutations, obs) => {
 			for (const mutation of mutations) {
 				for (const node of mutation.addedNodes) {
-					if (node instanceof HTMLElement && node.matches('[data-type="file-explorer"] .nav-files-container')) {
+					if (node instanceof HTMLElement && node.matches(FILE_EXPLORER_SELECTOR)) {
 						if (disconnectOnMount) obs.disconnect()
 						this.log.info('File Explorer mounted', node)
 						onMount(node)

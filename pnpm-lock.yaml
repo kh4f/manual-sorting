@@ -70,7 +70,7 @@ importers:
         specifier: ^8.46.2
         version: 8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3)
       vitest:
-        specifier: ^4.0.2
+        specifier: ^4.0.3
         version: 4.0.3(@types/node@24.9.1)(happy-dom@20.0.8)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
 packages:

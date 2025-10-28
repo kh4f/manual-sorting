@@ -30,7 +30,7 @@ export default defineConfig({
 			output: 'stdout',
 			commitRange: 'latest-release',
 			header: '',
-			partials: { header: '', body: 'from-file' },
+			partials: { header: '', body: '{{fromFile}}' },
 		},
 	},
 })

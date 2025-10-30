@@ -7,17 +7,23 @@ import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
 import { Logger } from '@/utils/logger'
 import { Patcher } from '@/patcher'
 import { ExplorerManager } from '@/explorer-manager'
+import { SyncMonitorObs } from '@/sync/sync-monitor-obs'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager!: OrderManager
 	private patcher = new Patcher(this)
 	public explorerManager = new ExplorerManager(this)
+	private syncMonitorObs = new SyncMonitorObs(this)
 	private log = new Logger('core', '#ff4e37')
 	public settings!: PluginSettings
 
 	async onload() {
 		await this.loadSettings()
-		this.setLogLevel(this.settings.debugMode ? 'debug' : 'silent')
+
+		//init early to prevent overwriting data.json
+		if (this.syncMonitorObs.isEnabled()) this.syncMonitorObs.onload()
+
+		this.setLogLevel(this.settings.debugMode ? 'debug' : 'silent')  //may overwrite data.json
 		if (process.env.DEV) this.log.info('Loading Manual Sorting in dev mode')
 		this.addSettingTab(new SettingsTab(this.app, this))
 		this.app.workspace.onLayoutReady(() => this.initialize())
@@ -27,6 +33,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.patcher.unpatchFileExplorer()
 		this.patcher.unpatchSortOrderMenu()
 		if (this.isManualSortingEnabled()) void this.explorerManager.refreshExplorer()
+		if (this.syncMonitorObs.isEnabled()) this.syncMonitorObs.onunload()
 	}
 
 	async initialize() {
@@ -53,6 +60,8 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async saveSettings() {
+		if (this.syncMonitorObs.isEnabled()
+			&& this.syncMonitorObs.isSyncActive()) return
 		await this.saveData(this.settings)
 		this.log.info('Settings saved:', this.settings)
 	}

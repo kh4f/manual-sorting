@@ -12,6 +12,8 @@ export interface PluginSettings {
 	draggingEnabled: boolean
 	debugMode: boolean
 	newItemsPosition: 'top' | 'bottom'
+	syncMonitorObs: boolean
+	syncInactivityResetMs: number
 }
 
 export type FileOrder = Record<string, string[]>

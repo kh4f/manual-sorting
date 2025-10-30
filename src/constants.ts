@@ -13,4 +13,6 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	selectedSortOrder: 'manual-sorting',
 	debugMode: !!process.env.DEV,
 	newItemsPosition: 'top',
+	syncMonitorObs: false,
+	syncInactivityResetMs: 2000,
 }

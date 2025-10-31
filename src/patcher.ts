@@ -1,4 +1,4 @@
-import { Menu, MenuItem, Keymap, TAbstractFile } from 'obsidian'
+import { Menu, MenuItem, Keymap, TAbstractFile, FileManager, TFile, type PaneType } from 'obsidian'
 import type { FileTreeItem, FileExplorerView, InfinityScroll, InfinityScrollRootEl, FolderTreeItem } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import Sortable, { type SortablePrototype } from 'sortablejs'
@@ -14,6 +14,7 @@ export class Patcher {
 	private dndManager: DndManager
 	private log = new Logger('patcher', '#65a3ff')
 	private recentExplorerAction = ''
+	private manuallyChangedItems = new Set<string>()
 
 	constructor(private plugin: ManualSortingPlugin) {
 		this.dndManager = new DndManager(plugin)
@@ -52,6 +53,15 @@ export class Patcher {
 					const currentChildren = Array.from(this.children)
 					const newChildrenSet = new Set(newChildren)
 
+					const reconcileCustomOrder = (changedItemPath: string) => {
+						let shouldSaveSettings = true
+						if (!patcher.manuallyChangedItems.delete(changedItemPath)) { // <=> if the item not in manuallyChangedItems
+							patcher.log.warn(`Item '${changedItemPath}' wasn't changed manually (likely synced), skipping settings file save to avoid merge conflict on sync`)
+							shouldSaveSettings = false
+						}
+						plugin.orderManager.updateOrder(shouldSaveSettings)
+					}
+
 					for (const child of currentChildren) {
 						const childElement = child as HTMLElement
 						if (!newChildrenSet.has(childElement)) {
@@ -61,8 +71,13 @@ export class Patcher {
 								const itemObject = plugin.app.vault.getAbstractFileByPath(childPath)
 								if (!itemObject) {
 									patcher.log.warn('Item not exists in vault, removing its DOM element:', childPath)
-									if (childPath) plugin.orderManager.updateOrder()
 									this.removeChild(child)
+
+									const parentPath = childPath.substring(0, childPath.lastIndexOf('/')) || '/'
+									if (plugin.settings.customFileOrder[parentPath].includes(childPath)) {
+										patcher.log.info(`Removed item '${childPath}' is still present in custom order, updating order...`)
+										reconcileCustomOrder(childPath)
+									}
 								} else {
 									const actualParentPath = childElement.parentElement?.previousElementSibling?.getAttribute('data-path') || '/'
 									const itemObjectParentPath = itemObject.parent?.path
@@ -87,8 +102,8 @@ export class Patcher {
 						patcher.log.info(`Item container:`, itemContainer, elementFolderPath)
 
 						if (path && !plugin.settings.customFileOrder[elementFolderPath].includes(path)) {
-							patcher.log.info('Item not found in custom order, updating order...')
-							plugin.orderManager.updateOrder()
+							patcher.log.info(`New item '${path}' not found in custom order, updating order...`)
+							reconcileCustomOrder(path)
 						}
 
 						const expectedOrderMap = new Map(plugin.settings.customFileOrder[elementFolderPath].map((path, index) => [path, index]))
@@ -176,6 +191,10 @@ export class Patcher {
 						if (draggingElement) targetEl = draggingElement as HTMLElement
 					}
 					original.apply(this, [event, targetEl])
+				},
+				afterCreate: original => function (this: FileExplorerView, file: TFile, newLeaf: boolean | PaneType) {
+					if (plugin.isManualSortingEnabled()) patcher.manuallyChangedItems.add(file.path)
+					return original.apply(this, [file, newLeaf])
 				},
 			}),
 		)
@@ -270,6 +289,15 @@ export class Patcher {
 					const middleAlign = offsetTop - (container.clientHeight * 0.3) + (targetElement.clientHeight / 2)
 
 					container.scrollTo({ top: middleAlign, behavior: 'smooth' })
+				},
+			}),
+		)
+
+		this.explorerUninstallers.push(
+			around(Object.getPrototypeOf(this.plugin.app.fileManager) as FileManager, {
+				trashFile: original => function (this: FileManager, file: TAbstractFile) {
+					if (patcher.plugin.isManualSortingEnabled()) patcher.manuallyChangedItems.add(file.path)
+					return original.apply(this, [file])
 				},
 			}),
 		)

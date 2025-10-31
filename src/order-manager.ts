@@ -13,14 +13,14 @@ export class OrderManager {
 		void this.plugin.saveSettings()
 	}
 
-	updateOrder() {
+	updateOrder(shouldSaveSettings = true) {
 		this.log.info('Updating order...')
 		const currentOrder = this.getCurrentOrder()
 		const savedOrder = this.plugin.settings.customFileOrder
 		const newOrder = this.matchSavedOrder(currentOrder, savedOrder)
 		this.plugin.settings.customFileOrder = newOrder
 		this.log.info('Order updated:', this.plugin.settings.customFileOrder)
-		void this.plugin.saveSettings()
+		if (shouldSaveSettings) void this.plugin.saveSettings()
 	}
 
 	private getCurrentOrder() {

@@ -53,6 +53,7 @@
 		"tsx": "^4.20.6",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.46.2",
+		"vite-plugin-syncroid": "^0.3.0",
 		"vitest": "^4.0.3"
 	},
 	"dependencies": {

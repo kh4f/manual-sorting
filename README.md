@@ -1,5 +1,7 @@
 <div align="center">
-	<h1>📌 Manual Sorting</h1>
+	<h1>📌 This is a fork of <a href="https://github.com/kh4f/manual-sorting" target="_blank">kh4f/Manual Sorting</a></h1>
+	<b>Please check out the version there. This temporary development version here has been generated to add the sync monitor for Obsidian Sync.</b>
+	<br><br>
 	<b>An <a href="https://obsidian.md/" target="_blank">Obsidian</a> plugin that adds manual drag&drop sorting to the file explorer.</b>
 	<br><br>
 	<p>

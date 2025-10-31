@@ -1,7 +1,41 @@
 <div align="center">
 	<h1>📌 This is a fork of <a href="https://github.com/kh4f/manual-sorting" target="_blank">kh4f/Manual Sorting</a></h1>
-	<b>Please check out the version there. This temporary development version here has been generated to add the sync monitor for Obsidian Sync.</b>
+	<b>Please check out the version there. This is a temporary development version. It was generated to add support for the Obsidian Sync synchronization service to Manual Sorting.</b>
 	<br><br>
+</div>
+
+<div align="left">
+
+When working with Obsidian Sync, observe the following:
+- Concurrent editing is _not_ permitted. Only work on one device at a time.
+- Wait until synchronization is complete before starting your work.
+
+When using Manual Sorting with Obsidian Sync:
+- Always keep the 'Obsidian Sync support' option enabled in the settings.
+- The default setting for the 'Sync inactivity reset timeout' is 2000 ms.
+  This value must be greater than the longest time Obsidian Sync takes between retrieving two
+  consecutive files from the remote vault. After the final file has been retrieved, this value
+  provides Obsidian with additional time to process and complete the synchronization.
+  For large vaults, many installed plugins, or slow connections on mobile devices, the value may
+  need to be increased if problems occur.
+- Your sort order is stored in
+  <path_to_your_local_vault>\\.obsidian\plugins\manual-sorting\data.json
+  You may want to back this up from time to time.
+
+Installing Manual Sorting with Obsidian Sync:
+- Obsidian settings, Sync, Installed community plugins  off
+- Install and enable Manual Sorting
+- Manual Sorting settings, Obsidian Sync support    on
+- Delete <path_to_your_local_vault>\\.obsidian\plugins\manual-sorting\data.json
+- Obsidian settings, Sync, Installed community plugins  on<br>
+Background: Because Obsidian Sync support is disabled by default, Manual Sorting writes the
+data.json file immediately without waiting for synchronization to complete. To handle this, we
+temporarily disable synchronization of the plugin data, remove the unnecessary data.json file, and
+then re-enable synchronization.
+
+</div>
+
+<div align="center">
 	<b>An <a href="https://obsidian.md/" target="_blank">Obsidian</a> plugin that adds manual drag&drop sorting to the file explorer.</b>
 	<br><br>
 	<p>

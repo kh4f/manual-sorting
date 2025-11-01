@@ -34,8 +34,8 @@ importers:
         specifier: ^16.4.0
         version: 16.4.0
       happy-dom:
-        specifier: ^20.0.8
-        version: 20.0.8
+        specifier: ^20.0.10
+        version: 20.0.10
       i18next:
         specifier: ^25.6.0
         version: 25.6.0(typescript@5.9.3)
@@ -74,7 +74,7 @@ importers:
         version: 0.3.0(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^4.0.4
-        version: 4.0.5(@types/node@24.9.2)(happy-dom@20.0.8)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+        version: 4.0.5(@types/node@24.9.2)(happy-dom@20.0.10)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
 packages:
 
@@ -1818,8 +1818,8 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  happy-dom@20.0.8:
-    resolution: {integrity: sha512-TlYaNQNtzsZ97rNMBAm8U+e2cUQXNithgfCizkDgc11lgmN4j9CKMhO3FPGKWQYPwwkFcPpoXYF/CqEPLgzfOg==}
+  happy-dom@20.0.10:
+    resolution: {integrity: sha512-6umCCHcjQrhP5oXhrHQQvLB0bwb1UzHAHdsXy+FjtKoYjUhmNZsQL8NivwM1vDvNEChJabVrUYxUnp/ZdYmy2g==}
     engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
@@ -4433,7 +4433,7 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.19.3
 
-  happy-dom@20.0.8:
+  happy-dom@20.0.10:
     dependencies:
       '@types/node': 20.19.21
       '@types/whatwg-mimetype': 3.0.2
@@ -5250,7 +5250,7 @@ snapshots:
       tsx: 4.20.6
       yaml: 2.8.1
 
-  vitest@4.0.5(@types/node@24.9.2)(happy-dom@20.0.8)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
+  vitest@4.0.5(@types/node@24.9.2)(happy-dom@20.0.10)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       '@vitest/expect': 4.0.5
       '@vitest/mocker': 4.0.5(vite@7.1.9(@types/node@24.9.2)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))
@@ -5274,7 +5274,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.9.2
-      happy-dom: 20.0.8
+      happy-dom: 20.0.10
     transitivePeerDependencies:
       - jiti
       - less

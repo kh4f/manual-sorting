@@ -4,7 +4,7 @@ import { existsSync } from 'node:fs'
 import syncroid from 'vite-plugin-syncroid'
 
 const isProd = process.argv.includes('--prod')
-const isSyncroidEnabled = existsSync('syncroid.config.ts')
+const useSyncroid = existsSync('syncroid.config.ts')
 const dirUrl = pathToFileURL(import.meta.dirname).href
 
 export default defineConfig({
@@ -23,5 +23,5 @@ export default defineConfig({
 	external: ['obsidian'],
 	noExternal: ['sortablejs', 'monkey-around'],
 	env: { DEV: !isProd },
-	plugins: [isSyncroidEnabled && syncroid({})],
+	plugins: [useSyncroid && syncroid({})],
 })

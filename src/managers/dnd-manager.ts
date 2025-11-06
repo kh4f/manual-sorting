@@ -10,6 +10,11 @@ export class DndManager {
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
+	private cachedTreeItems: HTMLElement[] = []
+	private rafId: number | null = null
+	private lastMouseY = 0
+	private currentDropIndicator: HTMLElement | null = null
+	private lastScrollY = 0
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -22,15 +27,39 @@ export class DndManager {
 		this.dragStartHandler = e => {
 			const draggedEl = e.target as HTMLElement
 
+			// Cache elements and their positions at the start of dragging
+			this.cacheTreeItems()
+
 			const onDrag = (e: DragEvent | TouchEvent) => {
-				this.collapseHoveredFolder(e.target as HTMLElement)
-				;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, e instanceof DragEvent ? e.clientY : e.touches[0].clientY))
-				this.updateDropIndicators(futureSibling, dropPosition)
+				// Save mouse position and process through RAF
+				this.lastMouseY = e instanceof DragEvent ? e.clientY : e.touches[0].clientY
+
+				// Check if scroll has changed
+				if (this.explorerEl && Math.abs(this.explorerEl.scrollTop - this.lastScrollY) > 1) {
+					this.cacheTreeItems()
+				}
+
+				if (this.rafId === null) {
+					this.rafId = requestAnimationFrame(() => {
+						this.rafId = null
+						this.collapseHoveredFolder(e.target as HTMLElement)
+						;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, this.lastMouseY))
+						this.updateDropIndicators(futureSibling, dropPosition)
+					})
+				}
 			}
 
 			const onDrop = () => {
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
+
+				// Cancel pending RAF
+				if (this.rafId !== null) {
+					cancelAnimationFrame(this.rafId)
+					this.rafId = null
+				}
+
 				this.clearDropIndicators()
+				this.cachedTreeItems = []
 
 				const sourcePath = draggedEl.dataset.path!
 				const item = this.plugin.getFileExplorerView().fileItems[sourcePath]
@@ -73,31 +102,53 @@ export class DndManager {
 		}
 	}
 
-	private findDropTarget(explorerEl: HTMLElement, mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
-		const treeItems = Array.from(explorerEl.querySelectorAll(
+	private cacheTreeItems() {
+		if (!this.explorerEl) return
+
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		const treeItems = Array.from(this.explorerEl.querySelectorAll(
 			'[data-type="file-explorer"] > .nav-files-container > div > .tree-item, \
 			.nav-folder:not(:has(> .is-being-dragged)) .tree-item',
-		))
-		if (!treeItems.length) return { futureSibling: treeItems[0] as HTMLElement, dropPosition: 'before' }
+		)) as HTMLElement[]
 
-		let futureSibling = treeItems[0] as HTMLElement
-		let dropPosition: 'before' | 'after' = treeItems[0].matches('.tree-item:nth-child(1 of .tree-item)') ? 'before' : 'after'
+		this.cachedTreeItems = treeItems
+		this.lastScrollY = this.explorerEl.scrollTop
+	}
 
-		treeItems.forEach(item => {
+	private findDropTarget(explorerEl: HTMLElement, mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
+		// Use cached elements, calculate coordinates on the fly
+		if (!this.cachedTreeItems.length) {
+			this.cacheTreeItems()
+			if (!this.cachedTreeItems.length) {
+				return { futureSibling: explorerEl, dropPosition: 'before' }
+			}
+		}
+
+		let futureSibling = this.cachedTreeItems[0]
+		let dropPosition: 'before' | 'after' = futureSibling.matches('.tree-item:nth-child(1 of .tree-item)') ? 'before' : 'after'
+
+		this.cachedTreeItems.forEach(item => {
 			const isTempChild = item.classList.contains('temp-child')
+
+			// Calculate coordinates on the fly - getBoundingClientRect() is fast enough
 			const itemRect = item.getBoundingClientRect()
 			const itemTop = itemRect.top
 			let itemBottom = itemRect.bottom
+
 			if (item.matches('.tree-item-children .tree-item:nth-last-child(1 of .tree-item)')) itemBottom -= 0.01
-			const futureSiblingEdgeY = futureSibling.getBoundingClientRect()[dropPosition === 'before' ? 'top' : 'bottom']
+
+			const futureSiblingRect = futureSibling.getBoundingClientRect()
+			const futureSiblingEdgeY = futureSiblingRect[dropPosition === 'before' ? 'top' : 'bottom']
 			const futureSiblingDist = Math.abs(futureSiblingEdgeY - mouseY)
 			const itemBottomDist = Math.abs(itemBottom - mouseY)
+
 			if ((itemBottomDist < futureSiblingDist) && !isTempChild)
-				[futureSibling, dropPosition] = [item as HTMLElement, 'after']
+				[futureSibling, dropPosition] = [item, 'after']
+
 			if (item.matches('.tree-item:nth-child(1 of .tree-item)')) {
 				const itemTopDist = Math.abs(itemTop - mouseY)
 				if (itemTopDist < futureSiblingDist && itemTopDist < itemBottomDist)
-					[futureSibling, dropPosition] = [item as HTMLElement, 'before']
+					[futureSibling, dropPosition] = [item, 'before']
 			}
 		})
 
@@ -105,7 +156,12 @@ export class DndManager {
 	}
 
 	private updateDropIndicators(futureSibling: HTMLElement, dropPosition: 'before' | 'after') {
-		document.querySelectorAll('.tree-item[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
+		// Remove indicator only from previous element
+		if (this.currentDropIndicator && this.currentDropIndicator !== futureSibling) {
+			this.currentDropIndicator.removeAttribute('data-drop-position')
+		}
+
+		this.currentDropIndicator = futureSibling
 		futureSibling.dataset.dropPosition = dropPosition
 		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		const siblingPath = (futureSibling.querySelector('.tree-item-self') as HTMLElement | null)?.dataset.path ?? ''
@@ -130,6 +186,12 @@ export class DndManager {
 	}
 
 	private clearDropIndicators() {
+		if (this.currentDropIndicator) {
+			this.currentDropIndicator.removeAttribute('data-drop-position')
+			this.currentDropIndicator = null
+		}
+
+		// Fallback in case something remained
 		document.querySelectorAll('.tree-item[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		document.querySelectorAll('.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
 		document.querySelectorAll('.temp-child').forEach(el => el.remove())

@@ -1,6 +1,21 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.0.0  `](https://github.com/kh4f/manual-sorting/compare/2.5.1...3.0.0)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚠️ BREAKING CHANGES
+- Changed settings storage format: renamed `customFileOrder` to `customOrder`, `selectedSortOrder` to `sortOrder`, and `newItemsPosition` to `newItemPlacement`. <sup>[1]</sup>
+- Removed `draggingEnabled` option. <sup>[1]</sup>
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚡ Performance
+- **dnd-manager**: optimize drag and drop performance with RAF and element caching [`8116e5e`](https://github.com/kh4f/manual-sorting/commit/8116e5e)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚜 Refactoring
+- **core**: migrate to custom DnD engine and update patching logic [`0609f36`](https://github.com/kh4f/manual-sorting/commit/0609f36) ⚠️<sup>[1]</sup> ([#34](https://github.com/kh4f/manual-sorting/issues/34), [#46](https://github.com/kh4f/manual-sorting/issues/46), [#48](https://github.com/kh4f/manual-sorting/issues/48), [#49](https://github.com/kh4f/manual-sorting/issues/49), [#73](https://github.com/kh4f/manual-sorting/issues/73))
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/2.5.1...3.0.0) &ensp;•&ensp; _Nov 6, 2025_
+
+
 ## &ensp; [` 📦 2.5.1  `](https://github.com/kh4f/manual-sorting/compare/2.5.0...2.5.1)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

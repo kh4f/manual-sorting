@@ -14,7 +14,7 @@ const versionsBumper: Bumper = {
 }
 
 export default defineConfig({
-	newTagPrefix: '',
+	tagPrefix: '',
 	_default: {
 		lifecycle: 'all',
 		bump: ['package.json', manifestBumper, versionsBumper],

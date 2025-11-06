@@ -35,7 +35,7 @@
 		"prepare": "simple-git-hooks"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.39.0",
+		"@eslint/js": "^9.39.1",
 		"@stylistic/eslint-plugin": "^5.5.0",
 		"@types/node": "^24.10.0",
 		"@types/sortablejs": "^1.15.9",

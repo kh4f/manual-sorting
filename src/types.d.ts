@@ -1,5 +1,5 @@
-import { IconName, TAbstractFile } from 'obsidian'
-import type Sortable from 'sortablejs'
+import { TFolder } from 'obsidian'
+import type { FileTreeItem } from 'obsidian-typings'
 import type { i18n } from 'i18next'
 
 declare global {
@@ -7,43 +7,22 @@ declare global {
 }
 
 export interface PluginSettings {
-	customFileOrder: FileOrder
-	selectedSortOrder: string
-	draggingEnabled: boolean
+	customOrder: FileOrder
+	sortOrder: string
 	debugMode: boolean
-	newItemsPosition: 'top' | 'bottom'
+	newItemPlacement: 'top' | 'bottom'
 }
 
 export type FileOrder = Record<string, string[]>
 
 declare module 'obsidian-typings' {
 	interface FileExplorerView {
-		autoRevealButtonEl: HTMLDivElement
-		headerDom: HeaderDom
-		onRename(file: TAbstractFile, oldPath: string): void
-		updateShowUnsupportedFiles(): void
-	}
-
-	interface HeaderDom {
-		addNavButton(icon: IconName, title: string, callback: (evt: MouseEvent) => void): HTMLElement
-	}
-
-	interface InfinityScroll {
-		scrollIntoView(target: { el: HTMLElement }, ...args: unknown[]): void
-	}
-
-	interface InfinityScrollRootEl {
-		childrenEl: HTMLElement
+		getSortedFolderItems(folder: TFolder, bypass?: boolean): FileTreeItem[]
 	}
 
 	interface TreeItem {
+		collapsed: boolean
 		setCollapsed(collapsed: boolean, check: boolean): void
-	}
-}
-
-declare module 'sortablejs' {
-	interface SortablePrototype extends Sortable {
-		_onDragOver(this: this, evt: DragEvent): unknown
 	}
 }
 

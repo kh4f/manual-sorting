@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
 import type ManualSortingPlugin from '@/plugin'
-import { Logger } from '@/utils/logger'
+import { Logger } from '@/utils'
 
 export class SettingsTab extends PluginSettingTab {
 	constructor(app: App, public plugin: ManualSortingPlugin) {
@@ -11,14 +11,14 @@ export class SettingsTab extends PluginSettingTab {
 		this.containerEl.empty()
 
 		new Setting(this.containerEl)
-			.setName('New items position')
-			.setDesc('Position of newly created items in a folder.')
+			.setName('New item placement')
+			.setDesc('Default new item placement.')
 			.addDropdown(dropdown => dropdown
 				.addOption('top', 'Top')
 				.addOption('bottom', 'Bottom')
-				.setValue(this.plugin.settings.newItemsPosition)
+				.setValue(this.plugin.settings.newItemPlacement)
 				.onChange(async value => {
-					this.plugin.settings.newItemsPosition = value as 'top' | 'bottom'
+					this.plugin.settings.newItemPlacement = value as 'top' | 'bottom'
 					await this.plugin.saveSettings()
 				}),
 			)

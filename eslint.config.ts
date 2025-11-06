@@ -24,6 +24,7 @@ export default defineConfig([
 			'@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
 			'@typescript-eslint/no-this-alias': 'off',
 			'@typescript-eslint/prefer-nullish-coalescing': 'off',
+			'@typescript-eslint/no-non-null-assertion': 'off',
 			'@typescript-eslint/naming-convention': ['error', {
 				selector: ['classProperty', 'classMethod'],
 				format: ['camelCase'],

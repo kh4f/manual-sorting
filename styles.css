@@ -1,24 +1,63 @@
-div.nav-files-container.manual-sorting-enabled {
-	& > div, div.tree-item-children {
-		min-height: 0 !important;
+[data-type="file-explorer"]:has([data-drop-position]) {
+	.tree-item { position: relative;}
 
-		& > div:not(.tree-item) {
-			margin-bottom: 0 !important;
+	.tree-item.temp-child { height: 15px; }
+
+	.tree-item::after, .tree-item:where(:nth-child(1 of .tree-item))::before {
+		content: "";
+		position: absolute;
+		display: block;
+		translate: -52% -2px;
+		height: 2px;
+		width: 80%;
+		left: 50%;
+		background-image: linear-gradient(90deg, #8888881a 50%, transparent 50%);
+		background-size: 8px 2px;
+		background-repeat: repeat-x;
+		border-radius: 100px;
+	}
+
+	.tree-item-children .tree-item:where(:nth-last-child(1 of .tree-item))::after {
+		background-image: none;
+	}
+
+	.tree-item[data-drop-position="before"]::before,
+	.tree-item[data-drop-position="after"]::after {
+		height: 2px;
+		background-image: linear-gradient(90deg, var(--color-accent) 50%, transparent 50%);
+		mask-image: linear-gradient(90deg, transparent 0%, black 50%, black 50%, transparent 100%);
+		background-repeat: repeat-x;
+		animation: dash-flow 0.5s linear infinite;
+	}
+
+	.nav-folder.is-drop-target {
+		background: hsla(var(--interactive-accent-hsl), 0.05) !important;
+		border-radius: var(--radius-s);
+		
+		> .nav-folder-title {
+			color: var(--nav-item-color-highlighted) !important;
+		}
+	}
+
+	.nav-folder.is-being-dragged-over {
+		background-color: transparent;
+		> .nav-folder-title {
+			color: var(--nav-item-color);
 		}
 	}
 }
 
-.menu-item[data-section="manual-sorting"] {
-	& .menu-item-icon:first-child {
-		display: flex;
-	}
+@keyframes dash-flow {
+	from { background-position: 0 0; }
+	to { background-position: 8px 0; }
+}
+
+.menu-item[data-section="customOrder"] {
+	& .menu-item-icon:first-child { display: flex; }
 
 	& .dragging-enabled-checkbox {
 		margin-bottom: -2px;
-
-		& input {
-			margin: 0;
-		}
+		& input { margin: 0; }
 	}
 
 	.svg-icon.lucide-pin {
@@ -31,22 +70,3 @@ div.nav-files-container.manual-sorting-enabled {
 	display: flex;
 	gap: 8px;
 }
-
-
-/* ========== Fix the hover state after dragging ========== */
-
-/* Simulate the hover state for the dragged item */
-.tree-item-self.hovered {
-	color: var(--nav-item-color-hover);
-	background-color: var(--nav-item-background-hover);
-	font-weight: var(--nav-item-weight-hover);
-}
-
-/* Reset default styles for :hover elements when the hover state is simulated manually */
-body:not(.is-grabbing):has(.tree-item-self.hovered) .tree-item-self.is-clickable:not(.hovered):not(.is-active):hover {
-	color: var(--nav-item-color);
-	background-color: var(--nav-item-background);
-	font-weight: var(--nav-item-weight);
-}
-
-/* ======================================================== */

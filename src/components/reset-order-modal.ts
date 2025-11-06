@@ -1,13 +1,13 @@
 import { App, ButtonComponent, Modal } from 'obsidian'
 
 export class ResetOrderModal extends Modal {
-	constructor(app: App, prevSelectedSortOrder: string, onSubmit: () => void) {
+	constructor(app: App, onSubmit: () => void) {
 		super(app)
 		this.setTitle('Manual sorting')
 		this.modalEl.addClass('manual-sorting-modal')
 
 		const modalContent = this.contentEl.createEl('div')
-		modalContent.createEl('p', { text: `Reset custom order to match previously selected one (${prevSelectedSortOrder})?` })
+		modalContent.createEl('p', { text: `Reset custom order?` })
 		const modalButtons = modalContent.createEl('div', { cls: 'modal-buttons' })
 		new ButtonComponent(modalButtons)
 			.setButtonText('Yep')

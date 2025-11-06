@@ -1,54 +1,75 @@
-import { Plugin } from 'obsidian'
+import { Plugin, TAbstractFile } from 'obsidian'
 import type { FileExplorerView } from 'obsidian-typings'
 import { SettingsTab } from '@/components'
-import { OrderManager } from '@/order-manager'
-import type { LogLevel, PluginSettings } from '@/types.d'
-import { DEFAULT_SETTINGS, MANUAL_SORTING_MODE_ID } from '@/constants'
-import { Logger } from '@/utils/logger'
-import { Patcher } from '@/patcher'
-import { ExplorerManager } from '@/explorer-manager'
+import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
+import type { PluginSettings } from '@/types'
+import { DEFAULT_SETTINGS, CUSTOM_SORTING_ID } from '@/constants'
+import { Logger } from '@/utils'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager!: OrderManager
 	private patcher = new Patcher(this)
 	public explorerManager = new ExplorerManager(this)
+	public dndManager = new DndManager(this)
 	private log = new Logger('core', '#ff4e37')
 	public settings!: PluginSettings
 
 	async onload() {
 		await this.loadSettings()
-		this.setLogLevel(this.settings.debugMode ? 'debug' : 'silent')
+		Logger.logLevel = this.settings.debugMode ? 'debug' : 'silent'
 		if (process.env.DEV) this.log.info('Loading Manual Sorting in dev mode')
 		this.addSettingTab(new SettingsTab(this.app, this))
 		this.app.workspace.onLayoutReady(() => this.initialize())
 	}
 
 	onunload() {
-		this.patcher.unpatchFileExplorer()
+		this.patcher.unpatchExplorer()
 		this.patcher.unpatchSortOrderMenu()
-		if (this.isManualSortingEnabled()) void this.explorerManager.refreshExplorer()
+		this.dndManager.disable()
+		this.getFileExplorerView().sort()
+		this.log.info('Manual Sorting unloaded')
 	}
 
 	async initialize() {
-		const prevManualSortingEnabledStatus = this.isManualSortingEnabled()
-		this.patcher.patchSortable()
-		this.patcher.patchSortOrderMenu()
-
 		await this.explorerManager.waitForExplorerElement()
-		const fileExplorerView = this.getFileExplorerView()
-		// fix for Obsidian not saving the last selected sorting mode
-		if (!prevManualSortingEnabledStatus) fileExplorerView.setSortOrder(this.settings.selectedSortOrder)
-		this.patcher.patchFileExplorer()
-
 		this.orderManager = new OrderManager(this)
-		this.orderManager.updateOrder()
-
-		if (this.isManualSortingEnabled()) await this.explorerManager.refreshExplorer()
+		this.orderManager.reconcileOrder()
+		this.patcher.patchExplorer()
+		this.patcher.patchSortOrderMenu()
+		this.getFileExplorerView().setSortOrder(this.settings.sortOrder)
+		if (this.isCustomSortingActive()) void this.dndManager.enable()
 		this.explorerManager.refreshExplorerOnMount()
+		this.registerVaultHandlers()
+	}
+
+	registerVaultHandlers() {
+		this.app.vault.on('rename', (item: TAbstractFile, oldPath: string) => {
+			const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
+			const newDir = item.path.substring(0, item.path.lastIndexOf('/')) || '/'
+			if (oldDir !== newDir) return
+			this.log.info(`Item renamed from '${oldPath}' to '${item.path}'`)
+			this.orderManager.rename(oldPath, item.path)
+		})
+
+		this.app.vault.on('create', (item: TAbstractFile) => {
+			this.log.info(`Item created: '${item.path}'`)
+			this.orderManager.add(item)
+		})
+
+		this.app.vault.on('delete', (item: TAbstractFile) => {
+			this.log.info(`Item deleted: '${item.path}'`)
+			this.orderManager.remove(item.path)
+		})
 	}
 
 	async loadSettings() {
-		this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData() as Partial<PluginSettings>) }
+		const savedSettings = (await this.loadData() || {}) as Partial<PluginSettings>
+		this.settings = {
+			...DEFAULT_SETTINGS,
+			...Object.fromEntries((Object.keys(DEFAULT_SETTINGS) as (keyof PluginSettings)[])
+				.filter(k => k in savedSettings).map(k => [k, savedSettings[k]]),
+			),
+		}
 		this.log.info('Settings loaded:', this.settings)
 	}
 
@@ -60,20 +81,12 @@ export default class ManualSortingPlugin extends Plugin {
 	async onExternalSettingsChange() {
 		await this.loadSettings()
 		this.log.warn('Settings changed externally')
-		if (this.isManualSortingEnabled()) void this.explorerManager.refreshExplorer()
+		this.getFileExplorerView().sort()
 	}
+
+	isCustomSortingActive = () =>
+		this.settings.sortOrder === CUSTOM_SORTING_ID
 
 	getFileExplorerView = () =>
 		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
-
-	isManualSortingEnabled = () =>
-		this.settings.selectedSortOrder === MANUAL_SORTING_MODE_ID
-
-	setLogLevel(logLevel: LogLevel) {
-		Logger.logLevel = logLevel
-		if (logLevel === 'debug') {
-			this.settings.debugMode = true
-			void this.saveSettings()
-		}
-	}
 }

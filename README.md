@@ -32,6 +32,14 @@ Background: Because Obsidian Sync support is disabled by default, Manual Sorting
 data.json file immediately without waiting for synchronization to complete. To handle this, we
 temporarily disable synchronization of the plugin data, remove the unnecessary data.json file, and
 then re-enable synchronization.
+Note that this is not necessary if either
+syncMonitorObs: true in constants.ts
+or
+updated code of manual-sorting (Kh4f already implemented this on the branch fix/sync-conflict
+https://github.com/kh4f/manual-sorting/tree/fix/sync-conflict
+"Skip saving settings to data.json when updateOrder() is
+    triggered by workspace layout ready (since it’s not really necessary anyway, and during sync it
+    only causes trouble)."
 
 </div>
 

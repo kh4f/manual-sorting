@@ -39,7 +39,7 @@
 		"@stylistic/eslint-plugin": "^5.5.0",
 		"@types/node": "^24.10.0",
 		"@types/sortablejs": "^1.15.9",
-		"eslint": "^9.39.0",
+		"eslint": "^9.39.1",
 		"globals": "^16.5.0",
 		"happy-dom": "^20.0.10",
 		"i18next": "^25.6.0",

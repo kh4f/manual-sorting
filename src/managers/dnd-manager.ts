@@ -22,14 +22,20 @@ export class DndManager {
 
 		this.dragStartHandler = e => {
 			const draggedEl = e.target as HTMLElement
+			const pointer = e instanceof DragEvent ? e : e.touches[0]
+			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
+			if (Platform.isMobile && distanceFromRight > 25) return
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
+				// prevents horizontal swipe gesture from closing the explorer on mobile
+				if (Platform.isMobile) e.stopPropagation()
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement
+					const pointer = e instanceof DragEvent ? e : e.touches[0]
 					target.dataset.isBeingDragged = ''
 					this.collapseHoveredFolder(target)
-					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, e instanceof DragEvent ? e.clientY : e.touches[0].clientY))
+					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
 			}
@@ -124,7 +130,7 @@ export class DndManager {
 		if (childrenContainer && !childrenContainer.children.length) {
 			const tempChild = Object.assign(document.createElement('div'), {
 				className: 'tree-item temp-child',
-				innerHTML: `<div class="tree-item-self" data-path="${siblingPath}/temp"></div>`,
+				innerHTML: `<div class="tree-item-self temp" data-path="${siblingPath}/temp"></div>`,
 			})
 			childrenContainer.appendChild(tempChild)
 		}

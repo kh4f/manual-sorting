@@ -70,3 +70,14 @@
 	display: flex;
 	gap: 8px;
 }
+
+@media (pointer: coarse) {
+    .tree-item-self:not(.temp)::after {
+		content: "⋮⋮⋮";
+		position: absolute;
+		right: 12px;
+		align-self: center;
+		font-size: calc(var(--nav-item-size)+2px);
+		opacity: 0.4;
+	}
+}

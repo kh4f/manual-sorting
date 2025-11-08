@@ -33,6 +33,7 @@ export class DndManager {
 			}
 
 			const onDrop = () => {
+				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()
 

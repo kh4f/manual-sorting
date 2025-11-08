@@ -33,6 +33,13 @@ export class DndManager {
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
+					const explorerRect = this.explorerEl!.getBoundingClientRect()
+					const isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
+						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
+					if (isOutsideExplorer) {
+						this.clearDropIndicators()
+						return
+					}
 					target.dataset.isBeingDragged = ''
 					this.collapseHoveredFolder(target)
 					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, pointer.clientY))

@@ -1,6 +1,39 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.0.1  `](https://github.com/kh4f/manual-sorting/compare/3.0.0...3.0.1)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - handle dragging outside explorer correctly [`a574453`](https://github.com/kh4f/manual-sorting/commit/a574453)
+  - add drag handle for touch devices to prevent unintended drag events during scrolling [`b7304b7`](https://github.com/kh4f/manual-sorting/commit/b7304b7) ([#91](https://github.com/kh4f/manual-sorting/issues/91), [#87](https://github.com/kh4f/manual-sorting/issues/87))
+  - fix drop zone visibility issues [`5edf809`](https://github.com/kh4f/manual-sorting/commit/5edf809)
+- **dnd-manager**: 
+  - prevent race condition in drop indicator cleanup [`d3794ae`](https://github.com/kh4f/manual-sorting/commit/d3794ae)
+  - prevent item jump when dragging to same position [`3f7a363`](https://github.com/kh4f/manual-sorting/commit/3f7a363) ([#88](https://github.com/kh4f/manual-sorting/issues/88))
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚡ Performance
+- **dnd-manager**: throttle drag event handling with RAF [`6a637ea`](https://github.com/kh4f/manual-sorting/commit/6a637ea) ([#89](https://github.com/kh4f/manual-sorting/issues/89))
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;♻️ Reverts
+- **dnd-manager**: optimize drag and drop performance with RAF and element caching [`e5d72b1`](https://github.com/kh4f/manual-sorting/commit/e5d72b1) ([#89](https://github.com/kh4f/manual-sorting/issues/89))
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚜 Refactoring
+- **dnd-manager**: use generic type parameter in `querySelector` insted of type assertion [`209a7c7`](https://github.com/kh4f/manual-sorting/commit/209a7c7)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📦 Build
+- **tsdown**: replace file-based syncroid detection with env variable [`fe3b47b`](https://github.com/kh4f/manual-sorting/commit/fe3b47b)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🧩 Dependencies
+- **dev-deps**: 
+  - bump `vitest` from 4.0.6 to 4.0.7 [`a4dddad`](https://github.com/kh4f/manual-sorting/commit/a4dddad)
+  - bump `eslint` from 9.39.0 to 9.39.1 [`48c2b7d`](https://github.com/kh4f/manual-sorting/commit/48c2b7d)
+  - bump `@eslint/js` from 9.39.0 to 9.39.1 [`271c3b3`](https://github.com/kh4f/manual-sorting/commit/271c3b3)
+  - bump `typescript-eslint` from 8.46.2 to 8.46.3 [`8a55e56`](https://github.com/kh4f/manual-sorting/commit/8a55e56)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.0.0...3.0.1) &ensp;•&ensp; _Nov 8, 2025_
+
+
 ## &ensp; [` 📦 3.0.0  `](https://github.com/kh4f/manual-sorting/compare/2.5.1...3.0.0)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚠️ BREAKING CHANGES

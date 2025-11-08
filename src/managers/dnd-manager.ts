@@ -40,8 +40,7 @@ export class DndManager {
 				const sourcePath = draggedEl.dataset.path!
 				const item = this.plugin.getFileExplorerView().fileItems[sourcePath]
 
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-				const siblingPath = (futureSibling.querySelector('.tree-item-self') as HTMLElement | null)?.dataset.path ?? ''
+				const siblingPath = futureSibling.querySelector<HTMLElement>('.tree-item-self')?.dataset.path ?? ''
 				const isSiblingTempChild = futureSibling.classList.contains('temp-child')
 
 				this.plugin.orderManager.reconcileOrder()
@@ -112,8 +111,7 @@ export class DndManager {
 	private updateDropIndicators(futureSibling: HTMLElement, dropPosition: 'before' | 'after') {
 		document.querySelectorAll('.tree-item[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		futureSibling.dataset.dropPosition = dropPosition
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		const siblingPath = (futureSibling.querySelector('.tree-item-self') as HTMLElement | null)?.dataset.path ?? ''
+		const siblingPath = futureSibling.querySelector<HTMLElement>('.tree-item-self')?.dataset.path ?? ''
 
 		if (Platform.isMobile && ['nav-folder', 'is-collapsed'].every(cls => futureSibling.classList.contains(cls))) {
 			const item = this.plugin.getFileExplorerView().fileItems[siblingPath]

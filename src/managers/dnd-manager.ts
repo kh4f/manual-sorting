@@ -26,7 +26,9 @@ export class DndManager {
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
-					this.collapseHoveredFolder(e.target as HTMLElement)
+					const target = e.target as HTMLElement
+					target.dataset.isBeingDragged = ''
+					this.collapseHoveredFolder(target)
 					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, e instanceof DragEvent ? e.clientY : e.touches[0].clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
@@ -80,7 +82,7 @@ export class DndManager {
 	private findDropTarget(explorerEl: HTMLElement, mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
 		const treeItems = Array.from(explorerEl.querySelectorAll(
 			'[data-type="file-explorer"] > .nav-files-container > div > .tree-item, \
-			.nav-folder:not(:has(> .is-being-dragged)) .tree-item',
+			.nav-folder:not(:has(> [data-is-being-dragged])) .tree-item',
 		))
 		if (!treeItems.length) return { futureSibling: treeItems[0] as HTMLElement, dropPosition: 'before' }
 
@@ -133,7 +135,8 @@ export class DndManager {
 	}
 
 	private clearDropIndicators() {
-		document.querySelectorAll('.tree-item[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
+		document.querySelectorAll('[data-is-being-dragged]').forEach(el => el.removeAttribute('data-is-being-dragged'))
+		document.querySelectorAll('[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		document.querySelectorAll('.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
 		document.querySelectorAll('.temp-child').forEach(el => el.remove())
 	}

@@ -158,8 +158,8 @@ export class DndManager {
 		this.plugin.getFileExplorerView().lastDropTargetEl = item.el
 
 		if (isSiblingTempChild) siblingPath = ''
-		this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
-		void this.plugin.saveSettings()
+		const isItemMoved = this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
+		if (isItemMoved) void this.plugin.saveSettings()
 
 		return targetPath
 	}

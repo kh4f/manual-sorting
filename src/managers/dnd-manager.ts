@@ -10,6 +10,7 @@ export class DndManager {
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
+	private rafId = 0
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -23,9 +24,12 @@ export class DndManager {
 			const draggedEl = e.target as HTMLElement
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
-				this.collapseHoveredFolder(e.target as HTMLElement)
-				;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, e instanceof DragEvent ? e.clientY : e.touches[0].clientY))
-				this.updateDropIndicators(futureSibling, dropPosition)
+				cancelAnimationFrame(this.rafId)
+				this.rafId = requestAnimationFrame(() => {
+					this.collapseHoveredFolder(e.target as HTMLElement)
+					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, e instanceof DragEvent ? e.clientY : e.touches[0].clientY))
+					this.updateDropIndicators(futureSibling, dropPosition)
+				})
 			}
 
 			const onDrop = () => {

@@ -1,10 +1,11 @@
 import { defineConfig } from 'tsdown'
 import { pathToFileURL } from 'node:url'
-import { existsSync } from 'node:fs'
 import syncroid from 'vite-plugin-syncroid'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const isProd = process.argv.includes('--prod')
-const useSyncroid = existsSync('syncroid.config.ts')
+const useSyncroid = process.env.USE_SYNCROID !== undefined
 const dirUrl = pathToFileURL(import.meta.dirname).href
 
 export default defineConfig({

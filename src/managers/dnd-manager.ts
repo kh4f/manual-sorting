@@ -93,10 +93,7 @@ export class DndManager {
 	}
 
 	private findDropTarget(explorerEl: HTMLElement, mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
-		const treeItems = Array.from(explorerEl.querySelectorAll(
-			'[data-type="file-explorer"] > .nav-files-container > div > .tree-item, \
-			.nav-folder:not(:has(> [data-is-being-dragged])) .tree-item',
-		))
+		const treeItems = Array.from(explorerEl.querySelectorAll('.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item)'))
 		if (!treeItems.length) return { futureSibling: treeItems[0] as HTMLElement, dropPosition: 'before' }
 
 		let futureSibling = treeItems[0] as HTMLElement

@@ -1,6 +1,19 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.0.2  `](https://github.com/kh4f/manual-sorting/compare/3.0.1...3.0.2)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - prevent instant folder expansion during drag on mobile [`d4b2474`](https://github.com/kh4f/manual-sorting/commit/d4b2474) ([#90](https://github.com/kh4f/manual-sorting/issues/90))
+  - prevent explorer scrolling during drag on mobile [`1267d8d`](https://github.com/kh4f/manual-sorting/commit/1267d8d)
+  - prevent dragged folder auto-expansion when dragging on mobile [`4d9c601`](https://github.com/kh4f/manual-sorting/commit/4d9c601)
+  - prevent item move when dropped outside explorer [`06374ac`](https://github.com/kh4f/manual-sorting/commit/06374ac)
+  - prevent drop zones from displaying inside dragged folder descendants [`6ea7056`](https://github.com/kh4f/manual-sorting/commit/6ea7056)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.0.1...3.0.2) &ensp;•&ensp; _Nov 9, 2025_
+
+
 ## &ensp; [` 📦 3.0.1  `](https://github.com/kh4f/manual-sorting/compare/3.0.0...3.0.1)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

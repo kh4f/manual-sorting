@@ -124,9 +124,10 @@ export class DndManager {
 	private updateDropIndicators(futureSibling: HTMLElement, dropPosition: 'before' | 'after') {
 		document.querySelectorAll('.tree-item[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		futureSibling.dataset.dropPosition = dropPosition
-		const siblingPath = futureSibling.querySelector<HTMLElement>('.tree-item-self')?.dataset.path ?? ''
+		const futureSiblingSelf = futureSibling.querySelector<HTMLElement>(':scope > .tree-item-self')
+		const siblingPath = futureSiblingSelf?.dataset.path ?? ''
 
-		if (Platform.isMobile && ['nav-folder', 'is-collapsed'].every(cls => futureSibling.classList.contains(cls))) {
+		if (Platform.isMobile && ['nav-folder', 'is-collapsed'].every(cls => futureSibling.classList.contains(cls)) && futureSiblingSelf?.dataset.isBeingDragged === undefined) {
 			const item = this.plugin.getFileExplorerView().fileItems[siblingPath]
 			item.setCollapsed(false, true)
 		}

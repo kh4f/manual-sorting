@@ -28,7 +28,10 @@ export class DndManager {
 			let isOutsideExplorer = false
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
-				if (Platform.isMobile) e.stopPropagation() // prevents horizontal swipe gesture from closing the explorer on mobile
+				if (Platform.isMobile) {
+					e.stopPropagation()
+					e.preventDefault()
+				}
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement

@@ -25,6 +25,7 @@ export class DndManager {
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
 			if (Platform.isMobile && distanceFromRight > 25) return
+			let isOutsideExplorer = false
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) e.stopPropagation() // prevents horizontal swipe gesture from closing the explorer on mobile
@@ -33,7 +34,7 @@ export class DndManager {
 					const target = e.target as HTMLElement
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
 					const explorerRect = this.explorerEl!.getBoundingClientRect()
-					const isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
+					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
 					if (isOutsideExplorer) {
 						this.clearDropIndicators()
@@ -50,6 +51,7 @@ export class DndManager {
 				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()
+				if (isOutsideExplorer) return
 
 				const sourcePath = draggedEl.dataset.path!
 				const item = this.plugin.getFileExplorerView().fileItems[sourcePath]

@@ -37,7 +37,7 @@ export class OrderManager {
 
 	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after'): boolean {
 		if (oldPath === newPath && newPath === targetSiblingPath) return false
-		this.log.info(`Inserting ${oldPath} to ${newPath} (${position} ${targetSiblingPath})`)
+		this.log.info(`Moving ${oldPath} to ${newPath} (${position} ${targetSiblingPath})`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'

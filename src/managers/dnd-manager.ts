@@ -27,8 +27,7 @@ export class DndManager {
 			if (Platform.isMobile && distanceFromRight > 25) return
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
-				// prevents horizontal swipe gesture from closing the explorer on mobile
-				if (Platform.isMobile) e.stopPropagation()
+				if (Platform.isMobile) e.stopPropagation() // prevents horizontal swipe gesture from closing the explorer on mobile
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement

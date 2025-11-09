@@ -11,6 +11,8 @@ export class DndManager {
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
 	private rafId = 0
+	private folderExpandTimeout: number | null = null
+	private pendingExpandFolder: string | null = null
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -131,8 +133,26 @@ export class DndManager {
 		const siblingPath = futureSiblingSelf?.dataset.path ?? ''
 
 		if (Platform.isMobile && ['nav-folder', 'is-collapsed'].every(cls => futureSibling.classList.contains(cls)) && futureSiblingSelf?.dataset.isBeingDragged === undefined) {
-			const item = this.plugin.getFileExplorerView().fileItems[siblingPath]
-			item.setCollapsed(false, true)
+			if (this.pendingExpandFolder !== siblingPath) {
+				if (this.folderExpandTimeout !== null) {
+					clearTimeout(this.folderExpandTimeout)
+					this.folderExpandTimeout = null
+				}
+
+				this.pendingExpandFolder = siblingPath
+				this.folderExpandTimeout = window.setTimeout(() => {
+					const item = this.plugin.getFileExplorerView().fileItems[siblingPath]
+					item.setCollapsed(false, true)
+					this.folderExpandTimeout = null
+					this.pendingExpandFolder = null
+				}, 800)
+			}
+		} else {
+			if (this.folderExpandTimeout !== null) {
+				clearTimeout(this.folderExpandTimeout)
+				this.folderExpandTimeout = null
+				this.pendingExpandFolder = null
+			}
 		}
 
 		const childrenContainer = futureSibling.querySelector('.tree-item-children')
@@ -150,6 +170,11 @@ export class DndManager {
 	}
 
 	private clearDropIndicators() {
+		if (this.folderExpandTimeout !== null) {
+			clearTimeout(this.folderExpandTimeout)
+			this.folderExpandTimeout = null
+			this.pendingExpandFolder = null
+		}
 		document.querySelectorAll('[data-is-being-dragged]').forEach(el => el.removeAttribute('data-is-being-dragged'))
 		document.querySelectorAll('[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		document.querySelectorAll('.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))

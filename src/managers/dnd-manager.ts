@@ -46,7 +46,7 @@ export class DndManager {
 						return
 					}
 					target.dataset.isBeingDragged = ''
-					this.collapseHoveredFolder(target)
+					this.collapseDraggedFolder(target)
 					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
@@ -90,7 +90,7 @@ export class DndManager {
 		}
 	}
 
-	private collapseHoveredFolder(target: HTMLElement) {
+	private collapseDraggedFolder(target: HTMLElement) {
 		const isFolder = target.classList.contains('nav-folder-title')
 		if (isFolder && target.dataset.path) {
 			const file = this.plugin.getFileExplorerView().fileItems[target.dataset.path]

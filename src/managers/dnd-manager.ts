@@ -5,7 +5,7 @@ import { Logger } from '@/utils'
 
 export class DndManager {
 	private log = new Logger('DND-MANAGER', '#a6ff00')
-	private explorerEl: HTMLElement | null = null
+	private explorerEl!: HTMLElement
 	private dragStartHandler: ((e: DragEvent | TouchEvent) => void) | null = null
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
@@ -38,7 +38,7 @@ export class DndManager {
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
-					const explorerRect = this.explorerEl!.getBoundingClientRect()
+					const explorerRect = this.explorerEl.getBoundingClientRect()
 					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
 					if (isOutsideExplorer) {
@@ -47,7 +47,7 @@ export class DndManager {
 					}
 					target.dataset.isBeingDragged = ''
 					this.collapseDraggedFolder(target)
-					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl!, pointer.clientY))
+					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl, pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
 			}
@@ -84,7 +84,7 @@ export class DndManager {
 	}
 
 	disable() {
-		if (this.explorerEl && this.dragStartHandler) {
+		if (this.dragStartHandler) {
 			this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
 			this.log.info('Drag and drop disabled')
 		}

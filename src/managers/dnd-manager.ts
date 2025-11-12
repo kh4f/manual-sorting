@@ -184,7 +184,6 @@ export class DndManager {
 	private moveItem(item: FileTreeItem | FolderTreeItem, siblingPath: string, dropPosition: 'before' | 'after', isSiblingTempChild?: boolean): string {
 		const file = item.file
 		const sourcePath = file.path
-		if (isSiblingTempChild) siblingPath = ''
 
 		const targetFolderPath = siblingPath.substring(0, siblingPath.lastIndexOf('/'))
 		let targetPath = targetFolderPath ? targetFolderPath + '/' + file.name : file.name
@@ -194,6 +193,8 @@ export class DndManager {
 			const basePath = file instanceof TFile ? targetPath.slice(0, -(file.extension.length + 1)) : targetPath
 			targetPath = this.plugin.app.vault.getAvailablePath(basePath, file instanceof TFile ? file.extension : '')
 		}
+
+		if (isSiblingTempChild) siblingPath = ''
 
 		if (sourcePath !== targetPath || targetPath !== siblingPath) {
 			this.log.info(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)

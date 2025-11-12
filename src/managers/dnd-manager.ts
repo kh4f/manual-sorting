@@ -27,6 +27,7 @@ export class DndManager {
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
 			if (Platform.isMobile && distanceFromRight > 25) return
+			const explorerRect = this.explorerEl.getBoundingClientRect()
 			let isOutsideExplorer = false
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
@@ -38,7 +39,6 @@ export class DndManager {
 				this.rafId = requestAnimationFrame(() => {
 					const target = e.target as HTMLElement
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
-					const explorerRect = this.explorerEl.getBoundingClientRect()
 					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
 					if (isOutsideExplorer) {

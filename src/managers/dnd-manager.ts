@@ -10,6 +10,7 @@ export class DndManager {
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
+	private cachedElements: HTMLElement[] = []
 	private rafId = 0
 	private folderExpandTimeout: number | null = null
 	private pendingExpandFolder: string | null = null
@@ -31,6 +32,7 @@ export class DndManager {
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
 			draggedEl.dataset.isBeingDragged = ''
+			const prevScrollTop = this.explorerEl.scrollTop
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
@@ -47,7 +49,10 @@ export class DndManager {
 						return
 					}
 					this.collapseDraggedFolder(draggedEl)
-					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl, pointer.clientY))
+					if (!this.cachedElements.length || this.explorerEl.scrollTop !== prevScrollTop) {
+						this.cachedElements = Array.from(this.explorerEl.querySelectorAll('.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item)'))
+					}
+					;({ futureSibling, dropPosition } = this.findDropTarget(pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
 			}
@@ -99,11 +104,11 @@ export class DndManager {
 		}
 	}
 
-	private findDropTarget(explorerEl: HTMLElement, mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
-		const treeItems = Array.from(explorerEl.querySelectorAll('.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item)'))
-		if (!treeItems.length) return { futureSibling: treeItems[0] as HTMLElement, dropPosition: 'before' }
+	private findDropTarget(mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
+		const treeItems = this.cachedElements
+		if (!treeItems.length) return { futureSibling: treeItems[0], dropPosition: 'before' }
 
-		let futureSibling = treeItems[0] as HTMLElement
+		let futureSibling = treeItems[0]
 		let dropPosition: 'before' | 'after' = treeItems[0].matches('.tree-item:nth-child(1 of .tree-item)') ? 'before' : 'after'
 
 		treeItems.forEach(item => {
@@ -116,11 +121,11 @@ export class DndManager {
 			const futureSiblingDist = Math.abs(futureSiblingEdgeY - mouseY)
 			const itemBottomDist = Math.abs(itemBottom - mouseY)
 			if ((itemBottomDist < futureSiblingDist) && !isTempChild)
-				[futureSibling, dropPosition] = [item as HTMLElement, 'after']
+				[futureSibling, dropPosition] = [item, 'after']
 			if (item.matches('.tree-item:nth-child(1 of .tree-item)')) {
 				const itemTopDist = Math.abs(itemTop - mouseY)
 				if (itemTopDist < futureSiblingDist && itemTopDist < itemBottomDist)
-					[futureSibling, dropPosition] = [item as HTMLElement, 'before']
+					[futureSibling, dropPosition] = [item, 'before']
 			}
 		})
 
@@ -163,6 +168,7 @@ export class DndManager {
 				innerHTML: `<div class="tree-item-self temp" data-path="${siblingPath}/temp"></div>`,
 			})
 			childrenContainer.appendChild(tempChild)
+			this.cachedElements.push(tempChild)
 		}
 
 		document.querySelectorAll('.nav-folder.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
@@ -180,6 +186,7 @@ export class DndManager {
 		document.querySelectorAll('[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		document.querySelectorAll('.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
 		document.querySelectorAll('.temp-child').forEach(el => el.remove())
+		this.cachedElements = []
 	}
 
 	private moveItem(item: FileTreeItem | FolderTreeItem, siblingPath: string, dropPosition: 'before' | 'after', isSiblingTempChild?: boolean): string {

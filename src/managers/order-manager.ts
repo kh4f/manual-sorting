@@ -4,7 +4,7 @@ import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
 
 export class OrderManager {
-	private log = new Logger('order-manager', '#ffd900')
+	private log = new Logger('ORDER-MANAGER', '#00ccff')
 
 	constructor(private plugin: ManualSortingPlugin) {}
 

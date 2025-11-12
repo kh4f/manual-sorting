@@ -4,7 +4,7 @@ import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
 
 export class DndManager {
-	private log = new Logger('dnd-manager', '#7fff65')
+	private log = new Logger('DND-MANAGER', '#a6ff00')
 	private explorerEl: HTMLElement | null = null
 	private dragStartHandler: ((e: DragEvent | TouchEvent) => void) | null = null
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'

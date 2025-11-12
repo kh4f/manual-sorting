@@ -11,7 +11,7 @@ export default class ManualSortingPlugin extends Plugin {
 	private patcher = new Patcher(this)
 	public explorerManager = new ExplorerManager(this)
 	public dndManager = new DndManager(this)
-	private log = new Logger('core', '#ff4e37')
+	private log = new Logger('CORE', '#ff4828')
 	public settings!: PluginSettings
 
 	async onload() {

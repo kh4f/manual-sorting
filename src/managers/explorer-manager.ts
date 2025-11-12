@@ -3,7 +3,7 @@ import { FILE_EXPLORER_SELECTOR } from '@/constants'
 import { Logger } from '@/utils'
 
 export class ExplorerManager {
-	private log = new Logger('explorer-manager', '#bf77ff')
+	private log = new Logger('EXPLORER-MANAGER', '#ffa700')
 
 	constructor(private plugin: ManualSortingPlugin) {}
 

@@ -11,7 +11,7 @@ export class Patcher {
 	private explorerUninstaller: ReturnType<typeof around> | null = null
 	private menuUninstaller: ReturnType<typeof around> | null = null
 	private dndManager: DndManager
-	private log = new Logger('patcher', '#65a3ff')
+	private log = new Logger('PATCHER', '#988bff')
 
 	constructor(private plugin: ManualSortingPlugin) {
 		this.dndManager = new DndManager(plugin)

@@ -32,7 +32,7 @@ export class Patcher {
 			},
 			setSortOrder: original => function (this: FileExplorerView, sortOrder: string) {
 				original.call(this, sortOrder)
-				patcher.log.info('Sort order changed to:', sortOrder)
+				patcher.log.info(`Sort order changed to: '${sortOrder}'`)
 				const hadCustomSortingBeenActive = plugin.isCustomSortingActive()
 				plugin.settings.sortOrder = sortOrder
 				void plugin.saveSettings()

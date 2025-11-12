@@ -1,4 +1,4 @@
-[data-type="file-explorer"]:has([data-is-being-dragged]) {
+[data-type="file-explorer"]:has([data-drag-active]) {
 	.tree-item { position: relative;}
 
 	.tree-item.temp-child { height: 15px; }

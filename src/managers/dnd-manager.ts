@@ -29,6 +29,8 @@ export class DndManager {
 			if (Platform.isMobile && distanceFromRight > 25) return
 			const explorerRect = this.explorerEl.getBoundingClientRect()
 			let isOutsideExplorer = false
+			this.explorerEl.dataset.dragActive = ''
+			draggedEl.dataset.isBeingDragged = ''
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
@@ -37,7 +39,6 @@ export class DndManager {
 				}
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
-					const target = e.target as HTMLElement
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
 					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
@@ -45,8 +46,7 @@ export class DndManager {
 						this.clearDropIndicators()
 						return
 					}
-					target.dataset.isBeingDragged = ''
-					this.collapseDraggedFolder(target)
+					this.collapseDraggedFolder(draggedEl)
 					;({ futureSibling, dropPosition } = this.findDropTarget(this.explorerEl, pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
 				})
@@ -56,6 +56,7 @@ export class DndManager {
 				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()
+				delete this.explorerEl.dataset.dragActive
 				if (isOutsideExplorer) return
 
 				const sourcePath = draggedEl.dataset.path!

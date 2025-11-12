@@ -10,7 +10,7 @@ export class OrderManager {
 
 	add(item: TAbstractFile) {
 		const path = item.path
-		this.log.info(`Inserting new item: ${path}`)
+		this.log.info(`Inserting new item: '${path}'`)
 		const order = this.plugin.settings.customOrder
 		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
 		const isFolder = item instanceof TFolder
@@ -37,7 +37,7 @@ export class OrderManager {
 
 	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after'): boolean {
 		if (oldPath === newPath && newPath === targetSiblingPath) return false
-		this.log.info(`Moving ${oldPath} to ${newPath} (${position} ${targetSiblingPath})`)
+		this.log.info(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
@@ -65,7 +65,7 @@ export class OrderManager {
 	}
 
 	remove(path: string) {
-		this.log.info(`Removing item: ${path}`)
+		this.log.info(`Removing item: '${path}'`)
 		const order = this.plugin.settings.customOrder
 		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
 		const isFolder = path in order

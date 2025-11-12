@@ -184,6 +184,7 @@ export class DndManager {
 	private moveItem(item: FileTreeItem | FolderTreeItem, siblingPath: string, dropPosition: 'before' | 'after', isSiblingTempChild?: boolean): string {
 		const file = item.file
 		const sourcePath = file.path
+		if (isSiblingTempChild) siblingPath = ''
 
 		const targetFolderPath = siblingPath.substring(0, siblingPath.lastIndexOf('/'))
 		let targetPath = targetFolderPath ? targetFolderPath + '/' + file.name : file.name
@@ -194,14 +195,16 @@ export class DndManager {
 			targetPath = this.plugin.app.vault.getAvailablePath(basePath, file instanceof TFile ? file.extension : '')
 		}
 
-		this.log.info(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
+		if (sourcePath !== targetPath || targetPath !== siblingPath) {
+			this.log.info(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
+			void this.plugin.app.fileManager.renameFile(file, targetPath)
+			this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
+			void this.plugin.saveSettings()
+		} else {
+			this.log.info(`No move needed: '${sourcePath}' is already at the target position`)
+		}
 
-		void this.plugin.app.fileManager.renameFile(file, targetPath)
 		this.plugin.getFileExplorerView().lastDropTargetEl = item.el
-
-		if (isSiblingTempChild) siblingPath = ''
-		const isItemMoved = this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
-		if (isItemMoved) void this.plugin.saveSettings()
 
 		return targetPath
 	}

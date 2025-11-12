@@ -35,8 +35,7 @@ export class OrderManager {
 		this.logOrder('Updated order after renaming item:')
 	}
 
-	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after'): boolean {
-		if (oldPath === newPath && newPath === targetSiblingPath) return false
+	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after') {
 		this.log.info(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
@@ -60,8 +59,6 @@ export class OrderManager {
 			this.log.info('Directory did not change, calling sort on File Explorer manually')
 			this.plugin.getFileExplorerView().sort()
 		}
-
-		return true
 	}
 
 	remove(path: string) {

@@ -1,6 +1,25 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.0.3  `](https://github.com/kh4f/manual-sorting/compare/3.0.2...3.0.3)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - prevent drop indicators from disappearing during explorer scroll while dragging [`76919ed`](https://github.com/kh4f/manual-sorting/commit/76919ed)
+  - prevent folder order reset when dragging to empty explorer area [`885af77`](https://github.com/kh4f/manual-sorting/commit/885af77)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⚡ Performance
+- **dnd-manager**: 
+  - add basic element caching while explorer scroll position remains unchanged [`701ccb4`](https://github.com/kh4f/manual-sorting/commit/701ccb4)
+  - calculate `explorerRect` once in `dragStartHandler` instead of on every drag event [`e4aadcc`](https://github.com/kh4f/manual-sorting/commit/e4aadcc)
+  - move no-op check from `order-manager` to `dnd-manager` [`4b6ca4b`](https://github.com/kh4f/manual-sorting/commit/4b6ca4b)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🎨 Style
+- **logger**: enhance logger styles and tag format [`3f9135a`](https://github.com/kh4f/manual-sorting/commit/3f9135a)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.0.2...3.0.3) &ensp;•&ensp; _Nov 12, 2025_
+
+
 ## &ensp; [` 📦 3.0.2  `](https://github.com/kh4f/manual-sorting/compare/3.0.1...3.0.2)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

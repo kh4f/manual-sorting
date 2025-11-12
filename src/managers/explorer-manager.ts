@@ -14,7 +14,7 @@ export class ExplorerManager {
 	refreshExplorerOnMount = () => this.observeExplorerMount(() => this.refreshExplorer(), false, false)
 
 	refreshExplorer() {
-		this.log.info('Refreshing File Explorer after mount')
+		this.log.info('Refreshing Explorer after mount')
 		this.plugin.orderManager.reconcileOrder()
 		this.plugin.getFileExplorerView().setSortOrder(this.plugin.settings.sortOrder)
 		if (this.plugin.isCustomSortingActive()) void this.plugin.dndManager.enable()
@@ -24,7 +24,7 @@ export class ExplorerManager {
 		if (checkExisting) {
 			const target = document.querySelector(FILE_EXPLORER_SELECTOR)
 			if (target instanceof HTMLElement) {
-				if (!disableLogs) this.log.info('File Explorer already mounted', target)
+				if (!disableLogs) this.log.info('Explorer already mounted', target)
 				console.log()
 				onMount(target)
 				return
@@ -35,7 +35,7 @@ export class ExplorerManager {
 				for (const node of mutation.addedNodes) {
 					if (node instanceof HTMLElement && node.matches(FILE_EXPLORER_SELECTOR)) {
 						if (disconnectOnMount) obs.disconnect()
-						if (!disableLogs) this.log.info('File Explorer mounted', node)
+						if (!disableLogs) this.log.info('Explorer mounted', node)
 						onMount(node)
 						return
 					}

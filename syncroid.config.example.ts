@@ -1,4 +1,5 @@
-// Copy this file as 'syncroid.config.ts' to enable syncroid plugin in tsdown
+// Copy this file as 'syncroid.config.ts' to make the syncroid plugin use the config file
+// To enable syncroid in tsdown, set USE_SYNCROID=true in the .env file
 
 import type { UserConfig } from 'vite-plugin-syncroid'
 

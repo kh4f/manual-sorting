@@ -18,7 +18,7 @@
 		"drag-and-drop"
 	],
 	"engines": {
-		"node": "^24.11.0"
+		"node": "^24.11.1"
 	},
 	"packageManager": "pnpm@10.21.0",
 	"main": "main.js",

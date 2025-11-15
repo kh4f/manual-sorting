@@ -62,11 +62,11 @@
 }
 
 .menu-item[data-section="customOrder"] {
-	& .menu-item-icon:first-child { display: flex; }
+	.menu-item-icon:first-child { display: flex; }
 
-	& .dragging-enabled-checkbox {
+	.dragging-enabled-checkbox {
 		margin-bottom: -2px;
-		& input { margin: 0; }
+		input { margin: 0; }
 	}
 
 	.svg-icon.lucide-pin {

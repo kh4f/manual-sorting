@@ -19,7 +19,7 @@ importers:
         specifier: ^5.5.0
         version: 5.5.0(eslint@9.39.1(jiti@2.6.1))
       '@types/node':
-        specifier: ^24.10.0
+        specifier: ^24.10.1
         version: 24.10.1
       '@types/sortablejs':
         specifier: ^1.15.9

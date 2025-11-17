@@ -22,7 +22,7 @@ export default defineConfig({
 	outDir: '.',
 	clean: false,
 	external: ['obsidian'],
-	noExternal: ['sortablejs', 'monkey-around'],
+	noExternal: ['monkey-around'],
 	env: { DEV: !isProd },
 	plugins: [useSyncroid && syncroid({})],
 })

@@ -4,7 +4,7 @@ import { around } from 'monkey-around'
 import { ResetOrderModal } from '@/components'
 import { CUSTOM_SORTING_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
-import { DndManager } from '@/managers/dnd-manager'
+import { DndManager } from '@/managers'
 import { Logger } from '@/utils'
 
 export class Patcher {

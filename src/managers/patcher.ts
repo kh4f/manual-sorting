@@ -4,18 +4,14 @@ import { around } from 'monkey-around'
 import { ResetOrderModal } from '@/components'
 import { CUSTOM_SORTING_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
-import { DndManager } from '@/managers'
 import { Logger } from '@/utils'
 
 export class Patcher {
 	private explorerUninstaller: ReturnType<typeof around> | null = null
 	private menuUninstaller: ReturnType<typeof around> | null = null
-	private dndManager: DndManager
 	private log = new Logger('PATCHER', '#988bff')
 
-	constructor(private plugin: ManualSortingPlugin) {
-		this.dndManager = new DndManager(plugin)
-	}
+	constructor(private plugin: ManualSortingPlugin) {}
 
 	patchExplorer() {
 		const patcher = this

@@ -1,4 +1,4 @@
-import { type PluginSettings } from '@/types.d'
+import { type PluginSettings } from '@/types'
 
 export const CUSTOM_SORTING_ID = 'customOrder'
 

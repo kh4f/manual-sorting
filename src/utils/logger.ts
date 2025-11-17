@@ -1,4 +1,4 @@
-import type { LogLevel, LogMethod } from '@/types.d'
+import type { LogLevel, LogMethod } from '@/types'
 
 export class Logger {
 	static logLevel: LogLevel = 'silent'

@@ -1,5 +1,5 @@
 import { TAbstractFile, TFolder } from 'obsidian'
-import { type FileOrder } from '@/types.d'
+import { type FileOrder } from '@/types'
 import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
 

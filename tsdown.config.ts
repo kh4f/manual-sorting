@@ -10,6 +10,7 @@ const dirUrl = pathToFileURL(import.meta.dirname).href
 
 export default defineConfig({
 	entry: 'src/plugin.ts',
+	inputOptions: { resolve: { extensions: ['.ts', '.d.ts']	} },
 	outputOptions: {
 		entryFileNames: 'main.js',
 		minify: isProd,

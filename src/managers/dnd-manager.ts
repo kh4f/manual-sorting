@@ -34,6 +34,7 @@ export class DndManager {
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
 			draggedEl.dataset.isBeingDragged = ''
+			this.isCacheStale = true
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
@@ -206,7 +207,6 @@ export class DndManager {
 		document.querySelectorAll('[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))
 		document.querySelectorAll('.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
 		document.querySelectorAll('.temp-child').forEach(el => el.remove())
-		this.cachedElements = []
 	}
 
 	private moveItem(item: FileTreeItem | FolderTreeItem, siblingPath: string, dropPosition: 'before' | 'after', isSiblingTempChild?: boolean): string {

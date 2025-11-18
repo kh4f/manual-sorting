@@ -189,7 +189,6 @@ export class DndManager {
 				innerHTML: `<div class="tree-item-self temp" data-path="${siblingPath}/temp"></div>`,
 			})
 			childrenContainer.appendChild(tempChild)
-			this.cachedElements.push(tempChild)
 		}
 
 		document.querySelectorAll('.nav-folder.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))

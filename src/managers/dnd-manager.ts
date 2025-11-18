@@ -11,6 +11,8 @@ export class DndManager {
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
 	private cachedElements: HTMLElement[] = []
+	private isCacheStale = true
+	private treeItemsObserver: MutationObserver | null = null
 	private rafId = 0
 	private folderExpandTimeout: number | null = null
 	private pendingExpandFolder: string | null = null
@@ -32,7 +34,6 @@ export class DndManager {
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
 			draggedEl.dataset.isBeingDragged = ''
-			const prevScrollTop = this.explorerEl.scrollTop
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
@@ -49,8 +50,10 @@ export class DndManager {
 						return
 					}
 					this.collapseDraggedFolder(draggedEl)
-					if (!this.cachedElements.length || this.explorerEl.scrollTop !== prevScrollTop) {
+					if (this.isCacheStale) {
 						this.cachedElements = Array.from(this.explorerEl.querySelectorAll('.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item)'))
+						this.isCacheStale = false
+						this.log.info('Refreshed cached tree items')
 					}
 					;({ futureSibling, dropPosition } = this.findDropTarget(pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
@@ -85,15 +88,32 @@ export class DndManager {
 		}
 
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
+		this.initCacheInvalidation()
 
 		this.log.info('Drag and drop enabled')
 	}
 
 	disable() {
-		if (this.dragStartHandler) {
+		if (this.dragStartHandler)
 			this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
-			this.log.info('Drag and drop disabled')
+		if (this.treeItemsObserver) {
+			this.treeItemsObserver.disconnect()
+			this.treeItemsObserver = null
 		}
+		this.log.info('Drag and drop disabled')
+	}
+
+	private initCacheInvalidation() {
+		this.treeItemsObserver = new MutationObserver(mutations => {
+			for (const mutation of mutations) {
+				const updatedTreeItems = [...mutation.addedNodes, ...mutation.removedNodes].filter(
+					node => node instanceof HTMLElement && node.classList.contains('tree-item'),
+				)
+				if (!updatedTreeItems.length) continue
+				this.isCacheStale = true
+			}
+		})
+		this.treeItemsObserver.observe(this.explorerEl, { childList: true, subtree: true })
 	}
 
 	private collapseDraggedFolder(target: HTMLElement) {

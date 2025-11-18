@@ -32,11 +32,9 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async initialize() {
 		await this.explorerManager.waitForExplorerElement()
-		this.orderManager.reconcileOrder()
 		this.patcher.patchExplorer()
 		this.patcher.patchSortOrderMenu()
-		this.getFileExplorerView().setSortOrder(this.settings.sortOrder)
-		if (this.isCustomSortingActive()) void this.dndManager.enable()
+		this.explorerManager.refreshExplorer()
 		this.explorerManager.refreshExplorerOnMount()
 		this.registerVaultHandlers()
 	}

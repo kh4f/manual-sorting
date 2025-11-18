@@ -1,6 +1,21 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.1.0  `](https://github.com/kh4f/manual-sorting/compare/3.0.3...3.1.0)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features
+- **dnd**: implement auto-scrolling during dragging [`9365d21`](https://github.com/kh4f/manual-sorting/commit/9365d21)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd-manager**: 
+  - remove element caching logic causing drag-and-drop failures [`f7891ca`](https://github.com/kh4f/manual-sorting/commit/f7891ca)
+  - ensure settings are saved even when item is dropped at same position [`eef0f91`](https://github.com/kh4f/manual-sorting/commit/eef0f91)
+- **dnd**: restore drag indicators when pointer returns to explorer bounds [`cba2313`](https://github.com/kh4f/manual-sorting/commit/cba2313)
+- **styles**: prevent drag handles from appearing in non-file explorers [`3453f23`](https://github.com/kh4f/manual-sorting/commit/3453f23)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.0.3...3.1.0) &ensp;•&ensp; _Nov 19, 2025_
+
+
 ## &ensp; [` 📦 3.0.3  `](https://github.com/kh4f/manual-sorting/compare/3.0.2...3.0.3)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

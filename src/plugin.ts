@@ -7,7 +7,7 @@ import { DEFAULT_SETTINGS, CUSTOM_SORTING_ID } from '@/constants'
 import { Logger } from '@/utils'
 
 export default class ManualSortingPlugin extends Plugin {
-	public orderManager!: OrderManager
+	public orderManager = new OrderManager(this)
 	private patcher = new Patcher(this)
 	public explorerManager = new ExplorerManager(this)
 	public dndManager = new DndManager(this)
@@ -32,7 +32,6 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async initialize() {
 		await this.explorerManager.waitForExplorerElement()
-		this.orderManager = new OrderManager(this)
 		this.orderManager.reconcileOrder()
 		this.patcher.patchExplorer()
 		this.patcher.patchSortOrderMenu()

@@ -13,6 +13,9 @@ export class DndManager {
 	private rafId = 0
 	private folderExpandTimeout: number | null = null
 	private pendingExpandFolder: string | null = null
+	private scrollRafId: number | null = null
+	private scrollZone = 50
+	private scrollSpeed = 5
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -49,6 +52,7 @@ export class DndManager {
 					this.collapseDraggedFolder(draggedEl)
 					;({ futureSibling, dropPosition } = this.findDropTarget(pointer.clientY))
 					this.updateDropIndicators(futureSibling, dropPosition)
+					this.handleAutoScroll(pointer.clientY, explorerRect)
 				})
 			}
 
@@ -56,6 +60,7 @@ export class DndManager {
 				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()
+				this.stopAutoScroll()
 				delete this.explorerEl.dataset.dragActive
 				if (isOutsideExplorer) return
 
@@ -235,5 +240,29 @@ export class DndManager {
 			}
 			siblingPath = this.moveItem(item, siblingPath, dropPosition, isSiblingTempChild)
 		})
+	}
+
+	private handleAutoScroll(pointerY: number, explorerRect: DOMRect) {
+		const topDist = pointerY - explorerRect.top
+		const bottomDist = explorerRect.bottom - pointerY
+		if (topDist < this.scrollZone) this.startAutoScroll(-this.scrollSpeed)
+		else if (bottomDist < this.scrollZone) this.startAutoScroll(this.scrollSpeed)
+		else this.stopAutoScroll()
+	}
+
+	private startAutoScroll(speed: number) {
+		if (this.scrollRafId) return
+		const scrollStep = () => {
+			this.explorerEl.scrollTop += speed
+			this.scrollRafId = requestAnimationFrame(scrollStep)
+		}
+		this.scrollRafId = requestAnimationFrame(scrollStep)
+	}
+
+	private stopAutoScroll() {
+		if (this.scrollRafId) {
+			cancelAnimationFrame(this.scrollRafId)
+			this.scrollRafId = null
+		}
 	}
 }

@@ -228,10 +228,10 @@ export class DndManager {
 			this.log.info(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
 			void this.plugin.app.fileManager.renameFile(file, targetPath)
 			this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
-			void this.plugin.saveSettings()
 		} else {
 			this.log.info(`No move needed: '${sourcePath}' is already at the target position`)
 		}
+		void this.plugin.saveSettings()
 
 		this.plugin.getFileExplorerView().lastDropTargetEl = item.el
 

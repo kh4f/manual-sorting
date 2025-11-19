@@ -35,7 +35,7 @@
 ## 📥 Installation
 - **Via Obsidian Community Plugins**: https://obsidian.md/plugins?id=manual-sorting
 - **Using the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat)**: `Add Beta Plugin` → `kh4f/manual-sorting`
-- **Manually**: go to the [latest release](https://github.com/kh4f/manual-sorting/releases/latest) → copy `main.js`, `manifest.json`, `styles.css` to `your-vault/.obsidian/plugins/manual-sorting/`
+- **Manually**: go to the [latest release](https://github.com/kh4f/manual-sorting/releases/latest) → extract `manual-sorting-x.y.z.zip` to `vault/.obsidian/plugins/manual-sorting/`
 
 ## 💖 Credits
 - **Inspiration**: [Obsidian Bartender](https://github.com/nothingislost/obsidian-bartender), [Custom File Explorer sorting](https://github.com/SebastianMC/obsidian-custom-sort)

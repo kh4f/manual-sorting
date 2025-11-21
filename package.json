@@ -36,7 +36,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.1",
-		"@stylistic/eslint-plugin": "^5.5.0",
+		"@stylistic/eslint-plugin": "^5.6.0",
 		"@types/node": "^24.10.1",
 		"@types/sortablejs": "^1.15.9",
 		"dotenv": "^17.2.3",

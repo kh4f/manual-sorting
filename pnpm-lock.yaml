@@ -16,7 +16,7 @@ importers:
         specifier: ^9.39.1
         version: 9.39.1
       '@stylistic/eslint-plugin':
-        specifier: ^5.6.0
+        specifier: ^5.6.1
         version: 5.6.1(eslint@9.39.1(jiti@2.6.1))
       '@types/node':
         specifier: ^24.10.1

@@ -49,7 +49,7 @@ importers:
         specifier: ^1.10.3
         version: 1.10.3(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       obsidian-typings:
-        specifier: ^4.65.0
+        specifier: ^4.68.0
         version: 4.68.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
         specifier: ^0.32.1

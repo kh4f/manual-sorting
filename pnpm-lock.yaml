@@ -37,8 +37,8 @@ importers:
         specifier: ^20.0.11
         version: 20.0.11
       i18next:
-        specifier: ^25.6.3
-        version: 25.6.3(typescript@5.9.3)
+        specifier: ^25.7.0
+        version: 25.7.1(typescript@5.9.3)
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
@@ -1935,8 +1935,8 @@ packages:
       typescript:
         optional: true
 
-  i18next@25.6.3:
-    resolution: {integrity: sha512-AEQvoPDljhp67a1+NsnG/Wb1Nh6YoSvtrmeEd24sfGn3uujCtXCF3cXpr7ulhMywKNFF7p3TX1u2j7y+caLOJg==}
+  i18next@25.7.1:
+    resolution: {integrity: sha512-XbTnkh1yCZWSAZGnA9xcQfHcYNgZs2cNxm+c6v1Ma9UAUGCeJPplRe1ILia6xnDvXBjk0uXU+Z8FYWhA19SKFw==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -4497,7 +4497,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  i18next@25.6.3(typescript@5.9.3):
+  i18next@25.7.1(typescript@5.9.3):
     dependencies:
       '@babel/runtime': 7.28.4
     optionalDependencies:

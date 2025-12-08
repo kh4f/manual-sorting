@@ -17,7 +17,6 @@
 		"obsidian-manual-sorting",
 		"drag-and-drop"
 	],
-	"packageManager": "pnpm@10.24.0",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

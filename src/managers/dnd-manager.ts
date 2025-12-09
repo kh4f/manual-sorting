@@ -82,6 +82,8 @@ export class DndManager {
 				const selectedItems = this.plugin.getFileExplorerView().tree.selectedDoms
 				if (selectedItems.has(item)) this.moveSelectedItems(selectedItems, siblingPath, isSiblingTempChild, dropPosition)
 				else this.moveItem(item, siblingPath, dropPosition, isSiblingTempChild)
+
+				futureSibling = null
 			}
 
 			draggedEl.addEventListener(this.dragEventType, onDrag)

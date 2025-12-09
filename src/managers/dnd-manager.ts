@@ -29,7 +29,10 @@ export class DndManager {
 			const draggedEl = e.target as HTMLElement
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
-			if (Platform.isMobile && distanceFromRight > 25) return
+			if (Platform.isMobile) {
+				if (distanceFromRight > 25) return
+				e.preventDefault()
+			}
 			const explorerRect = this.explorerEl.getBoundingClientRect()
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''

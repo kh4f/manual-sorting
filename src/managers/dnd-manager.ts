@@ -22,8 +22,8 @@ export class DndManager {
 	async enable() {
 		this.explorerEl = await this.plugin.explorerManager.waitForExplorerElement(true)
 
-		let futureSibling: HTMLElement
-		let dropPosition: 'before' | 'after'
+		let futureSibling: HTMLElement | null = null
+		let dropPosition: 'before' | 'after' = 'before'
 
 		this.dragStartHandler = e => {
 			this.log.info('Drag started')
@@ -73,6 +73,7 @@ export class DndManager {
 				const sourcePath = draggedEl.dataset.path!
 				const item = this.plugin.getFileExplorerView().fileItems[sourcePath]
 
+				if (!futureSibling) return
 				const siblingPath = futureSibling.querySelector<HTMLElement>('.tree-item-self')?.dataset.path ?? ''
 				const isSiblingTempChild = futureSibling.classList.contains('temp-child')
 

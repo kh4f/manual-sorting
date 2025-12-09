@@ -16,6 +16,8 @@ export class DndManager {
 	private scrollRafId: number | null = null
 	private scrollZone = 50
 	private scrollSpeed = 5
+	private dropZonesActivationDelay = 250
+	private dropZonesActivationTimeout: number | null = null
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -90,6 +92,24 @@ export class DndManager {
 			draggedEl.addEventListener(this.dropEventType, onDrop, { once: true })
 		}
 
+		const mouseDownHandler = () => {
+			this.dropZonesActivationTimeout = window.setTimeout(() => {
+				if (this.explorerEl.dataset.dragActive === undefined) {
+					this.explorerEl.dataset.dragActive = ''
+				}
+				this.dropZonesActivationTimeout = null
+			}, this.dropZonesActivationDelay)
+		}
+		const mouseUpHandler = () => {
+			delete this.explorerEl.dataset.dragActive
+			if (this.dropZonesActivationTimeout) {
+				clearTimeout(this.dropZonesActivationTimeout)
+				this.dropZonesActivationTimeout = null
+			}
+		}
+
+		this.explorerEl.addEventListener('mousedown', mouseDownHandler)
+		this.explorerEl.addEventListener('mouseup', mouseUpHandler)
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
 
 		this.log.info('Drag and drop enabled')

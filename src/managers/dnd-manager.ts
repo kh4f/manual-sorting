@@ -90,8 +90,7 @@ export class DndManager {
 	}
 
 	disable() {
-		if (this.dragStartHandler)
-			this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
+		if (this.dragStartHandler) this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
 		this.log.info('Drag and drop disabled')
 	}
 

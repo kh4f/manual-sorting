@@ -26,6 +26,7 @@ export class DndManager {
 		let dropPosition: 'before' | 'after'
 
 		this.dragStartHandler = e => {
+			this.log.info('Drag started')
 			const draggedEl = e.target as HTMLElement
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
@@ -45,6 +46,7 @@ export class DndManager {
 				}
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
+					this.log.info('Dragging...')
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
 					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
@@ -60,6 +62,7 @@ export class DndManager {
 			}
 
 			const onDrop = () => {
+				this.log.info('Item dropped')
 				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()

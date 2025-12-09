@@ -80,11 +80,8 @@ export class DndManager {
 				this.plugin.orderManager.reconcileOrder()
 
 				const selectedItems = this.plugin.getFileExplorerView().tree.selectedDoms
-				if (selectedItems.has(item)) {
-					this.moveSelectedItems(selectedItems, siblingPath, isSiblingTempChild, dropPosition)
-				} else {
-					this.moveItem(item, siblingPath, dropPosition, isSiblingTempChild)
-				}
+				if (selectedItems.has(item)) this.moveSelectedItems(selectedItems, siblingPath, isSiblingTempChild, dropPosition)
+				else this.moveItem(item, siblingPath, dropPosition, isSiblingTempChild)
 			}
 
 			draggedEl.addEventListener(this.dragEventType, onDrag)

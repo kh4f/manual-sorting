@@ -2,7 +2,7 @@ import { Menu, MenuItem, TFolder } from 'obsidian'
 import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import { ResetOrderModal } from '@/components'
-import { CUSTOM_SORTING_ID } from '@/constants'
+import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
 
@@ -55,7 +55,7 @@ export class Patcher {
 						if (checkedItem) checkedItem.setChecked(false)
 					}
 
-					const sortingMenuSection = CUSTOM_SORTING_ID
+					const sortingMenuSection = CUSTOM_SORT_ORDER_ID
 					menu.addItem((item: MenuItem) => {
 						item.setTitle('Manual sorting')
 							.setIcon('pin')
@@ -63,7 +63,7 @@ export class Patcher {
 							.setSection(sortingMenuSection)
 							.onClick(() => {
 								if (!plugin.isCustomSortingActive()) {
-									plugin.settings.sortOrder = CUSTOM_SORTING_ID
+									plugin.settings.sortOrder = CUSTOM_SORT_ORDER_ID
 									plugin.orderManager.reconcileOrder()
 									void plugin.saveSettings()
 									plugin.getFileExplorerView().sort()

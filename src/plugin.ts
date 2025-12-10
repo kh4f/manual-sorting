@@ -3,7 +3,7 @@ import type { FileExplorerView } from 'obsidian-typings'
 import { SettingsTab } from '@/components'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import type { PluginSettings, LegacyPluginSettings, SortOrder } from '@/types'
-import { DEFAULT_SETTINGS, CUSTOM_SORTING_ID } from '@/constants'
+import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
 import { Logger } from '@/utils'
 
 export default class ManualSortingPlugin extends Plugin {
@@ -91,11 +91,11 @@ export default class ManualSortingPlugin extends Plugin {
 	migrateLegacySettings = (legacySettings: LegacyPluginSettings): PluginSettings => ({
 		...legacySettings,
 		customOrder: Object.fromEntries(Object.entries(legacySettings.customOrder).map(([folder, children]) => [folder, { children, sortOrder: 'custom' }])),
-		sortOrder: legacySettings.sortOrder === 'customOrder' ? CUSTOM_SORTING_ID : legacySettings.sortOrder as SortOrder,
+		sortOrder: legacySettings.sortOrder === 'customOrder' ? CUSTOM_SORT_ORDER_ID : legacySettings.sortOrder as SortOrder,
 	})
 
 	isCustomSortingActive = () =>
-		this.settings.sortOrder === CUSTOM_SORTING_ID
+		this.settings.sortOrder === CUSTOM_SORT_ORDER_ID
 
 	getFileExplorerView = () =>
 		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView

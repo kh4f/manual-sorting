@@ -1,6 +1,7 @@
 import type ManualSortingPlugin from '@/plugin'
-import { FILE_EXPLORER_SELECTOR } from '@/constants'
 import { Logger } from '@/utils'
+
+const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 
 export class ExplorerManager {
 	private log = new Logger('EXPLORER-MANAGER', '#ffa700')

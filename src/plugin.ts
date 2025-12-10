@@ -63,7 +63,7 @@ export default class ManualSortingPlugin extends Plugin {
 		const savedSettings = (await this.loadData() || {}) as Partial<PluginSettings | LegacyPluginSettings>
 		let settingsToLoad: PluginSettings
 		if (savedSettings.customOrder?.['/'] && Array.isArray(savedSettings.customOrder['/'])) {
-			this.log.info('Migrating settings to v4 API format')
+			this.log.info('Migrating settings to v4 format')
 			settingsToLoad = this.migrateLegacySettings(savedSettings as LegacyPluginSettings)
 		} else {
 			settingsToLoad = savedSettings as PluginSettings

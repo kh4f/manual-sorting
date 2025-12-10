@@ -18,7 +18,7 @@ export class ResetOrderModal extends Modal {
 			})
 
 		new ButtonComponent(modalButtons)
-			.setButtonText('Cancel')
+			.setButtonText('Nope')
 			.onClick(() => {
 				this.close()
 			})

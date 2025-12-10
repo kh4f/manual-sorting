@@ -1,6 +1,29 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.2.0  `](https://github.com/kh4f/manual-sorting/compare/3.1.0...3.2.0)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features
+- **dnd**: activate drop zones on mouse hold before drag start [`1de433f`](https://github.com/kh4f/manual-sorting/commit/1de433f) ([#100](https://github.com/kh4f/manual-sorting/issues/100))
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - clear `futureSibling` state after drop to prevent unintended moves on mobile [`fa76bbd`](https://github.com/kh4f/manual-sorting/commit/fa76bbd)
+  - prevent click event propagation on drag handle to explorer item [`51eb4c8`](https://github.com/kh4f/manual-sorting/commit/51eb4c8)
+- **dnd-manager**: prevent drop handler execution when drag wasn't initiated [`139a5d4`](https://github.com/kh4f/manual-sorting/commit/139a5d4)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🚜 Refactoring
+- **settings**: update settings storage format and add migration to v4 [`0ad2816`](https://github.com/kh4f/manual-sorting/commit/0ad2816)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🎨 Style
+- **modal**: 
+  - change cancel button text from "Cancel" to "Nope" [`1f41b31`](https://github.com/kh4f/manual-sorting/commit/1f41b31)
+  - correct title casing from 'Manual sorting' to 'Manual Sorting' [`8aedacd`](https://github.com/kh4f/manual-sorting/commit/8aedacd)
+- **drag-handles**: update drag handle icon to traditional 2-row 6-dot pattern [`0538258`](https://github.com/kh4f/manual-sorting/commit/0538258)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.1.0...3.2.0) &ensp;•&ensp; _Dec 10, 2025_
+
+
 ## &ensp; [` 📦 3.1.0  `](https://github.com/kh4f/manual-sorting/compare/3.0.3...3.1.0)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features

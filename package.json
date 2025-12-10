@@ -1,6 +1,6 @@
 {
 	"name": "manual-sorting",
-	"version": "3.1.0",
+	"version": "3.2.0",
 	"description": "An Obsidian plugin that adds manual drag&drop sorting to the file explorer.",
 	"author": "kh4f <kh4f.dev@gmail.com>",
 	"license": "MIT",

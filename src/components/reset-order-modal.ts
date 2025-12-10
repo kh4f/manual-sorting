@@ -3,7 +3,7 @@ import { App, ButtonComponent, Modal } from 'obsidian'
 export class ResetOrderModal extends Modal {
 	constructor(app: App, onSubmit: () => void) {
 		super(app)
-		this.setTitle('Manual sorting')
+		this.setTitle('Manual Sorting')
 		this.modalEl.addClass('manual-sorting-modal')
 
 		const modalContent = this.contentEl.createEl('div')

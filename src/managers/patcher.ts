@@ -1,5 +1,5 @@
 import { Menu, MenuItem, TFolder } from 'obsidian'
-import type { FileTreeItem, FileExplorerView } from 'obsidian-typings'
+import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import { ResetOrderModal } from '@/components'
 import { CUSTOM_SORTING_ID } from '@/constants'
@@ -23,10 +23,10 @@ export class Patcher {
 				const sortedItems = original.call(this, folder)
 				if (bypass || !plugin.isCustomSortingActive()) return sortedItems
 				const folderPath = folder.path
-				const customOrder = plugin.settings.customOrder[folderPath]
+				const customOrder = plugin.settings.customOrder[folderPath].children
 				return sortedItems.sort((a, b) => customOrder.indexOf(a.file.path) - customOrder.indexOf(b.file.path))
 			},
-			setSortOrder: original => function (this: FileExplorerView, sortOrder: string) {
+			setSortOrder: original => function (this: FileExplorerView, sortOrder: FileExplorerViewSortOrder) {
 				original.call(this, sortOrder)
 				patcher.log.info(`Sort order changed to: '${sortOrder}'`)
 				const hadCustomSortingBeenActive = plugin.isCustomSortingActive()

@@ -62,7 +62,7 @@
 	to { background-position: 8px 0; }
 }
 
-.menu-item[data-section="customOrder"] {
+.menu-item[data-section="custom"] {
 	.menu-item-icon:first-child { display: flex; }
 
 	.dragging-enabled-checkbox {

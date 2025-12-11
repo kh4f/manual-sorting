@@ -34,7 +34,7 @@ importers:
         specifier: ^16.5.0
         version: 16.5.0
       i18next:
-        specifier: ^25.7.1
+        specifier: ^25.7.2
         version: 25.7.2(typescript@5.9.3)
       jiti:
         specifier: ^2.6.1

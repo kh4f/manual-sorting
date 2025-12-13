@@ -1,6 +1,17 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.2.1  `](https://github.com/kh4f/manual-sorting/compare/3.2.0...3.2.1)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - increase drag zone activation width to `36px` [`6616215`](https://github.com/kh4f/manual-sorting/commit/6616215)
+  - validate dragged element is tree item before processing [`8e5061b`](https://github.com/kh4f/manual-sorting/commit/8e5061b) ([#108](https://github.com/kh4f/manual-sorting/issues/108))
+- **styles**: add spaces around operator in `calc` expression [`e9994fe`](https://github.com/kh4f/manual-sorting/commit/e9994fe)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.2.0...3.2.1) &ensp;•&ensp; _Dec 13, 2025_
+
+
 ## &ensp; [` 📦 3.2.0  `](https://github.com/kh4f/manual-sorting/compare/3.1.0...3.2.0)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;✨ Features

@@ -29,7 +29,8 @@ export class DndManager {
 
 		this.dragStartHandler = e => {
 			this.log.info('Drag started')
-			const draggedEl = e.target as HTMLElement
+			const draggedEl = (e.target as HTMLElement).closest<HTMLElement>('.tree-item-self')
+			if (!draggedEl) return
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
 			if (Platform.isMobile) {

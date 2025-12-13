@@ -18,7 +18,7 @@ export class DndManager {
 	private scrollSpeed = 5
 	private dropZonesActivationDelay = 250
 	private dropZonesActivationTimeout: number | null = null
-	private dragHandleWidth = 25
+	private dragZoneWidth = 25
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -34,7 +34,7 @@ export class DndManager {
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
 			const distanceFromRight = draggedEl.getBoundingClientRect().right - pointer.clientX
 			if (Platform.isMobile) {
-				if (distanceFromRight > this.dragHandleWidth) return
+				if (distanceFromRight > this.dragZoneWidth) return
 				e.preventDefault()
 			}
 			this.log.info('Drag started')

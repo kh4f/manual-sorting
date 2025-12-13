@@ -28,7 +28,6 @@ export class DndManager {
 		let dropPosition: 'before' | 'after' = 'before'
 
 		this.dragStartHandler = e => {
-			this.log.info('Drag started')
 			const draggedEl = (e.target as HTMLElement).closest<HTMLElement>('.tree-item-self')
 			if (!draggedEl) return
 			const pointer = e instanceof DragEvent ? e : e.touches[0]
@@ -37,6 +36,7 @@ export class DndManager {
 				if (distanceFromRight > 25) return
 				e.preventDefault()
 			}
+			this.log.info('Drag started')
 			const explorerRect = this.explorerEl.getBoundingClientRect()
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''

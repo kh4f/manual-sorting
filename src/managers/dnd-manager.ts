@@ -18,7 +18,7 @@ export class DndManager {
 	private scrollSpeed = 5
 	private dropZonesActivationDelay = 250
 	private dropZonesActivationTimeout: number | null = null
-	private dragZoneWidth = 25
+	private dragZoneWidth = 36
 
 	constructor(private plugin: ManualSortingPlugin) {}
 

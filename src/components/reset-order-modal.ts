@@ -4,7 +4,7 @@ export class ResetOrderModal extends Modal {
 	constructor(app: App, onSubmit: () => void) {
 		super(app)
 		this.setTitle('Manual Sorting')
-		this.modalEl.addClass('manual-sorting-modal')
+		this.modalEl.addClass('manual-sorting-modal', 'mod-form')
 
 		const modalContent = this.contentEl.createEl('div')
 		modalContent.createEl('p', { text: `Reset custom order?` })

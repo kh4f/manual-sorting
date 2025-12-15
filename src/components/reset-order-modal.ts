@@ -8,7 +8,7 @@ export class ResetOrderModal extends Modal {
 
 		const modalContent = this.contentEl.createEl('div')
 		modalContent.createEl('p', { text: `Reset custom order?` })
-		const modalButtons = modalContent.createEl('div', { cls: 'modal-buttons' })
+		const modalButtons = modalContent.createEl('div', { cls: 'modal-button-container' })
 		new ButtonComponent(modalButtons)
 			.setButtonText('Yep')
 			.setCta()

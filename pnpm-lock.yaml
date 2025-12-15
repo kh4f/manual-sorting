@@ -46,8 +46,8 @@ importers:
         specifier: ^1.10.3
         version: 1.10.3(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       obsidian-typings:
-        specifier: ^4.70.0
-        version: 4.70.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
+        specifier: ^4.74.0
+        version: 4.80.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
         specifier: ^0.32.1
         version: 0.32.1
@@ -1641,8 +1641,8 @@ packages:
   earcut@2.2.4:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
 
-  electron@39.2.6:
-    resolution: {integrity: sha512-dHBgTodWBZd+tL1Dt0PSh/CFLHeDkFCTKCTXu1dgPhlE9Z3k2zzlBQ9B2oW55CFsKanBDHiUomHJNw0XaSdQpA==}
+  electron@39.2.7:
+    resolution: {integrity: sha512-KU0uFS6LSTh4aOIC3miolcbizOFP7N1M46VTYVfqIgFiuA2ilfNaOHLDS9tCMvwwHRowAsvqBrh9NgMXcTOHCQ==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -2135,13 +2135,19 @@ packages:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
 
-  obsidian-typings@4.70.0:
-    resolution: {integrity: sha512-QSzl3i+BVE0mrwR82yRtlfHu1SEA4YP/cPoF5EM/CZJITSOeTzdWBnNt119M7VNH2J6bYTWJflGqxxGSTjs+HA==}
+  obsidian-typings@4.80.0:
+    resolution: {integrity: sha512-Cpp1feTIZaovKS8mXmnUOXFWwKStdBM8Ev3k8OtA3SSm2cjjTXa/xy/PT3gpdLuIzZpSKjMrBgjac6yYPU3hVg==}
     peerDependencies:
       typescript: '>=4.8.0'
 
   obsidian@1.10.3:
     resolution: {integrity: sha512-VP+ZSxNMG7y6Z+sU9WqLvJAskCfkFrTz2kFHWmmzis+C+4+ELjk/sazwcTHrHXNZlgCeo8YOlM6SOrAFCynNew==}
+    peerDependencies:
+      '@codemirror/state': 6.5.0
+      '@codemirror/view': 6.38.6
+
+  obsidian@1.11.0:
+    resolution: {integrity: sha512-lVqN9AmDWHzhNATi2tDnjqVgI6WUYKeT+lIsAycAyLt4XCC6zRsWzb+tFCiB7Rn3PpttefjoovilhYwvS4Iqxw==}
     peerDependencies:
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.38.6
@@ -2426,8 +2432,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  style-mod@4.1.2:
-    resolution: {integrity: sha512-wnD1HyVqpJUI2+eKZ+eo1UwghftP6yuFheBqqe+bWCotBjC2K1YnteJILRMs3SM4V/0dLEW1SC27MWP5y+mwmw==}
+  style-mod@4.1.3:
+    resolution: {integrity: sha512-i/n8VsZydrugj3Iuzll8+x/00GH2vnYsk1eomD8QiRrSAeW6ItbCQDtfXCeJHd0iwiNagqjQkvpvREEPtW3IoQ==}
 
   stylis@4.3.6:
     resolution: {integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==}
@@ -2443,6 +2449,10 @@ packages:
   syncroid@0.6.1:
     resolution: {integrity: sha512-SnqD9Cd6PsVxNvz8elj0ymjasRr6WKl/fcWTI17afBfdt/q+quYgtHvIv/ZFqKuPkN+bWNbN2V1iE4FlrOU0zw==}
     engines: {node: ^24.11.0}
+
+  tagged-tag@1.0.0:
+    resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
+    engines: {node: '>=20'}
 
   terminal-columns@1.4.1:
     resolution: {integrity: sha512-IKVL/itiMy947XWVv4IHV7a0KQXvKjj4ptbi7Ew9MPMcOLzkiQeyx3Gyvh62hKrfJ0RZc4M1nbhzjNM39Kyujw==}
@@ -2513,6 +2523,10 @@ packages:
   type-fest@0.13.1:
     resolution: {integrity: sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==}
     engines: {node: '>=10'}
+
+  type-fest@5.3.1:
+    resolution: {integrity: sha512-VCn+LMHbd4t6sF3wfU/+HKT63C9OoyrSIf4b+vtWHpt2U7/4InZG467YDNMFMR70DdHjAdpPWmw2lzRdg0Xqqg==}
+    engines: {node: '>=20'}
 
   type-flag@3.0.0:
     resolution: {integrity: sha512-3YaYwMseXCAhBB14RXW5cRQfJQlEknS6i4C8fCfeUdS3ihG9EdccdR9kt3vP73ZdeTGmPb4bZtkDn5XMIn1DLA==}
@@ -2735,7 +2749,7 @@ snapshots:
       '@lezer/common': 1.4.0
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.4
-      style-mod: 4.1.2
+      style-mod: 4.1.3
 
   '@codemirror/search@6.5.11':
     dependencies:
@@ -2751,7 +2765,7 @@ snapshots:
     dependencies:
       '@codemirror/state': 6.5.0
       crelt: 1.0.6
-      style-mod: 4.1.2
+      style-mod: 4.1.3
       w3c-keyname: 2.2.8
 
   '@electron/get@2.0.3':
@@ -4102,7 +4116,7 @@ snapshots:
 
   earcut@2.2.4: {}
 
-  electron@39.2.6:
+  electron@39.2.7:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.19.1
@@ -4662,7 +4676,7 @@ snapshots:
   object-keys@1.1.1:
     optional: true
 
-  obsidian-typings@4.70.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3):
+  obsidian-typings@4.80.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3):
     dependencies:
       '@antfu/utils': 9.2.0
       '@capacitor/core': 5.7.8
@@ -4681,14 +4695,15 @@ snapshots:
       '@types/prismjs': 1.26.5
       '@types/turndown': 5.0.5
       colord: 2.9.3
-      electron: 39.2.6
+      electron: 39.2.7
       i18next: 25.2.1(typescript@5.9.3)
       mermaid: 11.4.1
-      obsidian: 1.10.3(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
+      obsidian: 1.11.0(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       pdfjs-dist: 5.3.31
       pixi.js: 7.2.4(@pixi/utils@7.2.4)
       scrypt-js: 3.0.1
-      style-mod: 4.1.2
+      style-mod: 4.1.3
+      type-fest: 5.3.1
       typescript: 5.9.3
     transitivePeerDependencies:
       - '@pixi/core'
@@ -4697,6 +4712,13 @@ snapshots:
       - supports-color
 
   obsidian@1.10.3(@codemirror/state@6.5.0)(@codemirror/view@6.38.6):
+    dependencies:
+      '@codemirror/state': 6.5.0
+      '@codemirror/view': 6.38.6
+      '@types/codemirror': 5.60.8
+      moment: 2.29.4
+
+  obsidian@1.11.0(@codemirror/state@6.5.0)(@codemirror/view@6.38.6):
     dependencies:
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.38.6
@@ -5040,7 +5062,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  style-mod@4.1.2: {}
+  style-mod@4.1.3: {}
 
   stylis@4.3.6: {}
 
@@ -5057,6 +5079,8 @@ snapshots:
   syncroid@0.6.1:
     dependencies:
       minimatch: 10.1.1
+
+  tagged-tag@1.0.0: {}
 
   terminal-columns@1.4.1: {}
 
@@ -5120,6 +5144,10 @@ snapshots:
 
   type-fest@0.13.1:
     optional: true
+
+  type-fest@5.3.1:
+    dependencies:
+      tagged-tag: 1.0.0
 
   type-flag@3.0.0: {}
 

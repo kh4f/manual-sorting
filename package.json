@@ -36,7 +36,7 @@
 		"@types/node": "^25.0.1",
 		"@types/sortablejs": "^1.15.9",
 		"dotenv": "^17.2.3",
-		"eslint": "^9.39.1",
+		"eslint": "^9.39.2",
 		"globals": "^16.5.0",
 		"i18next": "^25.7.2",
 		"jiti": "^2.6.1",

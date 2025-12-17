@@ -46,8 +46,8 @@ importers:
         specifier: ^1.11.0
         version: 1.11.0(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       obsidian-typings:
-        specifier: ^4.80.0
-        version: 4.80.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
+        specifier: ^4.81.0
+        version: 4.83.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
         specifier: ^0.32.1
         version: 0.32.1
@@ -1974,8 +1974,8 @@ packages:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
 
-  obsidian-typings@4.80.0:
-    resolution: {integrity: sha512-Cpp1feTIZaovKS8mXmnUOXFWwKStdBM8Ev3k8OtA3SSm2cjjTXa/xy/PT3gpdLuIzZpSKjMrBgjac6yYPU3hVg==}
+  obsidian-typings@4.83.0:
+    resolution: {integrity: sha512-AO0HpNU4J9Y+WhSx5J64pYd7HXc/0othgtEZldoLa7assRjesGGHFaGYqCLRqsfmSDVBwLUSPUQZdZXKV4tD4Q==}
     peerDependencies:
       typescript: '>=4.8.0'
 
@@ -2579,7 +2579,7 @@ snapshots:
     dependencies:
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.38.6
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.4.0
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.5
       style-mod: 4.1.3
@@ -2811,7 +2811,7 @@ snapshots:
 
   '@lezer/lr@1.4.5':
     dependencies:
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.4.0
 
   '@marijn/find-cluster-break@1.0.2': {}
 
@@ -4402,7 +4402,7 @@ snapshots:
   object-keys@1.1.1:
     optional: true
 
-  obsidian-typings@4.80.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3):
+  obsidian-typings@4.83.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3):
     dependencies:
       '@antfu/utils': 9.2.0
       '@capacitor/core': 5.7.8

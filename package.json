@@ -42,7 +42,7 @@
 		"jiti": "^2.6.1",
 		"lint-staged": "^16.2.7",
 		"obsidian": "^1.11.0",
-		"obsidian-typings": "^4.82.0",
+		"obsidian-typings": "^4.84.0",
 		"relion": "^0.32.1",
 		"simple-git-hooks": "^2.13.1",
 		"tsdown": "^0.18.0",

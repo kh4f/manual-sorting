@@ -246,13 +246,14 @@ export class DndManager {
 		let filteredItems = Array.from(selectedItems)
 		const areFolderInSelection = filteredItems.some(item => item.file instanceof TFolder)
 		if (areFolderInSelection) {
-			// filter out selected files inside selected folders
-			filteredItems = filteredItems.filter(item => {
-				if (item.file instanceof TFolder) return true
-				const file = item.file
-				return !filteredItems.some(item => item.file instanceof TFolder && file.path.startsWith(item.file.path + '/'))
-			})
+			// keep only top-level items in the selection
+			filteredItems = filteredItems.filter(item => !filteredItems.some(selectedFolder =>
+				selectedFolder.file instanceof TFolder
+				&& selectedFolder.file.path !== item.file.path
+				&& item.file.path.startsWith(selectedFolder.file.path + '/'),
+			))
 		}
+		console.log(filteredItems)
 		filteredItems = filteredItems.sort((a, b) => {
 			const elA = a.el, elB = b.el
 			if (elA.compareDocumentPosition(elB) & Node.DOCUMENT_POSITION_FOLLOWING) return -1

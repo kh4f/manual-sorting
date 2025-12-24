@@ -130,7 +130,10 @@ export class DndManager {
 	}
 
 	private findDropTarget(mouseY: number): { futureSibling: HTMLElement, dropPosition: 'before' | 'after' } {
-		const treeItems = Array.from<HTMLElement>(this.explorerEl.querySelectorAll('.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item)'))
+		const treeItems = Array.from<HTMLElement>(this.explorerEl.querySelectorAll('\
+			.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item, \
+						   .nav-folder:has(> .is-selected) .tree-item) \
+		'))
 		if (!treeItems.length) return { futureSibling: treeItems[0], dropPosition: 'before' }
 
 		let futureSibling = treeItems[0]
@@ -138,6 +141,7 @@ export class DndManager {
 
 		treeItems.forEach(item => {
 			const isTempChild = item.classList.contains('temp-child')
+			const isFollowedBySelected = item.matches(':nth-child(1 of .tree-item:has(> .is-selected):has(+ .tree-item > .is-selected))')
 			const itemRect = item.getBoundingClientRect()
 			const itemTop = itemRect.top
 			let itemBottom = itemRect.bottom
@@ -145,7 +149,7 @@ export class DndManager {
 			const futureSiblingEdgeY = futureSibling.getBoundingClientRect()[dropPosition === 'before' ? 'top' : 'bottom']
 			const futureSiblingDist = Math.abs(futureSiblingEdgeY - mouseY)
 			const itemBottomDist = Math.abs(itemBottom - mouseY)
-			if ((itemBottomDist < futureSiblingDist) && !isTempChild)
+			if ((itemBottomDist < futureSiblingDist) && !isTempChild && !isFollowedBySelected)
 				[futureSibling, dropPosition] = [item, 'after']
 			if (item.matches('.tree-item:nth-child(1 of .tree-item)')) {
 				const itemTopDist = Math.abs(itemTop - mouseY)

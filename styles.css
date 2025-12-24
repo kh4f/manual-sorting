@@ -4,8 +4,11 @@
 
 		.tree-item.temp-child { height: 15px; }
 		
-		.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item) {
-			&:not(.temp-child)::after, &:where(:nth-child(1 of .tree-item))::before {
+		.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item, 
+					   .nav-folder:has(> .is-selected) .tree-item
+					) {
+			&:not(.temp-child, :has(> .is-selected):has(+ .tree-item > .is-selected))::after, 
+			&:where(:nth-child(1 of .tree-item))::before {
 				content: "";
 				position: absolute;
 				display: block;

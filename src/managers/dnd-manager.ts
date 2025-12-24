@@ -7,6 +7,8 @@ export class DndManager {
 	private log = new Logger('DND-MANAGER', '#a6ff00')
 	private explorerEl!: HTMLElement
 	private dragStartHandler: ((e: DragEvent | TouchEvent) => void) | null = null
+	private mouseDownHandler: ((e: MouseEvent) => void) | null = null
+	private mouseUpHandler: ((e: MouseEvent) => void) | null = null
 	private dragStartEventType: 'dragstart' | 'touchstart' = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private dragEventType: 'drag' | 'touchmove' = Platform.isMobile ? 'touchmove' : 'drag'
 	private dropEventType: 'dragend' | 'touchend' = Platform.isMobile ? 'touchend' : 'dragend'
@@ -94,7 +96,7 @@ export class DndManager {
 			draggedEl.addEventListener(this.dropEventType, onDrop, { once: true })
 		}
 
-		const mouseDownHandler = () => {
+		this.mouseDownHandler = () => {
 			this.dropZonesActivationTimeout = window.setTimeout(() => {
 				if (this.explorerEl.dataset.dragActive === undefined) {
 					this.explorerEl.dataset.dragActive = ''
@@ -102,7 +104,7 @@ export class DndManager {
 				this.dropZonesActivationTimeout = null
 			}, this.dropZonesActivationDelay)
 		}
-		const mouseUpHandler = () => {
+		this.mouseUpHandler = () => {
 			delete this.explorerEl.dataset.dragActive
 			if (this.dropZonesActivationTimeout) {
 				clearTimeout(this.dropZonesActivationTimeout)
@@ -110,8 +112,8 @@ export class DndManager {
 			}
 		}
 
-		this.explorerEl.addEventListener('mousedown', mouseDownHandler)
-		this.explorerEl.addEventListener('mouseup', mouseUpHandler)
+		this.explorerEl.addEventListener('mousedown', this.mouseDownHandler)
+		this.explorerEl.addEventListener('mouseup', this.mouseUpHandler)
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
 
 		this.log.info('Drag and drop enabled')
@@ -119,6 +121,8 @@ export class DndManager {
 
 	disable() {
 		if (this.dragStartHandler) this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
+		if (this.mouseDownHandler) this.explorerEl.removeEventListener('mousedown', this.mouseDownHandler)
+		if (this.mouseUpHandler) this.explorerEl.removeEventListener('mouseup', this.mouseUpHandler)
 		this.log.info('Drag and drop disabled')
 	}
 

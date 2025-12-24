@@ -42,6 +42,7 @@ export class DndManager {
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
 			draggedEl.dataset.isBeingDragged = ''
+			const selectedItems = new Set(this.plugin.getFileExplorerView().tree.selectedDoms)
 
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
@@ -82,7 +83,6 @@ export class DndManager {
 
 				this.plugin.orderManager.reconcileOrder()
 
-				const selectedItems = this.plugin.getFileExplorerView().tree.selectedDoms
 				if (selectedItems.has(item)) this.moveSelectedItems(selectedItems, siblingPath, isSiblingTempChild, dropPosition)
 				else this.moveItem(item, siblingPath, dropPosition, isSiblingTempChild)
 

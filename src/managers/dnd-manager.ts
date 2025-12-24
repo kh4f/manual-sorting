@@ -203,6 +203,11 @@ export class DndManager {
 		document.querySelectorAll('.nav-folder.is-drop-target').forEach(el => el.classList.remove('is-drop-target'))
 		const parentFolder = futureSibling.parentElement!.closest('.nav-folder, [data-type="file-explorer"] > .nav-files-container > div')
 		if (parentFolder) parentFolder.classList.add('is-drop-target')
+
+		const tooltip = document.querySelector<HTMLElement>('.drag-ghost-action')
+		if (!tooltip) return
+		const targetFolderName = parentFolder?.querySelector<HTMLElement>(':scope > .tree-item-self')?.dataset.path || this.plugin.app.vault.getName()
+		tooltip.innerText = i18next.t('interface.drag-and-drop.move-into-folder', { folder: targetFolderName })
 	}
 
 	private clearDropIndicators() {

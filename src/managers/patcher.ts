@@ -23,6 +23,7 @@ export class Patcher {
 				const sortedItems = original.call(this, folder)
 				if (bypass || !plugin.isCustomSortingActive()) return sortedItems
 				const folderPath = folder.path
+				if (!(folderPath in plugin.settings.customOrder)) return sortedItems
 				const customOrder = plugin.settings.customOrder[folderPath].children
 				return sortedItems.sort((a, b) => customOrder.indexOf(a.file.path) - customOrder.indexOf(b.file.path))
 			},

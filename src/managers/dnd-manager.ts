@@ -72,6 +72,10 @@ export class DndManager {
 				this.clearDropIndicators()
 				this.stopAutoScroll()
 				delete this.explorerEl.dataset.dragActive
+				if (this.dropZonesActivationTimeout) {
+					clearTimeout(this.dropZonesActivationTimeout)
+					this.dropZonesActivationTimeout = null
+				}
 				if (isOutsideExplorer) return
 
 				const sourcePath = draggedEl.dataset.path!

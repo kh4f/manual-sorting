@@ -5,7 +5,7 @@
 		.tree-item.temp-child { height: 15px; }
 		
 		.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item) {
-			&::after, &:where(:nth-child(1 of .tree-item))::before {
+			&:not(.temp-child)::after, &:where(:nth-child(1 of .tree-item))::before {
 				content: "";
 				position: absolute;
 				display: block;

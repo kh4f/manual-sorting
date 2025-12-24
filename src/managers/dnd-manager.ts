@@ -73,10 +73,6 @@ export class DndManager {
 				this.clearDropIndicators()
 				this.stopAutoScroll()
 				delete this.explorerEl.dataset.dragActive
-				if (this.dropZonesActivationTimeout) {
-					clearTimeout(this.dropZonesActivationTimeout)
-					this.dropZonesActivationTimeout = null
-				}
 				if (isOutsideExplorer) return
 
 				const sourcePath = draggedEl.dataset.path!
@@ -214,6 +210,10 @@ export class DndManager {
 			clearTimeout(this.folderExpandTimeout)
 			this.folderExpandTimeout = null
 			this.pendingExpandFolder = null
+		}
+		if (this.dropZonesActivationTimeout) {
+			clearTimeout(this.dropZonesActivationTimeout)
+			this.dropZonesActivationTimeout = null
 		}
 		document.querySelectorAll('[data-is-being-dragged]').forEach(el => el.removeAttribute('data-is-being-dragged'))
 		document.querySelectorAll('[data-drop-position]').forEach(el => el.removeAttribute('data-drop-position'))

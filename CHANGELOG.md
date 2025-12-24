@@ -1,6 +1,25 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.2.2  `](https://github.com/kh4f/manual-sorting/compare/3.2.1...3.2.2)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - prevent drop zones from appearing in default sorting modes [`3ef2bfe`](https://github.com/kh4f/manual-sorting/commit/3ef2bfe)
+  - display correct target folder in drag tooltip [`4ae09d4`](https://github.com/kh4f/manual-sorting/commit/4ae09d4)
+  - disallow multi-select drop into selected folders [`a8c611e`](https://github.com/kh4f/manual-sorting/commit/a8c611e)
+  - prevent unintended nesting in multi-select drop [`8eb3709`](https://github.com/kh4f/manual-sorting/commit/8eb3709)
+  - prevent phantom drop zones when dragging near empty folders [`4904d0c`](https://github.com/kh4f/manual-sorting/commit/4904d0c)
+  - clear drop zones activation timeout on item drop [`06431b6`](https://github.com/kh4f/manual-sorting/commit/06431b6) ([#114](https://github.com/kh4f/manual-sorting/issues/114))
+  - prevent subfolders of selected folders from escaping during multi-selection drag [`5373c80`](https://github.com/kh4f/manual-sorting/commit/5373c80) ([#113](https://github.com/kh4f/manual-sorting/issues/113))
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🎨 Style
+- **dnd**: improve visual clarity of active drop zone [`e63f740`](https://github.com/kh4f/manual-sorting/commit/e63f740)
+- **modal**: add `mod-form` class for narrower modal layout [`37fb900`](https://github.com/kh4f/manual-sorting/commit/37fb900)
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.2.1...3.2.2) &ensp;•&ensp; _Dec 25, 2025_
+
+
 ## &ensp; [` 📦 3.2.1  `](https://github.com/kh4f/manual-sorting/compare/3.2.0...3.2.1)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

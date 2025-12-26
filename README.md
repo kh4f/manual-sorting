@@ -39,7 +39,7 @@
 
 ## 💖 Credits
 - **Inspiration**: [Obsidian Bartender](https://github.com/nothingislost/obsidian-bartender), [Custom File Explorer sorting](https://github.com/SebastianMC/obsidian-custom-sort)
-- **Huge thanks** to [@Zweikeks](https://github.com/Zweikeks), [@Azmoinal](https://github.com/Azmoinal), [@SublimePeace](https://github.com/SublimePeace) for testing and providing feedback!
+- **Huge thanks** to [@Zweikeks](https://github.com/Zweikeks), [@Azmoinal](https://github.com/Azmoinal), [@SublimePeace](https://github.com/SublimePeace), [@Anonym0usPlayer](https://github.com/Anonym0usPlayer) for testing and providing feedback!
 - **Special thanks** to [@Mara-Li](https://github.com/Mara-Li) for contributions!
 
 </br>

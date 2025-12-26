@@ -96,7 +96,8 @@ export class DndManager {
 			draggedEl.addEventListener(this.dropEventType, onDrop, { once: true })
 		}
 
-		this.mouseDownHandler = () => {
+		this.mouseDownHandler = e => {
+			if (e.button !== 0) return
 			this.dropZonesActivationTimeout = window.setTimeout(() => {
 				if (this.explorerEl.dataset.dragActive === undefined) {
 					this.explorerEl.dataset.dragActive = ''

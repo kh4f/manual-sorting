@@ -1,6 +1,16 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.2.3  `](https://github.com/kh4f/manual-sorting/compare/3.2.2...3.2.3)
+
+### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes
+- **dnd**: 
+  - ensure drop zones are cleared when releasing mouse [`9576442`](https://github.com/kh4f/manual-sorting/commit/9576442) ([#114](https://github.com/kh4f/manual-sorting/issues/114))
+  - prevent drag activation on right click [`5ceadc4`](https://github.com/kh4f/manual-sorting/commit/5ceadc4) ([#114](https://github.com/kh4f/manual-sorting/issues/114))
+
+##### &emsp;&ensp;&nbsp;&nbsp; [_All Release Commits_](https://github.com/kh4f/manual-sorting/compare/3.2.2...3.2.3) &ensp;•&ensp; _Dec 26, 2025_
+
+
 ## &ensp; [` 📦 3.2.2  `](https://github.com/kh4f/manual-sorting/compare/3.2.1...3.2.2)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

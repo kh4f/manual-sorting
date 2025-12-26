@@ -114,7 +114,7 @@ export class DndManager {
 		}
 
 		this.explorerEl.addEventListener('mousedown', this.mouseDownHandler)
-		this.explorerEl.addEventListener('mouseup', this.mouseUpHandler)
+		window.addEventListener('mouseup', this.mouseUpHandler)
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
 
 		this.log.info('Drag and drop enabled')
@@ -123,7 +123,7 @@ export class DndManager {
 	disable() {
 		if (this.dragStartHandler) this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
 		if (this.mouseDownHandler) this.explorerEl.removeEventListener('mousedown', this.mouseDownHandler)
-		if (this.mouseUpHandler) this.explorerEl.removeEventListener('mouseup', this.mouseUpHandler)
+		if (this.mouseUpHandler) window.removeEventListener('mouseup', this.mouseUpHandler)
 		this.log.info('Drag and drop disabled')
 	}
 

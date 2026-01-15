@@ -1,5 +1,5 @@
-import { defineConfig } from 'tsdown'
 import { pathToFileURL } from 'node:url'
+import { defineConfig } from 'tsdown'
 
 const isProd = process.argv.includes('--prod')
 const dirUrl = pathToFileURL(import.meta.dirname).href

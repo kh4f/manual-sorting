@@ -1,56 +1,25 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["mergeConfidence:all-badges"],
-	"ignorePaths": ["node_modules/**", "tests/**"],
+	"ignorePaths": ["node_modules/**"],
 	"dependencyDashboard": true,
 	"rangeStrategy": "bump",
-	"prHourlyLimit": 0,
 	"semanticCommits": "enabled",
 	"commitMessageAction": "bump",
 	"commitMessageTopic": "`{{depName}}`",
-	"commitMessageExtra": "from {{replace '^[^v0-9]+' '' currentValue}} to {{newVersion}}",
-	"commitBody": "Signed-off-by: {{{gitAuthor}}}",
+	"commitMessageExtra": "from {{currentValue}} to {{newValue}}",
+	"automergeType": "branch",
+	"minimumReleaseAge": "3 days",
 	"branchTopic": "{{depNameSanitized}}-{{newVersion}}",
 	"packageRules": [
 		{
-            "matchUpdateTypes": "patch",
-            "automerge": true,
-			"automergeType": "branch",
-			"minimumReleaseAge": "3 days"
-        },
-		{
-            "matchUpdateTypes": "minor",
+			"matchUpdateTypes": "minor",
 			"matchCurrentVersion": "!/^0/",
-            "automerge": true,
-			"automergeType": "branch",
-			"minimumReleaseAge": "3 days"
-        },
-		{
-			"matchDepTypes": ["dependencies"],
-			"semanticCommitScope": "deps"
+			"automerge": true
 		},
 		{
-			"matchDepTypes": ["devDependencies"],
-			"semanticCommitScope": "dev-deps"
-		},
-		{
-			"matchDepTypes": ["peerDependencies"],
-			"semanticCommitScope": "peer-deps"
-		},
-		{
-            "matchManagers": ["github-actions"],
-            "semanticCommitScope": "actions",
-			"commitMessageTopic": "`{{depName}}`"
-		},
-		{
-			"matchDepNames": "pnpm",
-			"semanticCommitScope": "package-manager",
-			"commitMessageTopic": "`{{depName}}`"
-		},
-		{
-			"matchDepTypes": ["engines"],
-			"semanticCommitScope": "engine",
-			"commitMessageTopic": "`{{depName}}`"
-		}
+            "matchUpdateTypes": "patch",
+            "automerge": true
+        }
 	]
 }

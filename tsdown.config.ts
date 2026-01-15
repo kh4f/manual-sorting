@@ -1,10 +1,7 @@
 import { defineConfig } from 'tsdown'
 import { pathToFileURL } from 'node:url'
-import syncroid from 'vite-plugin-syncroid'
-import 'dotenv/config'
 
 const isProd = process.argv.includes('--prod')
-const useSyncroid = process.env.USE_SYNCROID !== undefined
 const dirUrl = pathToFileURL(import.meta.dirname).href
 
 export default defineConfig({
@@ -24,5 +21,4 @@ export default defineConfig({
 	external: ['obsidian'],
 	noExternal: ['monkey-around'],
 	env: { DEV: !isProd },
-	plugins: [useSyncroid && syncroid({})],
 })

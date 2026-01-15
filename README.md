@@ -45,5 +45,5 @@
 </br>
 
 <div align="center">
-  <b>MIT licensed | © 2025 <a href="https://github.com/kh4f">kh4f</a></b>
+  <b>MIT License © 2025-2026 <a href="https://github.com/kh4f">kh4f</a></b>
 </div>

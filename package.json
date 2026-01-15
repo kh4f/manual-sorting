@@ -7,16 +7,7 @@
 	"repository": "https://github.com/kh4f/manual-sorting",
 	"bugs": "https://github.com/kh4f/manual-sorting/issues",
 	"homepage": "https://github.com/kh4f/manual-sorting#readme",
-	"keywords": [
-		"obsidian",
-		"obsidian-md",
-		"obsidian-plugin",
-		"obsidian-sorting",
-		"custom-sorting",
-		"manual-sorting",
-		"obsidian-manual-sorting",
-		"drag-and-drop"
-	],
+	"keywords": ["obsidian", "obsidian-md", "obsidian-plugin", "obsidian-sorting", "custom-sorting", "manual-sorting", "obsidian-manual-sorting", "drag-and-drop"],
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
@@ -46,7 +37,5 @@
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.52.0"
 	},
-	"dependencies": {
-		"monkey-around": "^3.0.0"
-	}
+	"dependencies": { "monkey-around": "^3.0.0" }
 }

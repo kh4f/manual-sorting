@@ -6,8 +6,7 @@ jobs:
   release:
     name: Release & Publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # for creating a GitHub release
+    permissions: { contents: write } # for creating a GitHub release
     env:
       TAG: ${{ github.ref_name }}
     steps:

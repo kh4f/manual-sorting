@@ -9,6 +9,7 @@
 	"homepage": "https://github.com/kh4f/manual-sorting#readme",
 	"keywords": ["obsidian", "obsidian-md", "obsidian-plugin", "obsidian-sorting", "custom-sorting", "manual-sorting", "obsidian-manual-sorting", "drag-and-drop"],
 	"pnpm": { "onlyBuiltDependencies": ["esbuild", "electron", "obsidian-typings"] },
+	"relion": { "tagPrefix": "", "bumpFiles": ["package.json", "manifest.json"] },
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
@@ -16,8 +17,8 @@
 		"build:watch": "tsdown --watch",
 		"build:prod": "tsdown --prod",
 		"lint": "eslint",
-		"release": "relion",
-		"release:github": "relion -p github"
+		"release:context": "pnpm relion -f",
+		"release": "pnpm relion -bct"
 	},
 	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {
@@ -31,7 +32,7 @@
 		"jiti": "^2.6.1",
 		"obsidian": "^1.11.0",
 		"obsidian-typings": "^4.90.0",
-		"relion": "^0.32.1",
+		"relion": "^0.36.1",
 		"tsdown": "^0.18.4",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",

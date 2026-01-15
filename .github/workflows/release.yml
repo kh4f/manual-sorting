@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-        # fetch full history for correct commits parsing by relion
-        with: { fetch-depth: 0 }
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -42,8 +40,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create $TAG \
-            --title $TAG \
-            --notes "$(pnpm --silent release:github)" \
-            --draft \
-            main.js manifest.json styles.css $ARCHIVE_NAME
+          gh release create $TAG --title $TAG --draft \
+          manifest.json main.js styles.css $ARCHIVE_NAME

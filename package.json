@@ -27,8 +27,7 @@
 		"lint:fix": "eslint --fix",
 		"bench": "vitest bench --run",
 		"release": "relion",
-		"release:github": "relion -p github",
-		"prepare": "simple-git-hooks"
+		"release:github": "relion -p github"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
@@ -39,11 +38,9 @@
 		"globals": "^17.0.0",
 		"i18next": "^25.7.3",
 		"jiti": "^2.6.1",
-		"lint-staged": "^16.2.7",
 		"obsidian": "^1.11.0",
 		"obsidian-typings": "^4.90.0",
 		"relion": "^0.32.1",
-		"simple-git-hooks": "^2.13.1",
 		"tsdown": "^0.18.4",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
@@ -51,11 +48,5 @@
 	},
 	"dependencies": {
 		"monkey-around": "^3.0.0"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "pnpm lint-staged"
-	},
-	"lint-staged": {
-		"*.ts": "pnpm lint:fix"
 	}
 }

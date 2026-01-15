@@ -12,7 +12,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsdown",
-		"build:watch": "tsdown --watch src",
+		"build:watch": "tsdown --watch",
 		"build:prod": "tsdown --prod",
 		"lint": "eslint",
 		"lint:fix": "eslint --fix",

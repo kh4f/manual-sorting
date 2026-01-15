@@ -20,6 +20,7 @@
 		"release": "relion",
 		"release:github": "relion -p github"
 	},
+	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
 		"@stylistic/eslint-plugin": "^5.6.1",
@@ -36,6 +37,5 @@
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.52.0"
-	},
-	"dependencies": { "monkey-around": "^3.0.0" }
+	}
 }

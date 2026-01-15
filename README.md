@@ -5,7 +5,7 @@
 	<p>
 		<a href='https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugin-stats.json#:~:text="manual%2Dsorting"' target="_blank"><img src="https://img.shields.io/badge/dynamic/json?logo=obsidian&color=363636&labelColor=be2a3c&label=Downloads&query=%24%5B%22manual-sorting%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&style=flat" alt="Downloads Badge"></a>
 		<a href="https://github.com/kh4f/manual-sorting/releases"><img src="https://img.shields.io/github/v/tag/kh4f/manual-sorting?color=373737&labelColor=9c2437&label=%F0%9F%93%A6%20Release&style=flat" alt="Version Badge"></a>
-		<a href="https://github.com/kh4f/manual-sorting/blob/master/LICENSE"><img src="https://img.shields.io/github/license/kh4f/manual-sorting?color=373737&labelColor=88304e&label=%F0%9F%9B%A1%EF%B8%8F%20Licence&style=flat" alt="License Badge"></a>
+		<a href="https://github.com/kh4f/manual-sorting/blob/master/LICENSE"><img src="https://img.shields.io/github/license/kh4f/manual-sorting?color=373737&labelColor=88304e&label=%F0%9F%9B%A1%EF%B8%8F%20License&style=flat" alt="License Badge"></a>
 		<a href="https://github.com/kh4f/manual-sorting/issues?q=is%3Aissue+is%3Aopen+label%3Abug"><img src="https://img.shields.io/github/issues/kh4f/manual-sorting/bug?color=373737&labelColor=522546&label=%F0%9F%90%9B%20Bugs&style=flat" alt="Open Bugs Badge"></a>
 	</p>
 	<p>

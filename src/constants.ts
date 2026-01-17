@@ -7,4 +7,5 @@ export const DEFAULT_SETTINGS: PluginSettings = {
 	sortOrder: 'custom',
 	debugMode: !!process.env.DEV,
 	newItemPlacement: 'top',
+	ignorePaths: {},
 }

@@ -12,6 +12,7 @@ export interface LegacyPluginSettings {
 	sortOrder: string
 	debugMode: boolean
 	newItemPlacement: 'top' | 'bottom'
+	ignorePaths: Record<string, boolean>
 }
 
 export interface PluginSettings {
@@ -19,6 +20,7 @@ export interface PluginSettings {
 	sortOrder: SortOrder
 	debugMode: boolean
 	newItemPlacement: 'top' | 'bottom'
+	ignorePaths: Record<string, boolean>
 }
 
 export type FileOrder = Record<string, {

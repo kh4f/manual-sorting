@@ -6,7 +6,27 @@ import { Logger } from '@/utils'
 export class OrderManager {
 	private log = new Logger('ORDER-MANAGER', '#00ccff')
 
-	constructor(private plugin: ManualSortingPlugin) {}
+	constructor(private plugin: ManualSortingPlugin) { }
+
+	private isPathIgnored(path: string): boolean {
+		if (this.plugin.settings.ignorePaths[path]) {
+			this.log.info(`Path '${path}' is explicitly ignored`)
+			return true
+		}
+
+		const parts = path.split('/').filter(part => part)
+		let currentPath = ''
+
+		for (const part of parts) {
+			currentPath = currentPath ? `${currentPath}/${part}` : part
+			if (this.plugin.settings.ignorePaths[currentPath]) {
+				this.log.info(`Path '${path}' is ignored because parent '${currentPath}' is ignored`)
+				return true
+			}
+		}
+
+		return false
+	}
 
 	add(item: TAbstractFile) {
 		const path = item.path
@@ -16,6 +36,7 @@ export class OrderManager {
 		const isFolder = item instanceof TFolder
 		const insertPos = this.plugin.settings.newItemPlacement
 
+		if (this.isPathIgnored(dir)) return
 		if (isFolder) order[path] = { children: [], sortOrder: 'custom' }
 		if (insertPos === 'top') order[dir].children.unshift(path)
 		else order[dir].children.push(path)
@@ -27,10 +48,18 @@ export class OrderManager {
 		this.log.info(`Renaming '${oldPath}' to '${newPath}'`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
+		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
 
-		order[oldDir].children = order[oldDir].children.map((path: string) => (path === oldPath ? newPath : path))
+		if (!this.isPathIgnored(oldDir)) {
+			order[oldDir].children = order[oldDir].children.map((path: string) => (path === oldPath ? newPath : path))
+		}
+
 		const isFolder = oldPath in order
 		if (isFolder) this.renameFolder(oldPath, newPath)
+
+		if (this.isPathIgnored(newDir) && typeof order[newDir] !== 'undefined') {
+			order[newDir].children = order[newDir].children.filter((path: string) => path !== newPath)
+		}
 
 		this.logOrder('Updated order after renaming item:')
 	}
@@ -43,19 +72,23 @@ export class OrderManager {
 		const isFolder = oldPath in order
 		const isDirChanged = oldDir !== newDir
 
-		order[oldDir].children = order[oldDir].children.filter(path => path !== oldPath)
+		const oldDirIgnored = this.isPathIgnored(oldDir)
+
+		if (!oldDirIgnored) {
+			order[oldDir].children = order[oldDir].children.filter(path => path !== oldPath)
+		}
 
 		let insertIdx = 0
-		if (targetSiblingPath) {
+		if (!this.isPathIgnored(newDir) && targetSiblingPath) {
 			const siblingIdx = order[newDir].children.indexOf(targetSiblingPath)
 			insertIdx = position === 'before' ? siblingIdx : siblingIdx + 1
+			order[newDir].children.splice(insertIdx, 0, newPath)
 		}
-		order[newDir].children.splice(insertIdx, 0, newPath)
 
-		if (isFolder) this.renameFolder(oldPath, newPath)
+		if (isFolder && !oldDirIgnored) this.renameFolder(oldPath, newPath)
 
 		this.logOrder('Updated order after moving item:')
-		if (!isDirChanged) {
+		if (oldDir === newDir && !isDirChanged) {
 			this.log.info('Directory did not change, calling sort on File Explorer manually')
 			this.plugin.getFileExplorerView().sort()
 		}
@@ -95,13 +128,18 @@ export class OrderManager {
 		const explorerView = this.plugin.getFileExplorerView()
 
 		const indexFolder = (folder: TFolder) => {
+			if (this.isPathIgnored(folder.path)) return
+
 			const sortedItems = explorerView.getSortedFolderItems(folder, true)
 			const sortedItemPaths = sortedItems.map(item => item.file.path)
 			currentOrder[folder.path] = { children: sortedItemPaths, sortOrder: 'custom' }
 
 			for (const item of sortedItems) {
 				const itemObject = item.file
-				if (itemObject instanceof TFolder) indexFolder(itemObject)
+				if (itemObject instanceof TFolder) {
+					if (this.isPathIgnored(itemObject.path)) continue
+					indexFolder(itemObject)
+				}
 			}
 		}
 
@@ -113,6 +151,7 @@ export class OrderManager {
 		const result: FileOrder = {}
 
 		for (const folder in currentOrder) {
+			if (this.isPathIgnored(folder)) continue
 			if (folder in savedOrder) {
 				const prevOrder = savedOrder[folder]
 				const currentFiles = currentOrder[folder]

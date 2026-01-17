@@ -238,6 +238,11 @@ export class DndManager {
 		const targetFolderPath = siblingPath.substring(0, siblingPath.lastIndexOf('/'))
 		let targetPath = targetFolderPath ? targetFolderPath + '/' + file.name : file.name
 
+		if (this.plugin.isPathIgnored(sourcePath) || this.plugin.isPathIgnored(targetFolderPath)) {
+			this.log.info(`Skipping move to ignored folder path target: '${sourcePath}' source: '${sourcePath}'`)
+			return sourcePath
+		}
+
 		const isDuplicateExists = sourcePath !== targetPath && !!this.plugin.app.vault.getAbstractFileByPath(targetPath)
 		if (isDuplicateExists) {
 			const basePath = file instanceof TFile ? targetPath.slice(0, -(file.extension.length + 1)) : targetPath

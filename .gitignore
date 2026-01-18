@@ -2,5 +2,3 @@ node_modules
 main.js
 main.js.map
 data.json
-.env
-syncroid.config.ts

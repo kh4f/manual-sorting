@@ -17,8 +17,8 @@
 		"build:watch": "tsdown --watch",
 		"build:prod": "tsdown --prod",
 		"lint": "eslint",
-		"release:context": "pnpm relion -f",
-		"release": "pnpm relion -bct"
+		"release:context": "relion -f",
+		"release": "relion -bct"
 	},
 	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {

@@ -32,6 +32,7 @@ export class OrderManager {
 		const isFolder = oldPath in order
 		if (isFolder) this.renameFolder(oldPath, newPath)
 
+		void this.plugin.saveSettings()
 		this.logOrder('Updated order after renaming item:')
 	}
 

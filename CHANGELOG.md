@@ -1,6 +1,14 @@
 # Changelog
 
 
+## &ensp; [` 📦 3.2.4  `](https://github.com/kh4f/manual-sorting/compare/3.2.3...3.2.4)
+
+### &emsp; 🩹 Fixes
+- **Settings save on rename**: renaming items now always updates settings in `data.json`. [🡥](https://github.com/kh4f/manual-sorting/commit/115f687) [#120](https://github.com/kh4f/manual-sorting/issues/120)
+
+##### &emsp;&emsp; [_Full Changelog_](https://github.com/kh4f/manual-sorting/compare/3.2.3...3.2.4) &ensp;•&ensp; _Jan 21, 2026_
+
+
 ## &ensp; [` 📦 3.2.3  `](https://github.com/kh4f/manual-sorting/compare/3.2.2...3.2.3)
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🩹 Fixes

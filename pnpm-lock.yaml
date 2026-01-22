@@ -34,7 +34,7 @@ importers:
         specifier: ^2.6.1
         version: 2.6.1
       obsidian:
-        specifier: ^1.11.0
+        specifier: ^1.11.4
         version: 1.11.4(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       obsidian-typings:
         specifier: ^4.93.0

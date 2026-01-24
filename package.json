@@ -17,8 +17,7 @@
 		"build:watch": "tsdown --watch",
 		"build:prod": "tsdown --prod",
 		"lint": "eslint",
-		"release:context": "relion -f",
-		"release": "relion -bct"
+		"release": "relion"
 	},
 	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {
@@ -31,7 +30,7 @@
 		"jiti": "^2.6.1",
 		"obsidian": "^1.11.4",
 		"obsidian-typings": "^4.93.0",
-		"relion": "^0.36.1",
+		"relion": "^0.37.0",
 		"tsdown": "^0.19.0",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",

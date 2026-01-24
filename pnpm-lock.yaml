@@ -40,8 +40,8 @@ importers:
         specifier: ^4.93.0
         version: 4.93.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
-        specifier: ^0.36.1
-        version: 0.36.1
+        specifier: ^0.37.0
+        version: 0.37.0
       tsdown:
         specifier: ^0.19.0
         version: 0.19.0(typescript@5.9.3)
@@ -1947,8 +1947,8 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
-  relion@0.36.1:
-    resolution: {integrity: sha512-qNINVqtx9b9k+Xg1e/w+ru77BsPk8U219ae9xNZQ1i2TMnn1qIFcq/Ta45PBvjvrOtslod8WgBqBXl879OYZCA==}
+  relion@0.37.0:
+    resolution: {integrity: sha512-oP9dXE+4s07qhrfAT6c8FQ33F9c7t5QGMufSvfa9heRz6H+b3kwQZVFuteGiDKDqqZvGSPPTvBU2+Aw2tHXoMg==}
     hasBin: true
 
   resolve-alpn@1.2.1:
@@ -4171,7 +4171,7 @@ snapshots:
 
   quick-lru@5.1.1: {}
 
-  relion@0.36.1:
+  relion@0.37.0:
     dependencies:
       semver: 7.7.3
 

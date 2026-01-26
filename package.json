@@ -22,7 +22,7 @@
 	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
-		"@stylistic/eslint-plugin": "^5.7.0",
+		"@stylistic/eslint-plugin": "^5.7.1",
 		"@types/node": "^25.0.10",
 		"@types/sortablejs": "^1.15.9",
 		"eslint": "^9.39.2",

@@ -21,4 +21,5 @@ export default defineConfig({
 	external: ['obsidian'],
 	noExternal: ['monkey-around'],
 	env: { DEV: !isProd },
+	inlineOnly: false,
 })

@@ -43,7 +43,7 @@ importers:
         specifier: ^0.38.0
         version: 0.38.0
       tsdown:
-        specifier: ^0.20.2
+        specifier: ^0.20.3
         version: 0.20.3(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0

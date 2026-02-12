@@ -30,7 +30,7 @@
 		"jiti": "^2.6.1",
 		"obsidian": "^1.11.4",
 		"obsidian-typings": "^4.93.0",
-		"relion": "^0.38.0",
+		"relion": "^0.39.1",
 		"tsdown": "^0.20.3",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",

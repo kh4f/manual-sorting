@@ -40,8 +40,8 @@ importers:
         specifier: ^4.93.0
         version: 4.93.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
       relion:
-        specifier: ^0.38.0
-        version: 0.38.0
+        specifier: ^0.39.0
+        version: 0.39.1
       tsdown:
         specifier: ^0.20.3
         version: 0.20.3(typescript@5.9.3)
@@ -1879,8 +1879,8 @@ packages:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
 
-  relion@0.38.0:
-    resolution: {integrity: sha512-8oagLJD0OwDa8G0P7UbbFNR1lCVI0PJWOHWWP4xTD1MxsgX04SaP/DC9DG1DXUrST3RMW4arXNnMSi/rGSKPwA==}
+  relion@0.39.1:
+    resolution: {integrity: sha512-Se1XgUsPolCExkba4qk1O/EC2iKoTLMqVNmsMzWEdijEfwNZ7lSgGrbd/jz6M7AJn7yXqUp4fHYCwvCLwZuzTA==}
     hasBin: true
 
   resolve-alpn@1.2.1:
@@ -1948,6 +1948,11 @@ packages:
 
   semver@7.7.3:
     resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.7.4:
+    resolution: {integrity: sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -4059,9 +4064,9 @@ snapshots:
 
   quick-lru@5.1.1: {}
 
-  relion@0.38.0:
+  relion@0.39.1:
     dependencies:
-      semver: 7.7.3
+      semver: 7.7.4
 
   resolve-alpn@1.2.1: {}
 
@@ -4140,6 +4145,8 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.3: {}
+
+  semver@7.7.4: {}
 
   serialize-error@7.0.1:
     dependencies:

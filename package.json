@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@stylistic/eslint-plugin": "^5.8.0",
-		"@types/node": "^25.2.2",
+		"@types/node": "^25.2.3",
 		"@types/sortablejs": "^1.15.9",
 		"eslint": "^9.39.2",
 		"i18next": "^25.8.4",

@@ -28,7 +28,7 @@
 		"eslint": "^10.0.0",
 		"i18next": "^25.8.11",
 		"jiti": "^2.6.1",
-		"obsidian": "^1.11.4",
+		"obsidian": "^1.12.2",
 		"obsidian-typings": "^4.93.0",
 		"relion": "^0.39.1",
 		"tsdown": "^0.20.3",

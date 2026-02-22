@@ -34,8 +34,8 @@ importers:
         specifier: ^2.6.1
         version: 2.6.1
       obsidian:
-        specifier: ^1.11.4
-        version: 1.11.4(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
+        specifier: ^1.12.2
+        version: 1.12.2(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)
       obsidian-typings:
         specifier: ^4.93.0
         version: 4.93.0(@pixi/core@7.2.4)(@pixi/display@7.2.4(@pixi/core@7.2.4))(@pixi/utils@7.2.4)(typescript@5.9.3)
@@ -1736,6 +1736,12 @@ packages:
 
   obsidian@1.11.4:
     resolution: {integrity: sha512-n0KD3S+VndgaByrEtEe8NELy0ya6/s+KZ7OcxA6xOm5NN4thxKpQjo6eqEudHEvfGCeT/TYToAKJzitQ1I3XTg==}
+    peerDependencies:
+      '@codemirror/state': 6.5.0
+      '@codemirror/view': 6.38.6
+
+  obsidian@1.12.2:
+    resolution: {integrity: sha512-DGAzpt6vo+sMDET/o8Zj26Bj2hbHrFsNUU8TtnzCyerO/OHksMFQnU9QEnPHVsOMstt/WnHXfC56j2r1syObWg==}
     peerDependencies:
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.38.6
@@ -3839,6 +3845,13 @@ snapshots:
       - supports-color
 
   obsidian@1.11.4(@codemirror/state@6.5.0)(@codemirror/view@6.38.6):
+    dependencies:
+      '@codemirror/state': 6.5.0
+      '@codemirror/view': 6.38.6
+      '@types/codemirror': 5.60.8
+      moment: 2.29.4
+
+  obsidian@1.12.2(@codemirror/state@6.5.0)(@codemirror/view@6.38.6):
     dependencies:
       '@codemirror/state': 6.5.0
       '@codemirror/view': 6.38.6

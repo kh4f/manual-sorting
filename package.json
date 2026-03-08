@@ -31,7 +31,7 @@
 		"obsidian": "^1.11.4",
 		"obsidian-typings": "^4.93.0",
 		"relion": "^0.40.0",
-		"tsdown": "^0.20.3",
+		"tsdown": "^0.21.0",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.56.1"

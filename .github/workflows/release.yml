@@ -18,11 +18,11 @@ jobs:
       - name: Install deps
         run: bun i
 
-      - name: Build
-        run: bun build:prod
-
       - name: Lint
         run: bun lint
+
+      - name: Build
+        run: bun build:prod
 
       - name: Create release archive
         run: |

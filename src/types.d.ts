@@ -1,7 +1,7 @@
 import { TFolder } from 'obsidian'
+import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type { FileTreeItem, FileExplorerViewSortOrder } from 'obsidian-typings'
 import type { i18n } from 'i18next'
-import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 
 declare global {
 	const i18next: i18n

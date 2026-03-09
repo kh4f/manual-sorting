@@ -1,5 +1,5 @@
-import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
+import type ManualSortingPlugin from '@/plugin'
 
 const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 

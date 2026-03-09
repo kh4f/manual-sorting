@@ -1,7 +1,7 @@
 import { TAbstractFile, TFolder } from 'obsidian'
-import type { FileOrder } from '@/types'
-import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
+import type ManualSortingPlugin from '@/plugin'
+import type { FileOrder } from '@/types'
 
 export class OrderManager {
 	private log = new Logger('ORDER-MANAGER', '#00ccff')

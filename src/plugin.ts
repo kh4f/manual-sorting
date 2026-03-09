@@ -1,10 +1,10 @@
 import { Plugin, TAbstractFile } from 'obsidian'
-import type { FileExplorerView } from 'obsidian-typings'
 import { SettingsTab } from '@/components'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
-import type { PluginSettings, LegacyPluginSettings, SortOrder } from '@/types'
 import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
 import { Logger } from '@/utils'
+import type { FileExplorerView } from 'obsidian-typings'
+import type { PluginSettings, LegacyPluginSettings, SortOrder } from '@/types'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)

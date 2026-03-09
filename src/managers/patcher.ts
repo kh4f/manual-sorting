@@ -1,10 +1,10 @@
 import { Menu, MenuItem, TFolder } from 'obsidian'
-import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from 'obsidian-typings'
 import { around } from 'monkey-around'
+import { Logger } from '@/utils'
 import { ResetOrderModal } from '@/components'
 import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
-import { Logger } from '@/utils'
+import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from 'obsidian-typings'
 
 export class Patcher {
 	private explorerUninstaller: ReturnType<typeof around> | null = null

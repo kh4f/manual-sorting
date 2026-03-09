@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
-import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
+import type ManualSortingPlugin from '@/plugin'
 
 export class SettingsTab extends PluginSettingTab {
 	constructor(app: App, public plugin: ManualSortingPlugin) {

@@ -1,7 +1,7 @@
 import { Platform, TFile, TFolder } from 'obsidian'
-import type { FileTreeItem, FolderTreeItem } from 'obsidian-typings'
-import type ManualSortingPlugin from '@/plugin'
 import { Logger } from '@/utils'
+import type ManualSortingPlugin from '@/plugin'
+import type { FileTreeItem, FolderTreeItem } from 'obsidian-typings'
 
 export class DndManager {
 	private log = new Logger('DND-MANAGER', '#a6ff00')

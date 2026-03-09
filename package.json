@@ -9,7 +9,7 @@
 	"homepage": "https://github.com/kh4f/manual-sorting#readme",
 	"keywords": ["obsidian", "obsidian-md", "obsidian-plugin", "obsidian-sorting", "custom-sorting", "manual-sorting", "obsidian-manual-sorting", "drag-and-drop"],
 	"pnpm": { "onlyBuiltDependencies": ["esbuild", "electron", "obsidian-typings"] },
-	"relion": { "tagPrefix": "", "bumpFiles": ["package.json", "manifest.json"] },
+	"relion": { "tagPrefix": "", "bump": ["package.json", "manifest.json"] },
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

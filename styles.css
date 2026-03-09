@@ -3,11 +3,11 @@
 		.tree-item { position: relative;}
 
 		.tree-item.temp-child { height: 15px; }
-		
-		.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item, 
+
+		.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item,
 					   .nav-folder:has(> .is-selected) .tree-item
 					) {
-			&:not(.temp-child, :has(> .is-selected):has(+ .tree-item > .is-selected))::after, 
+			&:not(.temp-child, :has(> .is-selected):has(+ .tree-item > .is-selected))::after,
 			&:where(:nth-child(1 of .tree-item))::before {
 				content: "";
 				position: absolute;
@@ -33,7 +33,7 @@
 		.nav-folder.is-drop-target {
 			background: hsla(var(--interactive-accent-hsl), 0.05) !important;
 			border-radius: var(--radius-s);
-			
+
 			> .nav-folder-title {
 				color: var(--nav-item-color-highlighted) !important;
 			}

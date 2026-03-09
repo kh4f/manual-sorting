@@ -1,4 +1,4 @@
-import { type PluginSettings } from '@/types'
+import type { PluginSettings } from '@/types'
 
 export const CUSTOM_SORT_ORDER_ID = 'custom'
 

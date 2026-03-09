@@ -18,8 +18,6 @@ export default defineConfig({
 	format: 'cjs',
 	outDir: '.',
 	clean: false,
-	external: ['obsidian'],
-	noExternal: ['monkey-around'],
+	deps: { onlyAllowBundle: 'monkey-around', neverBundle: 'obsidian' },
 	env: { DEV: !isProd },
-	inlineOnly: false,
 })

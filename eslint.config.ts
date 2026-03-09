@@ -12,28 +12,15 @@ export default defineConfig([
 	{
 		name: 'Type-Aware Rules',
 		files: ['**/*.ts'],
-		extends: [
-			tseslint.configs.strictTypeChecked,
-			tseslint.configs.stylisticTypeChecked,
-		],
+		extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylisticTypeChecked],
+		languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
 		rules: {
 			'@typescript-eslint/restrict-template-expressions': 'off',
-			'@typescript-eslint/no-dynamic-delete': 'off',
-			'@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
-			'@typescript-eslint/no-this-alias': 'off',
-			'@typescript-eslint/prefer-nullish-coalescing': 'off',
+			'@typescript-eslint/no-confusing-void-expression': 'off',
 			'@typescript-eslint/no-non-null-assertion': 'off',
-			'@typescript-eslint/naming-convention': ['error', {
-				selector: ['classProperty', 'classMethod'],
-				format: ['camelCase'],
-				leadingUnderscore: 'forbid',
-			}],
-		},
-		languageOptions: {
-			parserOptions: {
-				projectService: true,
-				tsconfigRootDir: import.meta.dirname,
-			},
+			'@typescript-eslint/prefer-nullish-coalescing': 'off',
+			'@typescript-eslint/no-dynamic-delete': 'off',
+			'@typescript-eslint/no-this-alias': 'off',
 		},
 	},
 	{
@@ -44,7 +31,6 @@ export default defineConfig([
 			'@stylistic/indent': ['error', 'tab'],
 			'@stylistic/indent-binary-ops': ['error', 'tab'],
 			'@stylistic/no-tabs': 'off',
-			'@stylistic/linebreak-style': ['error', 'unix'],
 			'@stylistic/eol-last': ['error', 'never'],
 			'@stylistic/brace-style': ['error', '1tbs'],
 			'@stylistic/arrow-parens': ['error', 'as-needed'],

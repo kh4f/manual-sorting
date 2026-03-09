@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      monkey-around:
-        specifier: ^3.0.0
-        version: 3.0.0
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -33,6 +29,9 @@ importers:
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
+      monkey-around:
+        specifier: ^3.0.0
+        version: 3.0.0
       obsidian:
         specifier: ^1.11.4
         version: 1.11.4(@codemirror/state@6.5.0)(@codemirror/view@6.38.6)

@@ -19,7 +19,6 @@
 		"lint": "eslint",
 		"release": "relion"
 	},
-	"dependencies": { "monkey-around": "^3.0.0" },
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@stylistic/eslint-plugin": "^5.10.0",
@@ -28,6 +27,7 @@
 		"eslint": "^10.0.2",
 		"i18next": "^25.8.14",
 		"jiti": "^2.6.1",
+		"monkey-around": "^3.0.0",
 		"obsidian": "^1.11.4",
 		"obsidian-typings": "^4.93.0",
 		"relion": "^0.40.0",

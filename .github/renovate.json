@@ -1,7 +1,6 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["mergeConfidence:all-badges"],
-	"ignorePaths": ["node_modules/**"],
 	"dependencyDashboard": true,
 	"rangeStrategy": "bump",
 	"semanticCommits": "enabled",

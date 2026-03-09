@@ -4,7 +4,6 @@ on: { push: { branches-ignore: wip/** } }
 
 jobs:
   ci:
-    name: Checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -30,7 +30,7 @@
 		"monkey-around": "^3.0.0",
 		"obsidian": "^1.12.3",
 		"obsidian-typings": "^5.2.0",
-		"relion": "^0.41.1",
+		"relion": "^0.42.0",
 		"tsdown": "^0.21.1",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.57.0"

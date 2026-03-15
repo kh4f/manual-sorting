@@ -25,7 +25,7 @@
 		"@types/node": "^25.4.0",
 		"@types/sortablejs": "^1.15.9",
 		"eslint": "^10.0.3",
-		"i18next": "^25.8.17",
+		"i18next": "^25.8.18",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",
 		"obsidian": "^1.12.3",

@@ -15,7 +15,7 @@
         "monkey-around": "^3.0.0",
         "obsidian": "^1.12.3",
         "obsidian-typings": "^5.16.0",
-        "relion": "^0.41.1",
+        "relion": "^0.43.0",
         "tsdown": "^0.21.4",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.57.1",
@@ -780,7 +780,7 @@
 
     "quick-lru": ["quick-lru@5.1.1", "", {}, "sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA=="],
 
-    "relion": ["relion@0.41.1", "", { "dependencies": { "semver": "^7.7.4" }, "bin": { "relion": "dist/cli.js" } }, "sha512-u+CeAAh6S4MUrZlnt20Q4ehiatrdVZv/DQpbdFJ6w+A3tGmqWuyw8ErOQjidFLOe404oL2KRpwjDVibC2fhsXg=="],
+    "relion": ["relion@0.43.0", "", { "dependencies": { "semver": "^7.7.4" }, "bin": { "relion": "dist/cli.js" } }, "sha512-WNTHS4ZIAwN0Kd/GBATO7gMFXYIBCUqROU92MAsHdWNedvIf+ZqXRtn/zwS/bR2xSaK4HqcYBbGD87LqAQBeeA=="],
 
     "resolve-alpn": ["resolve-alpn@1.2.1", "", {}, "sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g=="],
 

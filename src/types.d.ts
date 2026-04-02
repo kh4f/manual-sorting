@@ -2,7 +2,7 @@ import { TFolder } from 'obsidian'
 import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type { FileTreeItem, FileExplorerViewSortOrder } from 'obsidian-typings'
 
-export interface PluginSettings {
+export interface Settings {
 	customOrder: FileOrder
 	sortOrder: SortOrder
 	debugMode: boolean

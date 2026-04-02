@@ -4,7 +4,7 @@ import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
 import { initLog, logger } from '@/utils'
 import type { FileExplorerView } from 'obsidian-typings'
-import type { PluginSettings } from '@/types'
+import type { Settings } from '@/types'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)
@@ -12,7 +12,7 @@ export default class ManualSortingPlugin extends Plugin {
 	public explorerManager = new ExplorerManager(this)
 	public dndManager = new DndManager(this)
 	private log = initLog('CORE', '#ff4828')
-	public settings!: PluginSettings
+	public settings!: Settings
 
 	async onload() {
 		await this.loadSettings()
@@ -60,10 +60,10 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		const savedSettings = (await this.loadData() || {}) as Partial<PluginSettings>
+		const savedSettings = (await this.loadData() || {}) as Partial<Settings>
 		this.settings = {
 			...DEFAULT_SETTINGS,
-			...Object.fromEntries((Object.keys(DEFAULT_SETTINGS) as (keyof PluginSettings)[])
+			...Object.fromEntries((Object.keys(DEFAULT_SETTINGS) as (keyof Settings)[])
 				.filter(k => k in savedSettings).map(k => [k, savedSettings[k]]),
 			),
 		}

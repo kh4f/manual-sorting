@@ -1,8 +1,8 @@
-import type { PluginSettings } from '@/types'
+import type { Settings } from '@/types'
 
 export const CUSTOM_SORT_ORDER_ID = 'custom'
 
-export const DEFAULT_SETTINGS: PluginSettings = {
+export const DEFAULT_SETTINGS: Settings = {
 	customOrder: { '/': { children: [], sortOrder: 'custom' } },
 	sortOrder: 'custom',
 	debugMode: !!process.env.DEV,

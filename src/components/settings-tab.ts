@@ -1,5 +1,5 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
-import { Logger } from '@/utils'
+import { logger } from '@/utils'
 import type ManualSortingPlugin from '@/plugin'
 
 export class SettingsTab extends PluginSettingTab {
@@ -30,7 +30,7 @@ export class SettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.debugMode)
 				.onChange(async enableDebugMode => {
 					this.plugin.settings.debugMode = enableDebugMode
-					Logger.logLevel = enableDebugMode ? 'debug' : 'silent'
+					logger.level = enableDebugMode ? 'debug' : 'silent'
 					await this.plugin.saveSettings()
 				}),
 			)

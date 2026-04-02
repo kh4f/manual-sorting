@@ -26,7 +26,3 @@ declare module 'obsidian-typings' {
 }
 
 export type SortOrder = FileExplorerViewSortOrder | typeof CUSTOM_SORT_ORDER_ID
-
-export type LogLevel = 'debug' | 'silent'
-
-export type LogMethod = 'log' | 'warn' | 'error'

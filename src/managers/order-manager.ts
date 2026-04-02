@@ -1,16 +1,16 @@
 import { TAbstractFile, TFolder } from 'obsidian'
-import { Logger } from '@/utils'
+import { initLog } from '@/utils'
 import type ManualSortingPlugin from '@/plugin'
 import type { FileOrder } from '@/types'
 
 export class OrderManager {
-	private log = new Logger('ORDER-MANAGER', '#00ccff')
+	private log = initLog('ORDER-MANAGER', '#00ccff')
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
 	add(item: TAbstractFile) {
 		const path = item.path
-		this.log.info(`Inserting new item: '${path}'`)
+		this.log(`Inserting new item: '${path}'`)
 		const order = this.plugin.settings.customOrder
 		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
 		const isFolder = item instanceof TFolder
@@ -24,7 +24,7 @@ export class OrderManager {
 	}
 
 	rename(oldPath: string, newPath: string) {
-		this.log.info(`Renaming '${oldPath}' to '${newPath}'`)
+		this.log(`Renaming '${oldPath}' to '${newPath}'`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 
@@ -37,7 +37,7 @@ export class OrderManager {
 	}
 
 	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after') {
-		this.log.info(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
+		this.log(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
 		const order = this.plugin.settings.customOrder
 		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
@@ -57,13 +57,13 @@ export class OrderManager {
 
 		this.logOrder('Updated order after moving item:')
 		if (!isDirChanged) {
-			this.log.info('Directory did not change, calling sort on File Explorer manually')
+			this.log('Directory did not change, calling sort on File Explorer manually')
 			this.plugin.getFileExplorerView().sort()
 		}
 	}
 
 	remove(path: string) {
-		this.log.info(`Removing item: '${path}'`)
+		this.log(`Removing item: '${path}'`)
 		const order = this.plugin.settings.customOrder
 		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
 		const isFolder = path in order
@@ -75,7 +75,7 @@ export class OrderManager {
 	}
 
 	reconcileOrder() {
-		this.log.info('Updating order...')
+		this.log('Updating order...')
 		const currentOrder = this.getCurrentOrder()
 		const savedOrder = this.plugin.settings.customOrder
 		const newOrder = this.matchSavedOrder(currentOrder, savedOrder)
@@ -88,7 +88,7 @@ export class OrderManager {
 	}
 
 	private logOrder(message: string) {
-		this.log.infoCompact(message, JSON.stringify(this.plugin.settings.customOrder, null, 4))
+		this.log(message, JSON.stringify(this.plugin.settings.customOrder, null, 4), 'group')
 	}
 
 	private getCurrentOrder() {

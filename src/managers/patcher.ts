@@ -1,6 +1,6 @@
 import { Menu, MenuItem, TFolder } from 'obsidian'
 import { around } from 'monkey-around'
-import { Logger } from '@/utils'
+import { initLog } from '@/utils'
 import { ResetOrderModal } from '@/components'
 import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
@@ -9,7 +9,7 @@ import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from '
 export class Patcher {
 	private explorerUninstaller: ReturnType<typeof around> | null = null
 	private menuUninstaller: ReturnType<typeof around> | null = null
-	private log = new Logger('PATCHER', '#988bff')
+	private log = initLog('PATCHER', '#988bff')
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
@@ -29,7 +29,7 @@ export class Patcher {
 			},
 			setSortOrder: original => function (this: FileExplorerView, sortOrder: FileExplorerViewSortOrder) {
 				original.call(this, sortOrder)
-				patcher.log.info(`Sort order changed to: '${sortOrder}'`)
+				patcher.log(`Sort order changed to: '${sortOrder}'`)
 				const hadCustomSortingBeenActive = plugin.isCustomSortingActive()
 				plugin.settings.sortOrder = sortOrder
 				void plugin.saveSettings()
@@ -98,13 +98,13 @@ export class Patcher {
 		if (!this.explorerUninstaller) return
 		this.explorerUninstaller()
 		this.explorerUninstaller = null
-		this.log.info('Explorer unpatched')
+		this.log('Explorer unpatched')
 	}
 
 	unpatchSortOrderMenu() {
 		if (!this.menuUninstaller) return
 		this.menuUninstaller()
 		this.menuUninstaller = null
-		this.log.info('Sort order menu unpatched')
+		this.log('Sort order menu unpatched')
 	}
 }

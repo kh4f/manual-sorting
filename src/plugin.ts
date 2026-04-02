@@ -2,7 +2,7 @@ import { Plugin, TAbstractFile } from 'obsidian'
 import { SettingsTab } from '@/components'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
-import { Logger } from '@/utils'
+import { initLog, logger } from '@/utils'
 import type { FileExplorerView } from 'obsidian-typings'
 import type { PluginSettings } from '@/types'
 
@@ -11,13 +11,13 @@ export default class ManualSortingPlugin extends Plugin {
 	private patcher = new Patcher(this)
 	public explorerManager = new ExplorerManager(this)
 	public dndManager = new DndManager(this)
-	private log = new Logger('CORE', '#ff4828')
+	private log = initLog('CORE', '#ff4828')
 	public settings!: PluginSettings
 
 	async onload() {
 		await this.loadSettings()
-		Logger.logLevel = this.settings.debugMode ? 'debug' : 'silent'
-		if (process.env.DEV) this.log.info('Loading Manual Sorting in dev mode')
+		logger.level = this.settings.debugMode ? 'debug' : 'silent'
+		if (process.env.DEV) this.log('Loading Manual Sorting in dev mode')
 		this.addSettingTab(new SettingsTab(this.app, this))
 		this.app.workspace.onLayoutReady(() => this.initialize())
 	}
@@ -27,7 +27,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.patcher.unpatchSortOrderMenu()
 		this.dndManager.disable()
 		this.getFileExplorerView().sort()
-		this.log.info('Manual Sorting unloaded')
+		this.log('Manual Sorting unloaded')
 	}
 
 	async initialize() {
@@ -44,17 +44,17 @@ export default class ManualSortingPlugin extends Plugin {
 			const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
 			const newDir = item.path.substring(0, item.path.lastIndexOf('/')) || '/'
 			if (oldDir !== newDir) return
-			this.log.info(`Item renamed from '${oldPath}' to '${item.path}'`)
+			this.log(`Item renamed from '${oldPath}' to '${item.path}'`)
 			this.orderManager.rename(oldPath, item.path)
 		})
 
 		this.app.vault.on('create', (item: TAbstractFile) => {
-			this.log.info(`Item created: '${item.path}'`)
+			this.log(`Item created: '${item.path}'`)
 			this.orderManager.add(item)
 		})
 
 		this.app.vault.on('delete', (item: TAbstractFile) => {
-			this.log.info(`Item deleted: '${item.path}'`)
+			this.log(`Item deleted: '${item.path}'`)
 			this.orderManager.remove(item.path)
 		})
 	}
@@ -67,17 +67,17 @@ export default class ManualSortingPlugin extends Plugin {
 				.filter(k => k in savedSettings).map(k => [k, savedSettings[k]]),
 			),
 		}
-		this.log.info('Settings loaded:', this.settings)
+		this.log('Settings loaded:', this.settings)
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings)
-		this.log.info('Settings saved:', this.settings)
+		this.log('Settings saved:', this.settings)
 	}
 
 	async onExternalSettingsChange() {
 		await this.loadSettings()
-		this.log.warn('Settings changed externally')
+		this.log('Settings changed externally')
 		this.getFileExplorerView().sort()
 	}
 

@@ -1,36 +1,24 @@
-import type { LogLevel, LogMethod } from '@/types'
+type LogLevel = 'debug' | 'silent'
+type LogMethod = 'log' | 'warn' | 'error' | 'group'
 
-export class Logger {
-	static logLevel: LogLevel = 'silent'
-	private style: string
-	private prefix: string
+export const logger = { level: 'silent' as LogLevel }
 
-	constructor(scope: string, color: string) {
-		this.prefix = `%cMS|${scope}`
-		this.style = `color: ${color};
-			background: #21202a;
-			padding: 1px 5px;
-			border-radius: 5px;
-			font-family: consolas, monospace;
-			font-size: 11px;
-			border: 1px solid ${color}50;`
-	}
+export const log = (...args: unknown[]) => $log(`%cMS`, buildStyle('#00ccff'), ...args)
+export const initLog = (scope: string, color: string) => (...args: unknown[]) => $log(`%cMS|${scope}`, buildStyle(color), ...args)
 
-	info = (...args: unknown[]) => this.log('log', ...args)
-
-	warn = (...args: unknown[]) => this.log('warn', ...args)
-
-	error = (...args: unknown[]) => this.log('error', ...args)
-
-	infoCompact = (label: string, ...args: unknown[]) => {
-		if (Logger.logLevel === 'silent') return
-		console.groupCollapsed(this.prefix, this.style, label)
-		console.log(...args)
-		console.groupEnd()
-	}
-
-	private log(logMethod: LogMethod = 'log', ...args: unknown[]) {
-		if (Logger.logLevel === 'silent') return
-		console[logMethod](this.prefix, this.style, ...args)
-	}
+const $log = (...args: unknown[]) => {
+	if (logger.level === 'silent') return
+	const method = ['log', 'warn', 'error', 'group'].some(m => args.at(-1) === m) ? args.pop() as LogMethod : 'log'
+	if (method !== 'group') return console[method](...args)
+	console.groupCollapsed(args.shift())
+	console.log(...args)
+	console.groupEnd()
 }
+
+const buildStyle = (color: string) => `color: ${color};
+	background: #1d2131;
+	padding: 1px 5px;
+	border-radius: 5px;
+	font-family: consolas, monospace;
+	font-size: 11px;
+	border: 1px solid ${color}50;`

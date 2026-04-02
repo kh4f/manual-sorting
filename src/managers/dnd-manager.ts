@@ -1,10 +1,10 @@
 import { Platform, TFile, TFolder } from 'obsidian'
-import { Logger } from '@/utils'
+import { initLog } from '@/utils'
 import type ManualSortingPlugin from '@/plugin'
 import type { FileTreeItem, FolderTreeItem } from 'obsidian-typings'
 
 export class DndManager {
-	private log = new Logger('DND-MANAGER', '#a6ff00')
+	private log = initLog('DND-MANAGER', '#a6ff00')
 	private explorerEl!: HTMLElement
 	private dragStartHandler: ((e: DragEvent | TouchEvent) => void) | null = null
 	private mouseDownHandler: ((e: MouseEvent) => void) | null = null
@@ -39,7 +39,7 @@ export class DndManager {
 				if (distanceFromRight > this.dragZoneWidth) return
 				e.preventDefault()
 			}
-			this.log.info('Drag started')
+			this.log('Drag started')
 			const explorerRect = this.explorerEl.getBoundingClientRect()
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
@@ -53,7 +53,7 @@ export class DndManager {
 				}
 				cancelAnimationFrame(this.rafId)
 				this.rafId = requestAnimationFrame(() => {
-					this.log.info('Dragging...')
+					this.log('Dragging...')
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
 					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
 						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
@@ -69,7 +69,7 @@ export class DndManager {
 			}
 
 			const onDrop = () => {
-				this.log.info('Item dropped')
+				this.log('Item dropped')
 				cancelAnimationFrame(this.rafId)
 				draggedEl.removeEventListener(this.dragEventType, onDrag)
 				this.clearDropIndicators()
@@ -117,14 +117,14 @@ export class DndManager {
 		window.addEventListener('mouseup', this.mouseUpHandler)
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
 
-		this.log.info('Drag and drop enabled')
+		this.log('Drag and drop enabled')
 	}
 
 	disable() {
 		if (this.dragStartHandler) this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
 		if (this.mouseDownHandler) this.explorerEl.removeEventListener('mousedown', this.mouseDownHandler)
 		if (this.mouseUpHandler) window.removeEventListener('mouseup', this.mouseUpHandler)
-		this.log.info('Drag and drop disabled')
+		this.log('Drag and drop disabled')
 	}
 
 	private collapseDraggedFolder(target: HTMLElement) {
@@ -247,11 +247,11 @@ export class DndManager {
 		if (isSiblingTempChild) siblingPath = ''
 
 		if (sourcePath !== targetPath || targetPath !== siblingPath) {
-			this.log.info(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
+			this.log(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
 			void this.plugin.app.fileManager.renameFile(file, targetPath)
 			this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
 		} else {
-			this.log.info(`No move needed: '${sourcePath}' is already at the target position`)
+			this.log(`No move needed: '${sourcePath}' is already at the target position`)
 		}
 		void this.plugin.saveSettings()
 
@@ -271,7 +271,6 @@ export class DndManager {
 				&& item.file.path.startsWith(selectedFolder.file.path + '/'),
 			))
 		}
-		console.log(filteredItems)
 		filteredItems = filteredItems.sort((a, b) => {
 			const elA = a.el, elB = b.el
 			if (elA.compareDocumentPosition(elB) & Node.DOCUMENT_POSITION_FOLLOWING) return -1

@@ -23,7 +23,6 @@
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/node": "^25.5.0",
 		"eslint": "^10.1.0",
-		"i18next": "^26.0.3",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",
 		"obsidian": "^1.12.3",

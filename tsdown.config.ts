@@ -10,13 +10,12 @@ export default defineConfig({
 		entryFileNames: 'main.js',
 		minify: isProd,
 		sourcemapBaseUrl: dirUrl,
-		sourcemapPathTransform: relativeSourcePath =>
-			`${dirUrl}/${relativeSourcePath}`,
+		sourcemapPathTransform: relativeSourcePath => `${dirUrl}/${relativeSourcePath}`,
 	},
 	sourcemap: !isProd,
 	format: 'cjs',
 	outDir: '.',
 	clean: false,
-	deps: { onlyAllowBundle: 'monkey-around', neverBundle: 'obsidian' },
+	deps: { onlyBundle: 'monkey-around', neverBundle: 'obsidian' },
 	env: { DEV: !isProd },
 })

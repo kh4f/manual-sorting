@@ -5,15 +5,15 @@ export class Logger {
 	private style: string
 	private prefix: string
 
-	constructor(private scope: string, private color: string) {
-		this.prefix = `%cMS|${this.scope}`
-		this.style = `color: ${this.color};
+	constructor(scope: string, color: string) {
+		this.prefix = `%cMS|${scope}`
+		this.style = `color: ${color};
 			background: #21202a;
 			padding: 1px 5px;
 			border-radius: 5px;
 			font-family: consolas, monospace;
 			font-size: 11px;
-			border: 1px solid ${this.color}50;`
+			border: 1px solid ${color}50;`
 	}
 
 	info = (...args: unknown[]) => this.log('log', ...args)

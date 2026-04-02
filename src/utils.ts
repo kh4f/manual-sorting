@@ -6,8 +6,14 @@ export class Logger {
 	private prefix: string
 
 	constructor(private scope: string, private color: string) {
-		this.style = `color: ${this.color}; background: #21202a; padding: 1px 5px; border-radius: 5px; font-family: consolas, monospace; font-size: 11px; border: 1px solid ${this.color}50;`
 		this.prefix = `%cMS|${this.scope}`
+		this.style = `color: ${this.color};
+			background: #21202a;
+			padding: 1px 5px;
+			border-radius: 5px;
+			font-family: consolas, monospace;
+			font-size: 11px;
+			border: 1px solid ${this.color}50;`
 	}
 
 	info = (...args: unknown[]) => this.log('log', ...args)

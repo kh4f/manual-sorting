@@ -10,7 +10,7 @@ const $log = (...args: unknown[]) => {
 	if (logger.level === 'silent') return
 	const method = ['log', 'warn', 'error', 'group'].some(m => args.at(-1) === m) ? args.pop() as LogMethod : 'log'
 	if (method !== 'group') return console[method](...args)
-	console.groupCollapsed(args.shift())
+	console.groupCollapsed(...args.splice(0, 3))
 	console.log(...args)
 	console.groupEnd()
 }

@@ -23,14 +23,14 @@
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/node": "^25.5.0",
 		"eslint": "^10.1.0",
-		"i18next": "^25.10.10",
+		"i18next": "^26.0.3",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",
 		"obsidian": "^1.12.3",
 		"obsidian-typings": "^5.18.0",
 		"relion": "^0.44.3",
 		"tsdown": "^0.21.7",
-		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.57.2"
+		"typescript": "^6.0.2",
+		"typescript-eslint": "^8.58.0"
 	}
 }

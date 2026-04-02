@@ -1,11 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
 		"moduleResolution": "bundler",
-		"strict": true,
 		"verbatimModuleSyntax": true,
 		"moduleDetection": "force",
+		"types": ["node"],
 		"paths": { "@/*": ["./src/*"] },
 	},
 	"include": ["**/*.ts"]

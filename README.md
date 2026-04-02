@@ -1,6 +1,6 @@
 <div align="center">
 	<h1>📌 Manual Sorting</h1>
-	An Obsidian plugin that enables <b>manual DnD sorting</b> in the file explorer
+	An Obsidian plugin that enables <b>DnD sorting</b> in the file explorer
 	<br><br>
 	<p>
 		<a href='https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugin-stats.json#:~:text="manual%2Dsorting"' target="_blank"><img src="https://img.shields.io/badge/dynamic/json?logo=obsidian&color=303145&labelColor=c52828&label=Downloads&query=%24%5B%22manual-sorting%22%5D.downloads&url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&style=flat-square" alt="Downloads Badge"></a>

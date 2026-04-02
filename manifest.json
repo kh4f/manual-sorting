@@ -3,7 +3,7 @@
 	"name": "Manual Sorting",
 	"version": "3.2.4",
 	"minAppVersion": "0.15.0",
-	"description": "Drag & drop sorting for the file explorer",
+	"description": "DnD sorting for file explorer",
 	"author": "kh4f",
 	"authorUrl": "https://github.com/kh4f",
 	"isDesktopOnly": false

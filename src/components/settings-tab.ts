@@ -12,7 +12,7 @@ export class SettingsTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('New item placement')
-			.setDesc('Default new item placement.')
+			.setDesc('Default new item placement')
 			.addDropdown(dropdown => dropdown
 				.addOption('top', 'Top')
 				.addOption('bottom', 'Bottom')
@@ -25,7 +25,7 @@ export class SettingsTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('Debug Mode')
-			.setDesc('Show debug logs in the console.')
+			.setDesc('Show debug logs in the console')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.debugMode)
 				.onChange(async enableDebugMode => {

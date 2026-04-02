@@ -4,7 +4,7 @@ import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
 import { Logger } from '@/utils'
 import type { FileExplorerView } from 'obsidian-typings'
-import type { PluginSettings, LegacyPluginSettings, SortOrder } from '@/types'
+import type { PluginSettings } from '@/types'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)
@@ -60,18 +60,11 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		const savedSettings = (await this.loadData() || {}) as Partial<PluginSettings | LegacyPluginSettings>
-		let settingsToLoad: PluginSettings
-		if (savedSettings.customOrder?.['/'] && Array.isArray(savedSettings.customOrder['/'])) {
-			this.log.info('Migrating settings to v4 format')
-			settingsToLoad = this.migrateLegacySettings(savedSettings as LegacyPluginSettings)
-		} else {
-			settingsToLoad = savedSettings as PluginSettings
-		}
+		const savedSettings = (await this.loadData() || {}) as Partial<PluginSettings>
 		this.settings = {
 			...DEFAULT_SETTINGS,
 			...Object.fromEntries((Object.keys(DEFAULT_SETTINGS) as (keyof PluginSettings)[])
-				.filter(k => k in settingsToLoad).map(k => [k, settingsToLoad[k]]),
+				.filter(k => k in savedSettings).map(k => [k, savedSettings[k]]),
 			),
 		}
 		this.log.info('Settings loaded:', this.settings)
@@ -87,12 +80,6 @@ export default class ManualSortingPlugin extends Plugin {
 		this.log.warn('Settings changed externally')
 		this.getFileExplorerView().sort()
 	}
-
-	migrateLegacySettings = (legacySettings: LegacyPluginSettings): PluginSettings => ({
-		...legacySettings,
-		customOrder: Object.fromEntries(Object.entries(legacySettings.customOrder).map(([folder, children]) => [folder, { children, sortOrder: 'custom' }])),
-		sortOrder: legacySettings.sortOrder === 'customOrder' ? CUSTOM_SORT_ORDER_ID : legacySettings.sortOrder as SortOrder,
-	})
 
 	isCustomSortingActive = () =>
 		this.settings.sortOrder === CUSTOM_SORT_ORDER_ID

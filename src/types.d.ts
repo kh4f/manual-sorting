@@ -2,13 +2,6 @@ import { TFolder } from 'obsidian'
 import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type { FileTreeItem, FileExplorerViewSortOrder } from 'obsidian-typings'
 
-export interface LegacyPluginSettings {
-	customOrder: Record<string, string[]>
-	sortOrder: string
-	debugMode: boolean
-	newItemPlacement: 'top' | 'bottom'
-}
-
 export interface PluginSettings {
 	customOrder: FileOrder
 	sortOrder: SortOrder

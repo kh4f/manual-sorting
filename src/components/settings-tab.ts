@@ -12,7 +12,7 @@ export class SettingsTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('New item placement')
-			.setDesc('Default new item placement')
+			.setDesc('Default placement for new items inside a folder')
 			.addDropdown(dropdown => dropdown
 				.addOption('top', 'Top')
 				.addOption('bottom', 'Bottom')

@@ -19,17 +19,17 @@
 		"release": "relion -t '' -b manifest.json"
 	},
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@stylistic/eslint-plugin": "^5.10.0",
-		"@types/node": "^25.5.0",
-		"eslint": "^10.1.0",
-		"jiti": "^2.6.1",
-		"monkey-around": "^3.0.0",
-		"obsidian": "^1.12.3",
-		"obsidian-typings": "^5.18.0",
-		"relion": "^0.44.3",
-		"tsdown": "^0.21.7",
-		"typescript": "^6.0.2",
-		"typescript-eslint": "^8.58.0"
+		"@eslint/js": "10.0.1",
+		"@stylistic/eslint-plugin": "5.10.0",
+		"@types/node": "25.5.2",
+		"eslint": "10.2.0",
+		"jiti": "2.6.1",
+		"monkey-around": "3.0.0",
+		"obsidian": "1.12.3",
+		"obsidian-typings": "5.18.0",
+		"relion": "0.44.3",
+		"tsdown": "0.21.7",
+		"typescript": "6.0.2",
+		"typescript-eslint": "8.58.0"
 	}
 }

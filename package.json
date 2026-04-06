@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@stylistic/eslint-plugin": "^5.10.0",
-		"@types/node": "^25.5.0",
+		"@types/bun": "^1.3.11",
 		"eslint": "^10.1.0",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",

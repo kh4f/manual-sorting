@@ -41,9 +41,3 @@
 - **Inspiration**: [Obsidian Bartender](https://github.com/nothingislost/obsidian-bartender), [Custom File Explorer sorting](https://github.com/SebastianMC/obsidian-custom-sort)
 - **Huge thanks** to [@Zweikeks](https://github.com/Zweikeks), [@Azmoinal](https://github.com/Azmoinal), [@SublimePeace](https://github.com/SublimePeace), [@Anonym0usPlayer](https://github.com/Anonym0usPlayer) for testing and feedback!
 - **Special thanks** to [@Mara-Li](https://github.com/Mara-Li) for contributions!
-
-<br>
-
-<div align="center">
-  <b>MIT License © 2025-2026 <a href="https://github.com/kh4f">kh4f</a></b>
-</div>

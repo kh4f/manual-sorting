@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
-		"moduleResolution": "bundler",
+		"noEmit": true,
+		"skipLibCheck": true,
 		"verbatimModuleSyntax": true,
-		"moduleDetection": "force",
-		"types": ["node"],
+		"types": ["bun"],
 		"paths": { "@/*": ["./src/*"] },
 	},
 	"include": ["**/*.ts"]

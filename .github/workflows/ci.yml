@@ -6,17 +6,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
 
-      - name: Set up Bun
-        uses: oven-sh/setup-bun@v2
-
-      - name: Install deps
-        run: bun i
-
-      - name: Lint
-        run: bun lint
-
-      - name: Build
-        run: bun build:prod
+      - run: bun i
+      - run: bun lint
+      - run: bun typecheck
+      - run: bun build:prod

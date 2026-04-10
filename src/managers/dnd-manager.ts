@@ -311,3 +311,72 @@ export class DndManager {
 		}
 	}
 }
+
+void css`
+	[data-type="file-explorer"] {
+		&:has([data-drag-active]) {
+			.tree-item { position: relative;}
+
+			.tree-item.temp-child { height: 15px; }
+
+			.tree-item:not(.nav-folder:has(> [data-is-being-dragged]) .tree-item,
+			.nav-folder:has(> .is-selected) .tree-item
+			) {
+				&:not(.temp-child, :has(> .is-selected):has(+ .tree-item > .is-selected))::after,
+				&:where(:nth-child(1 of .tree-item))::before {
+					content: "";
+					position: absolute;
+					display: block;
+					translate: -52% -2px;
+					height: 2px;
+					width: 80%;
+					left: 50%;
+					background-image: linear-gradient(90deg, #8888881a 50%, transparent 50%);
+					background-size: 8px 2px;
+					background-repeat: repeat-x;
+					border-radius: 100px;
+				}
+			}
+
+			.tree-item[data-drop-position="before"]::before,
+			.tree-item[data-drop-position="after"]::after {
+				background-image: linear-gradient(90deg, var(--color-accent) 50%, transparent 50%) !important;
+				mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+				animation: dash-flow 0.5s linear infinite;
+			}
+
+			.nav-folder.is-drop-target {
+				background: hsla(var(--interactive-accent-hsl), 0.05) !important;
+				border-radius: var(--radius-s);
+
+				> .nav-folder-title {
+					color: var(--nav-item-color-highlighted) !important;
+				}
+			}
+
+			.nav-folder.is-being-dragged-over {
+				background-color: transparent;
+				> .nav-folder-title {
+					color: var(--nav-item-color);
+				}
+			}
+		}
+
+		@media (pointer: coarse) {
+			.tree-item-self:not(.temp)::after {
+				content: "⋮⋮";
+				position: absolute;
+				rotate: 90deg;
+				right: 12px;
+				align-self: center;
+				font-size: calc(var(--nav-item-size) + 2px);
+				opacity: 0.4;
+			}
+		}
+	}
+
+	@keyframes dash-flow {
+		from { background-position: 0 0; }
+		to { background-position: 8px 0; }
+	}
+`

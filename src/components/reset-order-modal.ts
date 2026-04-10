@@ -22,3 +22,19 @@ export class ResetOrderModal extends Modal {
 			.onClick(() => this.close())
 	}
 }
+
+void css`
+	.menu-item[data-section="custom"] {
+		.menu-item-icon:first-child { display: flex; }
+
+		.dragging-enabled-checkbox {
+			margin-bottom: -2px;
+			input { margin: 0; }
+		}
+
+		.svg-icon.lucide-pin {
+			transform: rotate(45deg);
+			margin-bottom: -2px;
+		}
+	}
+`

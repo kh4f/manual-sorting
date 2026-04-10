@@ -20,6 +20,6 @@ jobs:
       - run: bun build:prod
 
       - run: zip -r $ZIP manifest.json main.js styles.css
-      - env:
+      - run: gh release create $TAG --title $TAG --draft manifest.json main.js styles.css $ZIP
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create $TAG --title $TAG --draft manifest.json main.js styles.css $ZIP

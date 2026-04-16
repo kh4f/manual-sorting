@@ -34,6 +34,6 @@
 		"rawstyle-eslint": "^0.2.0",
 		"tsdown": "^0.21.7",
 		"typescript": "^6.0.2",
-		"typescript-eslint": "^8.58.1"
+		"typescript-eslint": "^8.58.2"
 	}
 }

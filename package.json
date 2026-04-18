@@ -22,7 +22,10 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@stylistic/eslint-plugin": "^5.10.0",
+		"@tsdown/css": "^0.21.7",
 		"@types/bun": "^1.3.11",
+		"@voicss/eslint": "^0.1.0",
+		"@voicss/vite": "^0.1.0",
 		"eslint": "^10.2.0",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",
@@ -30,6 +33,7 @@
 		"obsidian-typings": "^5.20.0",
 		"tsdown": "^0.21.7",
 		"typescript": "^6.0.2",
-		"typescript-eslint": "^8.58.1"
+		"typescript-eslint": "^8.58.1",
+		"voicss": "^0.1.0"
 	}
 }

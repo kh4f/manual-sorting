@@ -1,5 +1,6 @@
 import { pathToFileURL } from 'node:url'
 import { defineConfig } from 'tsdown'
+import voicss from '@voicss/vite'
 
 const isProd = process.argv.includes('--prod')
 const dirUrl = pathToFileURL(import.meta.dirname).href
@@ -18,4 +19,6 @@ export default defineConfig({
 	clean: false,
 	deps: { onlyBundle: 'monkey-around', neverBundle: 'obsidian' },
 	env: { DEV: !isProd },
+	plugins: [voicss()],
+	css: { fileName: 'styles.css' },
 })

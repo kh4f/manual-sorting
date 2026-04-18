@@ -13,8 +13,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsdown",
-		"build:watch": "tsdown --watch",
-		"build:prod": "tsdown --prod",
+		"build:watch": "tsdown -w",
+		"build:prod": "tsdown -p",
 		"lint": "eslint",
 		"typecheck": "tsc",
 		"release": "bunx relion -b manifest.json -t ''"

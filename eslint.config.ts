@@ -29,12 +29,13 @@ export default defineConfig([
 		files: ['**/*.ts'],
 		extends: [stylistic.configs.recommended, voicss.configs.recommended],
 		rules: {
+			'@stylistic/no-tabs': 'off',
 			'@stylistic/indent': ['error', 'tab'],
 			'@stylistic/indent-binary-ops': ['error', 'tab'],
-			'@stylistic/no-tabs': 'off',
-			'@stylistic/eol-last': ['error', 'never'],
 			'@stylistic/brace-style': ['error', '1tbs'],
 			'@stylistic/arrow-parens': ['error', 'as-needed'],
+			'@stylistic/comma-dangle': ['error', 'only-multiline'],
+			'@stylistic/eol-last': ['error', 'never'],
 		},
 	},
 ])

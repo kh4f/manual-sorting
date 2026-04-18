@@ -2,7 +2,7 @@ import { pathToFileURL } from 'node:url'
 import { defineConfig } from 'tsdown'
 import voicss from '@voicss/vite'
 
-const isProd = process.argv.includes('--prod')
+const isProd = process.argv.includes('-p')
 const dirUrl = pathToFileURL(import.meta.dirname).href
 
 export default defineConfig({

@@ -9,7 +9,6 @@ jobs:
     env:
       TAG: ${{ github.ref_name }}
       ZIP: ${{ github.event.repository.name }}-${{ github.ref_name }}.zip
-
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2

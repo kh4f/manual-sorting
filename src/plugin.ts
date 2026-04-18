@@ -1,5 +1,5 @@
 import { Plugin, TAbstractFile } from 'obsidian'
-import { SettingsTab } from '@/components'
+import { SettingsTab } from '@/ui'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
 import { initLog, logger } from '@/utils'

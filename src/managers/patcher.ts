@@ -1,7 +1,7 @@
 import { Menu, MenuItem, TFolder } from 'obsidian'
 import { around } from 'monkey-around'
 import { initLog } from '@/utils'
-import { ResetOrderModal } from '@/components'
+import { ResetOrderModal } from '@/ui'
 import { CUSTOM_SORT_ORDER_ID } from '@/constants'
 import type ManualSortingPlugin from '@/plugin'
 import type { FileTreeItem, FileExplorerView, FileExplorerViewSortOrder } from 'obsidian-typings'

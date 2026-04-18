@@ -15,9 +15,12 @@ export class DndManager {
 	private rafId = 0
 	private folderExpandTimeout: number | null = null
 	private pendingExpandFolder: string | null = null
+
 	private scrollRafId: number | null = null
-	private scrollZone = 50
-	private scrollSpeed = 5
+	private scrollZone = 60
+	private baseScrollSpeed = 25
+	private currentScrollSpeed = 0
+
 	private dropZonesActivationDelay = 250
 	private dropZonesActivationTimeout: number | null = null
 	private dragZoneWidth = 36
@@ -46,6 +49,9 @@ export class DndManager {
 			draggedEl.dataset.isBeingDragged = ''
 			const selectedItems = new Set(this.plugin.getFileExplorerView().tree.selectedDoms)
 
+			let lastClientX = 0
+			let lastClientY = 0
+
 			const onDrag = (e: DragEvent | TouchEvent) => {
 				if (Platform.isMobile) {
 					e.stopPropagation()
@@ -55,16 +61,22 @@ export class DndManager {
 				this.rafId = requestAnimationFrame(() => {
 					this.log('Dragging...')
 					const pointer = e instanceof DragEvent ? e : e.touches[0]
-					isOutsideExplorer = pointer.clientX < explorerRect.left || pointer.clientX > explorerRect.right
-						|| pointer.clientY < explorerRect.top || pointer.clientY > explorerRect.bottom
+					let [currentX, currentY] = [pointer.clientX, pointer.clientY]
+
+					if (currentX === 0 && currentY === 0) [currentX, currentY] = [lastClientX, lastClientY]
+					else [lastClientX, lastClientY] = [currentX, currentY]
+
+					this.handleAutoScroll(currentY, explorerRect)
+
+					isOutsideExplorer = currentX < explorerRect.left || currentX > explorerRect.right
+						|| currentY < explorerRect.top || currentY > explorerRect.bottom
 					if (isOutsideExplorer) {
 						this.clearDropIndicators()
 						return
 					}
 					this.collapseDraggedFolder(draggedEl)
-					;({ futureSibling, dropPosition } = this.findDropTarget(pointer.clientY))
+					;({ futureSibling, dropPosition } = this.findDropTarget(currentY))
 					this.updateDropIndicators(futureSibling, dropPosition)
-					this.handleAutoScroll(pointer.clientY, explorerRect)
 				})
 			}
 
@@ -290,15 +302,23 @@ export class DndManager {
 	private handleAutoScroll(pointerY: number, explorerRect: DOMRect) {
 		const topDist = pointerY - explorerRect.top
 		const bottomDist = explorerRect.bottom - pointerY
-		if (topDist < this.scrollZone) this.startAutoScroll(-this.scrollSpeed)
-		else if (bottomDist < this.scrollZone) this.startAutoScroll(this.scrollSpeed)
-		else this.stopAutoScroll()
+		if (topDist < this.scrollZone) {
+			const intensity = Math.max(0.1, 1 - topDist / this.scrollZone)
+			this.currentScrollSpeed = -(intensity * this.baseScrollSpeed)
+			this.startAutoScroll()
+		} else if (bottomDist < this.scrollZone) {
+			const intensity = Math.max(0.1, 1 - bottomDist / this.scrollZone)
+			this.currentScrollSpeed = intensity * this.baseScrollSpeed
+			this.startAutoScroll()
+		} else {
+			this.stopAutoScroll()
+		}
 	}
 
-	private startAutoScroll(speed: number) {
+	private startAutoScroll() {
 		if (this.scrollRafId) return
 		const scrollStep = () => {
-			this.explorerEl.scrollTop += speed
+			this.explorerEl.scrollTop += this.currentScrollSpeed
 			this.scrollRafId = requestAnimationFrame(scrollStep)
 		}
 		this.scrollRafId = requestAnimationFrame(scrollStep)

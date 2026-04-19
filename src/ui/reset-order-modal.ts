@@ -24,7 +24,7 @@ export class ResetOrderModal extends Modal {
 }
 
 void `css
-.menu-item[data-section="custom"] {
+.menu-item[data-section='custom'] {
 	.menu-item-icon:first-child { display: flex; }
 
 	.dragging-enabled-checkbox {

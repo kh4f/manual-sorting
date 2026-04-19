@@ -333,19 +333,19 @@ export class DndManager {
 }
 
 void `css
-[data-type="file-explorer"] {
+[data-type='file-explorer'] {
 	&:has([data-drag-active]) {
 		.tree-item { position: relative;}
 
 		.tree-item.temp-child { height: 15px; }
 
 		.tree-item:not(
-		.nav-folder:has(> [data-is-being-dragged]) .tree-item,
-		.nav-folder:has(> .is-selected) .tree-item
+			.nav-folder:has(> [data-is-being-dragged]) .tree-item,
+			.nav-folder:has(> .is-selected) .tree-item
 		) {
 			&:not(.temp-child, :has(> .is-selected):has(+ .tree-item > .is-selected))::after,
 			&:where(:nth-child(1 of .tree-item))::before {
-				content: "";
+				content: '';
 				position: absolute;
 				display: block;
 				translate: -52% -2px;
@@ -359,8 +359,8 @@ void `css
 			}
 		}
 
-		.tree-item[data-drop-position="before"]::before,
-		.tree-item[data-drop-position="after"]::after {
+		.tree-item[data-drop-position='before']::before,
+		.tree-item[data-drop-position='after']::after {
 			background-image: linear-gradient(90deg, var(--color-accent) 50%, transparent 50%) !important;
 			mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
 			animation: dash-flow 0.5s linear infinite;
@@ -385,7 +385,7 @@ void `css
 
 	@media (pointer: coarse) {
 		.tree-item-self:not(.temp)::after {
-			content: "⋮⋮";
+			content: '⋮⋮';
 			position: absolute;
 			rotate: 90deg;
 			right: 12px;

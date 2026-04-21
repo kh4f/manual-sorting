@@ -1,6 +1,6 @@
 import { TAbstractFile, TFolder } from 'obsidian'
-import { initLog } from '@/utils'
 import type ManualSortingPlugin from '@/plugin'
+import { getFileExplorerView, initLog } from '@/utils'
 import type { FileOrder } from '@/types'
 
 export class OrderManager {
@@ -58,7 +58,7 @@ export class OrderManager {
 		this.logOrder('Updated order after moving item:')
 		if (!isDirChanged) {
 			this.log('Directory did not change, calling sort on File Explorer manually')
-			this.plugin.getFileExplorerView().sort()
+			getFileExplorerView().sort()
 		}
 	}
 
@@ -87,13 +87,23 @@ export class OrderManager {
 		this.plugin.settings.customOrder = { '/': { children: [], sortOrder: 'custom' } }
 	}
 
+	overwriteCustomOrder(folderPath: string) {
+		const folderOrder = this.plugin.settings.customOrder[folderPath]
+		const folder = this.plugin.app.vault.getAbstractFileByPath(folderPath)
+		if (!(folder instanceof TFolder)) return
+
+		folderOrder.children = getFileExplorerView().getSortedFolderItems(folder).map(item => item.file.path)
+		folderOrder.sortOrder = 'custom'
+		this.log(`Custom order overwritten for '${folderPath}'`)
+	}
+
 	private logOrder(message: string) {
 		this.log(message, JSON.stringify(this.plugin.settings.customOrder, null, 4), 'group')
 	}
 
 	private getCurrentOrder() {
 		const currentOrder: FileOrder = {}
-		const explorerView = this.plugin.getFileExplorerView()
+		const explorerView = getFileExplorerView()
 
 		const indexFolder = (folder: TFolder) => {
 			const sortedItems = explorerView.getSortedFolderItems(folder, true)
@@ -122,10 +132,9 @@ export class OrderManager {
 				// Add new files to the beginning of the list
 				const newFiles = currentFiles.children.filter(file => !prevOrder.children.includes(file))
 				// Combine and remove duplicates
-				if (this.plugin.settings.newItemPlacement === 'top') {
-					result[folder] = { children: Array.from(new Set([...newFiles, ...existingFiles])), sortOrder: 'custom' }
-				} else {
-					result[folder] = { children: Array.from(new Set([...existingFiles, ...newFiles])), sortOrder: 'custom' }
+				result[folder] = {
+					children: Array.from(this.plugin.settings.newItemPlacement === 'top' ? [...newFiles, ...existingFiles] : [...existingFiles, ...newFiles]),
+					sortOrder: prevOrder.sortOrder,
 				}
 			} else {
 				// Remove duplicates from current folder

@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian'
-import { logger } from '@/utils'
 import type ManualSortingPlugin from '@/plugin'
+import { logger } from '@/utils'
 
 export class SettingsTab extends PluginSettingTab {
 	constructor(app: App, public plugin: ManualSortingPlugin) {
@@ -24,7 +24,7 @@ export class SettingsTab extends PluginSettingTab {
 			)
 
 		new Setting(this.containerEl)
-			.setName('Debug Mode')
+			.setName('Debug mode')
 			.setDesc('Show debug logs in the console')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.debugMode)

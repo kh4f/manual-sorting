@@ -1,10 +1,8 @@
 import { TFolder } from 'obsidian'
-import { CUSTOM_SORT_ORDER_ID } from '@/constants'
-import type { FileTreeItem, FileExplorerViewSortOrder } from 'obsidian-typings'
+import type { FileTreeItem } from 'obsidian-typings'
 
 export interface Settings {
 	customOrder: FileOrder
-	sortOrder: SortOrder
 	debugMode: boolean
 	newItemPlacement: 'top' | 'bottom'
 }
@@ -13,6 +11,15 @@ export type FileOrder = Record<string, {
 	children: string[]
 	sortOrder: SortOrder
 }>
+
+export type SortOrder =
+	| 'custom'
+	| 'alphabetical'
+	| 'alphabeticalReverse'
+	| 'byCreatedTime'
+	| 'byCreatedTimeReverse'
+	| 'byModifiedTime'
+	| 'byModifiedTimeReverse'
 
 declare module 'obsidian-typings' {
 	interface FileExplorerView {
@@ -24,5 +31,3 @@ declare module 'obsidian-typings' {
 		setCollapsed(collapsed: boolean, check: boolean): void
 	}
 }
-
-export type SortOrder = FileExplorerViewSortOrder | typeof CUSTOM_SORT_ORDER_ID

@@ -1,10 +1,10 @@
 import { Plugin, TAbstractFile } from 'obsidian'
-import { SettingsTab } from '@/ui'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
-import { DEFAULT_SETTINGS, CUSTOM_SORT_ORDER_ID } from '@/constants'
-import { initLog, logger } from '@/utils'
-import type { FileExplorerView } from 'obsidian-typings'
 import type { Settings } from '@/types'
+import { DEFAULT_SETTINGS } from '@/constants'
+import { getFileExplorerView, initLog, logger } from '@/utils'
+import { SettingsTab } from '@/ui/settings-tab'
+import { mountToolbar } from '@/ui/toolbar'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)
@@ -23,20 +23,20 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	onunload() {
+		this.explorerManager.disconnect()
 		this.patcher.unpatchExplorer()
-		this.patcher.unpatchSortOrderMenu()
 		this.dndManager.disable()
-		this.getFileExplorerView().sort()
+		getFileExplorerView().sort()
 		this.log('Manual Sorting unloaded')
 	}
 
 	async initialize() {
 		await this.explorerManager.waitForExplorerElement()
 		this.patcher.patchExplorer()
-		this.patcher.patchSortOrderMenu()
 		this.explorerManager.refreshExplorer()
 		this.explorerManager.refreshExplorerOnMount()
 		this.registerVaultHandlers()
+		mountToolbar(this)
 	}
 
 	registerVaultHandlers() {
@@ -78,12 +78,6 @@ export default class ManualSortingPlugin extends Plugin {
 	async onExternalSettingsChange() {
 		await this.loadSettings()
 		this.log('Settings changed externally')
-		this.getFileExplorerView().sort()
+		getFileExplorerView().sort()
 	}
-
-	isCustomSortingActive = () =>
-		this.settings.sortOrder === CUSTOM_SORT_ORDER_ID
-
-	getFileExplorerView = () =>
-		this.app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
 }

@@ -1,3 +1,5 @@
+import type { FileExplorerView } from 'obsidian-typings'
+
 type LogLevel = 'debug' | 'silent'
 type LogMethod = 'log' | 'warn' | 'error' | 'group'
 
@@ -5,6 +7,11 @@ export const logger = { level: 'silent' as LogLevel }
 
 export const log = (...args: unknown[]) => $log(`%cMS`, buildStyle('#00ccff'), ...args)
 export const initLog = (scope: string, color: string) => (...args: unknown[]) => $log(`%cMS|${scope}`, buildStyle(color), ...args)
+
+export const cn = (...cls: unknown[]) => cls.filter(Boolean).join(' ')
+
+// eslint-disable-next-line @typescript-eslint/no-deprecated
+export const getFileExplorerView = () => app.workspace.getLeavesOfType('file-explorer')[0].view as FileExplorerView
 
 const $log = (...args: unknown[]) => {
 	if (logger.level === 'silent') return

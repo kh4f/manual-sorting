@@ -1,7 +1,7 @@
 import { Platform, TFile, TFolder } from 'obsidian'
-import { initLog } from '@/utils'
-import type ManualSortingPlugin from '@/plugin'
 import type { FileTreeItem, FolderTreeItem } from 'obsidian-typings'
+import { getFileExplorerView, initLog } from '@/utils'
+import type ManualSortingPlugin from '@/plugin'
 
 export class DndManager {
 	private log = initLog('DND-MANAGER', '#a6ff00')
@@ -47,7 +47,7 @@ export class DndManager {
 			let isOutsideExplorer = false
 			this.explorerEl.dataset.dragActive = ''
 			draggedEl.dataset.isBeingDragged = ''
-			const selectedItems = new Set(this.plugin.getFileExplorerView().tree.selectedDoms)
+			const selectedItems = new Set(getFileExplorerView().tree.selectedDoms)
 
 			let lastClientX = 0
 			let lastClientY = 0
@@ -90,7 +90,7 @@ export class DndManager {
 				if (isOutsideExplorer) return
 
 				const sourcePath = draggedEl.dataset.path!
-				const item = this.plugin.getFileExplorerView().fileItems[sourcePath]
+				const item = getFileExplorerView().fileItems[sourcePath]
 
 				if (!futureSibling) return
 				const siblingPath = futureSibling.querySelector<HTMLElement>('.tree-item-self')?.dataset.path ?? ''
@@ -129,20 +129,20 @@ export class DndManager {
 		window.addEventListener('mouseup', this.mouseUpHandler)
 		this.explorerEl.addEventListener(this.dragStartEventType, this.dragStartHandler)
 
-		this.log('Drag and drop enabled')
+		this.log('DnD enabled')
 	}
 
 	disable() {
 		if (this.dragStartHandler) this.explorerEl.removeEventListener(this.dragStartEventType, this.dragStartHandler)
 		if (this.mouseDownHandler) this.explorerEl.removeEventListener('mousedown', this.mouseDownHandler)
 		if (this.mouseUpHandler) window.removeEventListener('mouseup', this.mouseUpHandler)
-		this.log('Drag and drop disabled')
+		this.log('DnD disabled')
 	}
 
 	private collapseDraggedFolder(target: HTMLElement) {
 		const isFolder = target.classList.contains('nav-folder-title')
 		if (isFolder && target.dataset.path) {
-			const file = this.plugin.getFileExplorerView().fileItems[target.dataset.path]
+			const file = getFileExplorerView().fileItems[target.dataset.path]
 			if (!file.collapsed) file.setCollapsed(true, true)
 		}
 	}
@@ -194,7 +194,7 @@ export class DndManager {
 
 				this.pendingExpandFolder = siblingPath
 				this.folderExpandTimeout = window.setTimeout(() => {
-					const item = this.plugin.getFileExplorerView().fileItems[siblingPath]
+					const item = getFileExplorerView().fileItems[siblingPath]
 					item.setCollapsed(false, true)
 					this.folderExpandTimeout = null
 					this.pendingExpandFolder = null
@@ -267,7 +267,7 @@ export class DndManager {
 		}
 		void this.plugin.saveSettings()
 
-		this.plugin.getFileExplorerView().lastDropTargetEl = item.el
+		getFileExplorerView().lastDropTargetEl = item.el
 
 		return targetPath
 	}

@@ -17,7 +17,7 @@ export default defineConfig({
 	format: 'cjs',
 	outDir: '.',
 	clean: false,
-	deps: { onlyBundle: 'monkey-around', neverBundle: 'obsidian' },
+	deps: { neverBundle: 'obsidian', onlyBundle: ['react', 'react-dom', 'scheduler', 'monkey-around'] },
 	env: { DEV: !isProd },
 	plugins: [voicss()],
 	css: { fileName: 'styles.css' },

@@ -56,12 +56,8 @@ export class ExplorerManager {
 
 		this.folderIndicatorsObserver?.disconnect()
 		this.observedExplorerEl = explorerEl
-		this.folderIndicatorsObserver = new MutationObserver(mutations => {
-			for (const mutation of mutations) {
-				for (const node of mutation.addedNodes) {
-					if (node instanceof HTMLElement) this.syncFolderIndicators(node)
-				}
-			}
+		this.folderIndicatorsObserver = new MutationObserver(() => {
+			this.syncFolderIndicators(explorerEl)
 		})
 		this.folderIndicatorsObserver.observe(explorerEl, { childList: true, subtree: true })
 	}

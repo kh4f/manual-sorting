@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client'
+import { TFolder } from 'obsidian'
 import type ManualSortingPlugin from '@/plugin'
 import type { SortOrder } from '@/types'
 import { CustomOrderIcon, CreatedTimeIcon, FileNameIcon, ModifiedTimeIcon } from '@/ui/icons'
@@ -11,8 +12,11 @@ export const mountIndicator = (folderTitle: HTMLElement, plugin: ManualSortingPl
 	const folderEl = folderTitle.closest<HTMLElement>('.nav-folder')
 	if (!folderEl) return
 
-	const folderPath = getFileExplorerView().files.get(folderEl)?.path
-	if (!folderPath) return
+	const folder = getFileExplorerView().files.get(folderEl)
+	if (!(folder instanceof TFolder)) return
+
+	const folderPath = folder.path
+	const childrenCount = folder.children.length
 
 	const sortOrder = plugin.settings.customOrder[folderPath].sortOrder
 	let indicatorEl = folderTitle.querySelector<HTMLElement>('.ms-indicator')
@@ -24,7 +28,7 @@ export const mountIndicator = (folderTitle: HTMLElement, plugin: ManualSortingPl
 		indicatorRoots.set(indicatorEl, indicatorRoot)
 	}
 
-	indicatorRoot.render(<Indicator sortOrder={sortOrder} folderPath={folderPath}/>)
+	indicatorRoot.render(<Indicator sortOrder={sortOrder} folderPath={folderPath} childrenCount={childrenCount}/>)
 }
 
 const getSortIcon = (sortOrder: SortOrder) => {
@@ -39,7 +43,7 @@ const getSortIcon = (sortOrder: SortOrder) => {
 	}
 }
 
-export const Indicator = ({ sortOrder, folderPath }: { sortOrder: SortOrder, folderPath: string }) => {
+export const Indicator = ({ sortOrder, folderPath, childrenCount }: { sortOrder: SortOrder, folderPath: string, childrenCount: number }) => {
 	const handleClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
 		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
@@ -47,27 +51,44 @@ export const Indicator = ({ sortOrder, folderPath }: { sortOrder: SortOrder, fol
 		log('Indicator clicked, showing sort order picker for folder:', folderPath)
 	}
 
-	return <button onClick={handleClick}>{getSortIcon(sortOrder)}</button>
+	return <button onClick={handleClick}>
+		<span className='count'>{childrenCount}</span>
+		<span className='sort-order-icon'>{getSortIcon(sortOrder)}</span>
+	</button>
 }
 
 void `css
 .ms-indicator {
-	position: absolute;
-	right: 8;
-	opacity: 0;
-	transition: opacity 0.3s;
+	margin-left: auto;
 	display: flex;
 
-	.nav-folder-title:hover > & {
-		opacity: 0.3;
-	}
-
 	button {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 16px;
 		padding: 0;
 		height: auto;
 		background: none;
 		box-shadow: none;
 		cursor: pointer;
+		color: var(--text-muted);
+
+		.count {
+			line-height: var(--line-height-tight);
+			opacity: 0.2;
+			transition: opacity 0.3s;
+		}
+
+		.sort-order-icon {
+			position: absolute;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: opacity 0.3s;
+		}
 
 		svg {
 			stroke: var(--icon-color);;
@@ -76,7 +97,16 @@ void `css
 			stroke-linejoin: round;
 			fill: none;
 			width: 16;
+			height: 16;
 		}
 	}
+
+	.nav-folder-title:hover > & {
+		.count { opacity: 0; }
+		.sort-order-icon { opacity: 0.7; }
+	}
+}
+.nav-folder-title {
+	align-items: center;
 }
 `

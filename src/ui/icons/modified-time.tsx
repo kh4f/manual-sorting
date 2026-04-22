@@ -6,7 +6,7 @@ export const ModifiedTimeIcon = ({ direction }: { direction: 'asc' | 'desc' }) =
 	</svg>
 
 void `css
-:is(.modified-time-icon, .created-time-icon) .clock {
+.ms-file-controls :is(.modified-time-icon, .created-time-icon) .clock {
 	transition: opacity 0.3s;
 	&.desc {
 		opacity: 0.4;

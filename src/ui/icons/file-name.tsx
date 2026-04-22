@@ -9,7 +9,7 @@ export const FileNameIcon = ({ direction }: { direction: 'asc' | 'desc' }) =>
 	</svg>
 
 void `css
-.file-name-icon .arrow {
+.ms-file-controls .file-name-icon .arrow {
 	transform-origin: center;
 	transition: transform 0.3s ease;
 

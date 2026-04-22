@@ -42,6 +42,7 @@ const toStoredSortOrder = (order: PickerOrder, direction: SortDirection): Stored
 export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin: ManualSortingPlugin) => {
 	createRoot(root).render(<FileControls file={file} plugin={plugin}/>)
 	log(`File controls mounted for '${file.path}':`, root)
+	root.addEventListener('click', e => e.stopImmediatePropagation(), true)
 }
 
 const FileControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
@@ -200,12 +201,14 @@ const PinHideControls = () => {
 	const [isPinned, setIsPinned] = useState(false)
 	const [isHidden, setIsHidden] = useState(false)
 
-	const handlePin = () => {
+	const handlePin = (e: React.MouseEvent) => {
+		e.stopPropagation()
 		log('Pin button clicked')
 		setIsPinned(v => !v)
 	}
 
-	const handleHide = () => {
+	const handleHide = (e: React.MouseEvent) => {
+		e.stopPropagation()
 		log('Hide button clicked')
 		setIsHidden(v => !v)
 	}
@@ -215,13 +218,13 @@ const PinHideControls = () => {
 			type='button'
 			className={cn(isPinned && 'selected')}
 			aria-label='Pin item'
-			onClick={handlePin}
+			onClickCapture={e => handlePin(e)}
 		><PinIcon/></button>
 		<button
 			type='button'
 			className={cn(isHidden && 'selected')}
 			aria-label='Hide item'
-			onClick={handleHide}
+			onClickCapture={e => handleHide(e)}
 		><HideIcon/></button>
 	</div>
 }

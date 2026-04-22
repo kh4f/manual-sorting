@@ -45,6 +45,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.registerEvent(this.app.workspace.on('file-menu', (menu, file) => {
 			let controlsContainer: HTMLElement
 			menu.addItem(item => {
+				item.setIsLabel(true)
 				controlsContainer = item.dom
 				controlsContainer.addClass('ms-file-controls')
 			})

@@ -197,9 +197,32 @@ const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manu
 }
 
 const PinHideControls = () => {
+	const [isPinned, setIsPinned] = useState(false)
+	const [isHidden, setIsHidden] = useState(false)
+
+	const handlePin = () => {
+		log('Pin button clicked')
+		setIsPinned(v => !v)
+	}
+
+	const handleHide = () => {
+		log('Hide button clicked')
+		setIsHidden(v => !v)
+	}
+
 	return <div className='pin-hide-controls'>
-		<button type='button' className='pin-btn' aria-label='Pin item'><PinIcon/></button>
-		<button type='button' className='hide-btn' aria-label='Hide item'><HideIcon/></button>
+		<button
+			type='button'
+			className={cn(isPinned && 'selected')}
+			aria-label='Pin item'
+			onClick={handlePin}
+		><PinIcon/></button>
+		<button
+			type='button'
+			className={cn(isHidden && 'selected')}
+			aria-label='Hide item'
+			onClick={handleHide}
+		><HideIcon/></button>
 	</div>
 }
 

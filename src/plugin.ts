@@ -1,10 +1,15 @@
 import { Plugin, TAbstractFile } from 'obsidian'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import type { Settings } from '@/types'
-import { DEFAULT_SETTINGS } from '@/constants'
 import { getFileExplorerView, initLog, logger } from '@/utils'
 import { SettingsTab } from '@/ui/settings-tab'
 import { mountSortOrderPicker } from '@/ui/sort-order-picker'
+
+const DEFAULT_SETTINGS: Settings = {
+	customOrder: { '/': { children: [], sortOrder: 'custom' } },
+	debugMode: !!process.env.DEV,
+	newItemPlacement: 'top',
+}
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)

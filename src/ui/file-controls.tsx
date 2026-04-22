@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { useState, useRef } from 'react'
+import { TFolder, type TAbstractFile } from 'obsidian'
 import type ManualSortingPlugin from '@/plugin'
 import type { SortOrder as StoredSortOrder } from '@/types'
 import { getFileExplorerView, log, cn } from '@/utils'
@@ -38,20 +39,21 @@ const toStoredSortOrder = (order: PickerOrder, direction: SortDirection): Stored
 	}
 }
 
-export const mountFileControls = (root: HTMLElement, folderPath: string, plugin: ManualSortingPlugin) => {
-	createRoot(root).render(<FileControls folderPath={folderPath} plugin={plugin}/>)
-	log(`File controls mounted for '${folderPath}':`, root)
+export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin: ManualSortingPlugin) => {
+	createRoot(root).render(<FileControls file={file} plugin={plugin}/>)
+	log(`File controls mounted for '${file.path}':`, root)
 }
 
-const FileControls = ({ folderPath, plugin }: { folderPath: string, plugin: ManualSortingPlugin }) => {
+const FileControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
 	return <>
-		<SortOrderControls folderPath={folderPath} plugin={plugin}/>
+		<SortOrderControls file={file} plugin={plugin}/>
 		<PinHideControls/>
 	</>
 }
 
-const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin: ManualSortingPlugin }) => {
-	const [sortOrder, setSortOrder] = useState<StoredSortOrder>(plugin.settings.customOrder[folderPath].sortOrder)
+const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
+	const isFolder = file instanceof TFolder
+	const [sortOrder, setSortOrder] = useState<StoredSortOrder>(isFolder ? plugin.settings.customOrder[file.path].sortOrder : 'custom')
 	const [checkState, setCheckState] = useState<'hidden' | 'visible' | 'fading'>('hidden')
 	const holdTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 	const overwriteTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -68,7 +70,7 @@ const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin:
 	}
 
 	const updateFolderSortOrder = async (nextSortOrder: StoredSortOrder) => {
-		const folderOrder = plugin.settings.customOrder[folderPath]
+		const folderOrder = plugin.settings.customOrder[file.path]
 		folderOrder.sortOrder = nextSortOrder
 		await plugin.saveSettings()
 		plugin.explorerManager.refreshFolderIndicators()
@@ -76,12 +78,12 @@ const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin:
 	}
 
 	const overwriteCustomOrder = async () => {
-		plugin.orderManager.overwriteCustomOrder(folderPath)
+		plugin.orderManager.overwriteCustomOrder(file.path)
 		setSortOrder('custom')
 		await plugin.saveSettings()
 		plugin.explorerManager.refreshFolderIndicators()
 		getFileExplorerView().sort()
-		log(`Custom order overwritten from current sort for '${folderPath}'`)
+		log(`Custom order overwritten from current sort for '${file.path}'`)
 	}
 
 	const handleClick = (e: React.MouseEvent, nextOrder: PickerOrder) => {
@@ -101,13 +103,13 @@ const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin:
 			nextSortOrder = toStoredSortOrder(nextOrder, direction === 'asc' ? 'desc' : 'asc')
 			setSortOrder(nextSortOrder)
 			void updateFolderSortOrder(nextSortOrder)
-			return log(`Sort order changed to '${nextSortOrder}' for '${folderPath}'`)
+			return log(`Sort order changed to '${nextSortOrder}' for '${file.path}'`)
 		}
 
 		nextSortOrder = toStoredSortOrder(nextOrder, 'asc')
 		setSortOrder(nextSortOrder)
 		void updateFolderSortOrder(nextSortOrder)
-		log(`Sort order changed to '${nextSortOrder}' for '${folderPath}'`)
+		log(`Sort order changed to '${nextSortOrder}' for '${file.path}'`)
 	}
 
 	const handlePointerDown = () => {
@@ -163,7 +165,8 @@ const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin:
 	return <div className='sort-order-controls'>
 		<button
 			type='button'
-			className={cn('custom-order-btn', order === 'custom' && 'selected')}
+			disabled={!isFolder}
+			className={cn('custom-order-btn', order === 'custom' && isFolder && 'selected')}
 			aria-label='Custom order'
 			onPointerDownCapture={handlePointerDown}
 			onPointerUpCapture={clearHold}
@@ -171,18 +174,21 @@ const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin:
 		><CustomOrderIcon><CheckIcon state={checkState}/></CustomOrderIcon></button>
 		<button
 			type='button'
+			disabled={!isFolder}
 			className={cn(order === 'filename' && 'selected')}
 			aria-label={`File name (${order === 'filename' && direction === 'desc' ? 'z → a' : 'a → z'})`}
 			onClickCapture={e => handleClick(e, 'filename')}
 		><FileNameIcon direction={order === 'filename' ? direction : 'asc'}/></button>
 		<button
 			type='button'
+			disabled={!isFolder}
 			className={cn(order === 'modified' && 'selected')}
 			aria-label={`Modified time (${order === 'modified' && direction === 'desc' ? 'old → new' : 'new → old'})`}
 			onClickCapture={e => handleClick(e, 'modified')}
 		><ModifiedTimeIcon direction={order === 'modified' ? direction : 'asc'}/></button>
 		<button
 			type='button'
+			disabled={!isFolder}
 			className={cn(order === 'created' && 'selected')}
 			aria-label={`Created time (${order === 'created' && direction === 'desc' ? 'old → new' : 'new → old'})`}
 			onClickCapture={e => handleClick(e, 'created')}
@@ -207,7 +213,6 @@ void `css
 	.pin-hide-controls {
 		margin: 0 auto;
 	}
-
 	button {
 		margin: 0;
 		padding: 0;
@@ -217,7 +222,13 @@ void `css
 		cursor: pointer;
 		width: 20;
 		height: 20;
-		&:hover {
+		&[disabled] {
+			cursor: not-allowed;
+			> svg:hover {
+				opacity: 0.2;
+			}
+		}
+		&:not([disabled]):hover {
 			background-color: var(--background-modifier-hover);
 		}
 		> svg {
@@ -236,9 +247,6 @@ void `css
 				opacity: 1;
 			}
 		}
-	}
-	&.selected {
-		background-color: transparent !important;
 	}
 }
 `

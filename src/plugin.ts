@@ -1,4 +1,4 @@
-import { Plugin, TAbstractFile, TFolder } from 'obsidian'
+import { Plugin, TAbstractFile } from 'obsidian'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import type { Settings } from '@/types'
 import { getFileExplorerView, initLog, logger } from '@/utils'
@@ -43,15 +43,12 @@ export default class ManualSortingPlugin extends Plugin {
 		this.registerVaultHandlers()
 
 		this.registerEvent(this.app.workspace.on('file-menu', (menu, file) => {
-			if (!(file instanceof TFolder)) return
-
 			let controlsContainer: HTMLElement
 			menu.addItem(item => {
 				controlsContainer = item.dom
 				controlsContainer.addClass('ms-file-controls')
 			})
-
-			mountFileControls(controlsContainer!, file.path, this)
+			mountFileControls(controlsContainer!, file, this)
 		}))
 	}
 

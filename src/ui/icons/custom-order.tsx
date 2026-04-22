@@ -6,15 +6,3 @@ export const CustomOrderIcon = ({ children }: { children?: React.ReactNode }) =>
 		</g>
 		{children}
 	</svg>
-
-void `css
-.custom-order-btn {
-	.user {
-		opacity: 0.2;
-		transition: opacity 0.3s;
-	}
-	&.selected .user {
-		opacity: 1;
-	}
-}
-`

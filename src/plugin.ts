@@ -1,9 +1,9 @@
-import { Plugin, TAbstractFile } from 'obsidian'
+import { Plugin, TAbstractFile, TFolder } from 'obsidian'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
 import type { Settings } from '@/types'
 import { getFileExplorerView, initLog, logger } from '@/utils'
 import { SettingsTab } from '@/ui/settings-tab'
-import { mountSortOrderPicker } from '@/ui/sort-order-picker'
+import { mountFileControls } from '@/ui/file-controls'
 
 const DEFAULT_SETTINGS: Settings = {
 	customOrder: { '/': { children: [], sortOrder: 'custom' } },
@@ -41,7 +41,18 @@ export default class ManualSortingPlugin extends Plugin {
 		this.explorerManager.refreshExplorer()
 		this.explorerManager.refreshExplorerOnMount()
 		this.registerVaultHandlers()
-		mountSortOrderPicker(this)
+
+		this.registerEvent(this.app.workspace.on('file-menu', (menu, file) => {
+			if (!(file instanceof TFolder)) return
+
+			let controlsContainer: HTMLElement
+			menu.addItem(item => {
+				controlsContainer = item.dom
+				controlsContainer.addClass('ms-file-controls')
+			})
+
+			mountFileControls(controlsContainer!, file.path, this)
+		}))
 	}
 
 	registerVaultHandlers() {

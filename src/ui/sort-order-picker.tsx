@@ -5,14 +5,16 @@ import type { SortOrder as StoredSortOrder } from '@/types'
 import { getFileExplorerView, log, cn } from '@/utils'
 import { CustomOrderIcon, CheckIcon, FileNameIcon, ModifiedTimeIcon, CreatedTimeIcon } from '@/ui/icons'
 
-type ToolbarOrder = 'custom' | 'filename' | 'modified' | 'created'
+type PickerOrder = 'custom' | 'filename' | 'modified' | 'created'
 type SortDirection = 'asc' | 'desc'
-interface ShowToolbarEventDetail { x: number, y: number, folderPath: string }
+interface ShowSortOrderPickerEventDetail { x: number, y: number, folderPath: string }
 
 const HIDE_DISTANCE = 5
 const CHANGE_SORT_BTN_LABEL = i18next.t('plugins.file-explorer.action-change-sort')
+const SORT_ORDER_PICKER_ID = 'ms-sort-order-picker'
+const SHOW_SORT_ORDER_PICKER_EVENT = 'ms-show-sort-order-picker'
 
-const getToolbarOrder = (sortOrder: StoredSortOrder): ToolbarOrder => {
+const getPickerOrder = (sortOrder: StoredSortOrder): PickerOrder => {
 	switch (sortOrder) {
 		case 'alphabetical':
 		case 'alphabeticalReverse': return 'filename'
@@ -24,7 +26,7 @@ const getToolbarOrder = (sortOrder: StoredSortOrder): ToolbarOrder => {
 	}
 }
 
-const getToolbarDirection = (sortOrder: StoredSortOrder): SortDirection => {
+const getPickerDirection = (sortOrder: StoredSortOrder): SortDirection => {
 	switch (sortOrder) {
 		case 'alphabeticalReverse':
 		case 'byModifiedTimeReverse':
@@ -33,7 +35,7 @@ const getToolbarDirection = (sortOrder: StoredSortOrder): SortDirection => {
 	}
 }
 
-const toStoredSortOrder = (order: ToolbarOrder, direction: SortDirection): StoredSortOrder => {
+const toStoredSortOrder = (order: PickerOrder, direction: SortDirection): StoredSortOrder => {
 	switch (order) {
 		case 'filename':
 			return direction === 'asc' ? 'alphabetical' : 'alphabeticalReverse'
@@ -46,15 +48,17 @@ const toStoredSortOrder = (order: ToolbarOrder, direction: SortDirection): Store
 	}
 }
 
-export const mountToolbar = (plugin: ManualSortingPlugin) => {
-	let toolbarEl = document.getElementById('ms-toolbar')
-	if (toolbarEl) return log('Toolbar already exists:', toolbarEl)
-	toolbarEl = document.body.createDiv({ attr: { id: 'ms-toolbar' } })
-	createRoot(toolbarEl).render(<Toolbar el={toolbarEl} plugin={plugin}/>)
-	log('Toolbar mounted:', toolbarEl)
+export const mountSortOrderPicker = (plugin: ManualSortingPlugin) => {
+	let pickerEl = document.getElementById(SORT_ORDER_PICKER_ID)
+	if (pickerEl) return log('Sort order picker already exists:', pickerEl)
+	pickerEl = document.body.createDiv({ attr: { id: SORT_ORDER_PICKER_ID } })
+	createRoot(pickerEl).render(<SortOrderPicker el={pickerEl} plugin={plugin}/>)
+	log('Sort order picker mounted:', pickerEl)
 }
 
-const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin }) => {
+export const showSortOrderPickerEvent = SHOW_SORT_ORDER_PICKER_EVENT
+
+const SortOrderPicker = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin }) => {
 	const [sortOrder, setSortOrder] = useState<StoredSortOrder>('custom')
 	const [checkState, setCheckState] = useState<'hidden' | 'visible' | 'fading'>('hidden')
 	const [position, setPosition] = useState<{ x: number, y: number } | null>(null)
@@ -65,8 +69,8 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 	const startTimeRef = useRef<number>(0)
 	const hideTimeoutFadeRef = useRef<NodeJS.Timeout | undefined>(undefined)
 	const ignoreCustomClickRef = useRef(false)
-	const order = getToolbarOrder(sortOrder)
-	const direction = getToolbarDirection(sortOrder)
+	const order = getPickerOrder(sortOrder)
+	const direction = getPickerDirection(sortOrder)
 
 	useEffect(() => {
 		if (position) {
@@ -89,11 +93,11 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 			const rect = sortButton.getBoundingClientRect()
 			setActiveFolderPath('/')
 			setPosition({ x: rect.left - 40, y: rect.top + 10 })
-			log('File Explorer sort button clicked, opening toolbar')
+			log('File Explorer sort button clicked, opening sort order picker')
 		}
 
 		const handleShow = (e: Event) => {
-			const customEvent = e as CustomEvent<ShowToolbarEventDetail>
+			const customEvent = e as CustomEvent<ShowSortOrderPickerEventDetail>
 			setActiveFolderPath(customEvent.detail.folderPath)
 			setPosition({ x: customEvent.detail.x, y: customEvent.detail.y })
 		}
@@ -104,12 +108,12 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 
 		document.addEventListener('click', handleSortButtonClick, true)
 		document.addEventListener('click', handleClickOutside)
-		document.addEventListener('ms-show-toolbar', handleShow)
+		document.addEventListener(SHOW_SORT_ORDER_PICKER_EVENT, handleShow)
 
 		return () => {
 			document.removeEventListener('click', handleSortButtonClick, true)
 			document.removeEventListener('click', handleClickOutside)
-			document.removeEventListener('ms-show-toolbar', handleShow)
+			document.removeEventListener(SHOW_SORT_ORDER_PICKER_EVENT, handleShow)
 		}
 	}, [el])
 
@@ -137,7 +141,7 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 			const dist = Math.hypot(dx, dy)
 
 			if (dist > HIDE_DISTANCE) {
-				log(`Pointer moved ${Math.round(dist)}px away from toolbar, hiding`)
+				log(`Pointer moved ${Math.round(dist)}px away from sort order picker, hiding`)
 				setPosition(null)
 			}
 		}
@@ -169,7 +173,7 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 		log(`Custom order overwritten from current sort for '${activeFolderPath}'`)
 	}
 
-	const handleClick = (nextOrder: ToolbarOrder) => {
+	const handleClick = (nextOrder: PickerOrder) => {
 		if (nextOrder === 'custom' && ignoreCustomClickRef.current) {
 			ignoreCustomClickRef.current = false
 			return
@@ -279,7 +283,7 @@ const Toolbar = ({ el, plugin }: { el: HTMLElement, plugin: ManualSortingPlugin 
 }
 
 void `css
-#ms-toolbar {
+#ms-sort-order-picker {
 	position: absolute;
 	z-index: 100;
 	padding: 0 8;

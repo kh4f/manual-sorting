@@ -4,7 +4,7 @@ import type { Settings } from '@/types'
 import { DEFAULT_SETTINGS } from '@/constants'
 import { getFileExplorerView, initLog, logger } from '@/utils'
 import { SettingsTab } from '@/ui/settings-tab'
-import { mountToolbar } from '@/ui/toolbar'
+import { mountSortOrderPicker } from '@/ui/sort-order-picker'
 
 export default class ManualSortingPlugin extends Plugin {
 	public orderManager = new OrderManager(this)
@@ -36,7 +36,7 @@ export default class ManualSortingPlugin extends Plugin {
 		this.explorerManager.refreshExplorer()
 		this.explorerManager.refreshExplorerOnMount()
 		this.registerVaultHandlers()
-		mountToolbar(this)
+		mountSortOrderPicker(this)
 	}
 
 	registerVaultHandlers() {

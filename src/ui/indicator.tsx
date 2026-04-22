@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import type ManualSortingPlugin from '@/plugin'
 import type { SortOrder } from '@/types'
 import { CustomOrderIcon, CreatedTimeIcon, FileNameIcon, ModifiedTimeIcon } from '@/ui/icons'
+import { showSortOrderPickerEvent } from '@/ui/sort-order-picker'
 import { log, getFileExplorerView } from '@/utils'
 
 const indicatorRoots = new WeakMap<HTMLElement, ReturnType<typeof createRoot>>()
@@ -42,8 +43,8 @@ export const Indicator = ({ sortOrder, folderPath }: { sortOrder: SortOrder, fol
 	const handleClick = (e: React.MouseEvent) => {
 		e.stopPropagation()
 		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-		document.dispatchEvent(new CustomEvent('ms-show-toolbar', { detail: { x: rect.left - 33, y: rect.top - 6, folderPath } }))
-		log('Indicator clicked, showing toolbar for folder:', folderPath)
+		document.dispatchEvent(new CustomEvent(showSortOrderPickerEvent, { detail: { x: rect.left - 33, y: rect.top - 6, folderPath } }))
+		log('Indicator clicked, showing sort order picker for folder:', folderPath)
 	}
 
 	return <button onClick={handleClick}>{getSortIcon(sortOrder)}</button>

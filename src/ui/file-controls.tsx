@@ -3,7 +3,7 @@ import { useState, useRef } from 'react'
 import type ManualSortingPlugin from '@/plugin'
 import type { SortOrder as StoredSortOrder } from '@/types'
 import { getFileExplorerView, log, cn } from '@/utils'
-import { CustomOrderIcon, CheckIcon, FileNameIcon, ModifiedTimeIcon, CreatedTimeIcon } from '@/ui/icons'
+import { CustomOrderIcon, CheckIcon, FileNameIcon, ModifiedTimeIcon, CreatedTimeIcon, PinIcon, HideIcon } from '@/ui/icons'
 
 type PickerOrder = 'custom' | 'filename' | 'modified' | 'created'
 type SortDirection = 'asc' | 'desc'
@@ -44,6 +44,13 @@ export const mountFileControls = (root: HTMLElement, folderPath: string, plugin:
 }
 
 const FileControls = ({ folderPath, plugin }: { folderPath: string, plugin: ManualSortingPlugin }) => {
+	return <>
+		<SortOrderControls folderPath={folderPath} plugin={plugin}/>
+		<PinHideControls/>
+	</>
+}
+
+const SortOrderControls = ({ folderPath, plugin }: { folderPath: string, plugin: ManualSortingPlugin }) => {
 	const [sortOrder, setSortOrder] = useState<StoredSortOrder>(plugin.settings.customOrder[folderPath].sortOrder)
 	const [checkState, setCheckState] = useState<'hidden' | 'visible' | 'fading'>('hidden')
 	const holdTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -153,7 +160,7 @@ const FileControls = ({ folderPath, plugin }: { folderPath: string, plugin: Manu
 		}
 	}
 
-	return <>
+	return <div className='sort-order-controls'>
 		<button
 			type='button'
 			className={cn('custom-order-btn', order === 'custom' && 'selected')}
@@ -180,13 +187,27 @@ const FileControls = ({ folderPath, plugin }: { folderPath: string, plugin: Manu
 			aria-label={`Created time (${order === 'created' && direction === 'desc' ? 'old → new' : 'new → old'})`}
 			onClickCapture={e => handleClick(e, 'created')}
 		><CreatedTimeIcon direction={order === 'created' ? direction : 'asc'}/></button>
-	</>
+	</div>
+}
+
+const PinHideControls = () => {
+	return <div className='pin-hide-controls'>
+		<button type='button' className='pin-btn' aria-label='Pin item'><PinIcon/></button>
+		<button type='button' className='hide-btn' aria-label='Hide item'><HideIcon/></button>
+	</div>
 }
 
 void `css
 .ms-file-controls {
-	padding: 2 6;
-	gap: 4;
+	.sort-order-controls, .pin-hide-controls {
+		display: flex;
+		align-items: center;
+		gap: 4;
+	}
+	.pin-hide-controls {
+		margin: 0 auto;
+	}
+
 	button {
 		margin: 0;
 		padding: 0;
@@ -208,6 +229,9 @@ void `css
 			width: 16;
 			opacity: 0.2;
 			transition: opacity 0.3s;
+			&:hover {
+				opacity: 0.3;
+			}
 			button.selected & {
 				opacity: 1;
 			}

@@ -349,7 +349,7 @@ void `css
 				position: absolute;
 				display: block;
 				translate: -52% -2px;
-				height: 2px;
+				height: 1px;
 				width: 80%;
 				left: 50%;
 				background-image: linear-gradient(90deg, #8888881a 50%, transparent 50%);
@@ -361,9 +361,7 @@ void `css
 
 		.tree-item[data-drop-position='before']::before,
 		.tree-item[data-drop-position='after']::after {
-			background-image: linear-gradient(90deg, var(--color-accent) 50%, transparent 50%) !important;
-			mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
-			animation: dash-flow 0.5s linear infinite;
+			background-color: var(--color-accent) !important;
 		}
 
 		.nav-folder.is-drop-target {
@@ -394,10 +392,5 @@ void `css
 			opacity: 0.4;
 		}
 	}
-}
-
-@keyframes dash-flow {
-	from { background-position: 0 0; }
-	to { background-position: 8px 0; }
 }
 `

@@ -31,7 +31,7 @@ export class SettingsTab extends PluginSettingTab {
 				.onChange(async showChildCounter => {
 					this.plugin.settings.showChildCounter = showChildCounter
 					await this.plugin.saveSettings()
-					this.plugin.explorerManager.refreshFolderIndicators()
+					this.plugin.explorerManager.refreshDecorators()
 				}),
 			)
 

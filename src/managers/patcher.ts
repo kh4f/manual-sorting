@@ -9,6 +9,7 @@ import { mountFileControls } from '@/ui/file-controls'
 
 const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
 const isHiddenItem = (plugin: ManualSortingPlugin, path: string) => plugin.settings.items[path]?.hidden ?? false
+const isPinnedItem = (plugin: ManualSortingPlugin, path: string) => plugin.settings.items[path]?.pinned ?? false
 
 const log = initLog('PATCHER', '#988bff')
 
@@ -29,7 +30,12 @@ export class Patcher {
 				const folderOrder = plugin.settings.items[folderPath]
 				if (!isFolderSettings(folderOrder)) return sortedItems
 
-				const orderedItems = sortFolderItems(sortedItems, folderOrder.sortOrder, folderOrder.children)
+				const orderedItems = sortFolderItems(
+					sortedItems,
+					folderOrder.sortOrder,
+					folderOrder.children,
+					path => isPinnedItem(plugin, path),
+				)
 				if (plugin.settings.showHidden) return orderedItems
 
 				return orderedItems.filter(item => !isHiddenItem(plugin, item.file.path))

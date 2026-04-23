@@ -2,6 +2,7 @@ import type ManualSortingPlugin from '@/plugin'
 import type { FolderSettings, ItemSettings } from '@/types'
 import { getFileExplorerView, initLog } from '@/utils'
 import { mountChildCounter, unmountChildCounter } from '@/ui/child-counter'
+import { mountPinIndicator, unmountPinIndicator } from '@/ui/pin-indicator'
 
 const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 const FOLDER_TITLE_SELECTOR = '.nav-folder-title'
@@ -16,7 +17,7 @@ export class ExplorerManager {
 
 	constructor(private plugin: ManualSortingPlugin) {}
 
-	waitForExplorerElement = async (disableLogs = false) => new Promise<HTMLElement>(resolve => {
+	waitForExplorerEl = async (disableLogs = false) => new Promise<HTMLElement>(resolve => {
 		this.observeExplorerMount(resolve, true, true, disableLogs)
 	})
 
@@ -29,10 +30,10 @@ export class ExplorerManager {
 		const rootSettings = this.plugin.settings.items['/']
 		getFileExplorerView().setSortOrder(isFolderSettings(rootSettings) ? rootSettings.sortOrder : 'custom')
 		void this.plugin.dndManager.enable()
-		this.observeFolderIndicators(explorerEl)
+		this.observeDecorators(explorerEl)
 	}
 
-	refreshFolderIndicators(root?: HTMLElement) {
+	refreshDecorators(root?: HTMLElement) {
 		root ??= this.observedExplorerEl ?? document.querySelector<HTMLElement>(FILE_EXPLORER_SELECTOR) ?? undefined
 		if (!root) return
 		this.syncFolderIndicators(root)
@@ -64,12 +65,15 @@ export class ExplorerManager {
 			const path = treeItemSelf.dataset.path
 			if (!path) return
 
+			const isPinned = this.plugin.settings.items[path]?.pinned ?? false
 			const isHidden = this.plugin.settings.items[path]?.hidden ?? false
+			if (isPinned) mountPinIndicator(treeItemSelf)
+			else unmountPinIndicator(treeItemSelf)
 			treeItemSelf.classList.toggle('ms-hidden-item', isHidden && this.plugin.settings.showHidden)
 		})
 	}
 
-	private observeFolderIndicators(explorerEl: HTMLElement) {
+	private observeDecorators(explorerEl: HTMLElement) {
 		this.syncFolderIndicators(explorerEl)
 		if (this.observedExplorerEl === explorerEl && this.folderIndicatorsObserver) return
 

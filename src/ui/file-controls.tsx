@@ -88,7 +88,7 @@ const ShowHiddenControls = ({ plugin }: { plugin: ManualSortingPlugin }) => {
 		setShowHidden(nextShowHidden)
 		plugin.settings.showHidden = nextShowHidden
 		await plugin.saveSettings()
-		plugin.explorerManager.refreshFolderIndicators()
+		plugin.explorerManager.refreshDecorators()
 		getFileExplorerView().sort()
 		log(`Show hidden files changed to '${nextShowHidden}'`)
 	}
@@ -129,7 +129,7 @@ const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manu
 		const folderOrder = ensureFolderSettings(plugin, file.path)
 		folderOrder.sortOrder = nextSortOrder
 		await plugin.saveSettings()
-		plugin.explorerManager.refreshFolderIndicators()
+		plugin.explorerManager.refreshDecorators()
 		getFileExplorerView().sort()
 	}
 
@@ -137,7 +137,7 @@ const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manu
 		plugin.orderManager.overwriteCustomOrder(file.path)
 		setSortOrder('custom')
 		await plugin.saveSettings()
-		plugin.explorerManager.refreshFolderIndicators()
+		plugin.explorerManager.refreshDecorators()
 		getFileExplorerView().sort()
 		log(`Custom order overwritten from current sort for '${file.path}'`)
 	}
@@ -266,6 +266,8 @@ const PinHideControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manual
 		}
 		setIsPinned(nextPinned)
 		await plugin.saveSettings()
+		plugin.explorerManager.refreshDecorators()
+		getFileExplorerView().sort()
 		log(`Pin state changed to '${nextPinned}' for '${file.path}'`)
 	}
 
@@ -279,7 +281,7 @@ const PinHideControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manual
 		}
 		setIsHidden(nextHidden)
 		await plugin.saveSettings()
-		plugin.explorerManager.refreshFolderIndicators()
+		plugin.explorerManager.refreshDecorators()
 		getFileExplorerView().sort()
 		log(`Hidden state changed to '${nextHidden}' for '${file.path}'`)
 	}

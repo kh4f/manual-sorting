@@ -27,6 +27,17 @@ const withFoldersFirst = (compareItems: (a: FileTreeItem, b: FileTreeItem) => nu
 		return compareItems(a, b)
 	}
 
+const withPinnedFirst = (
+	isPinned: (path: string) => boolean,
+	compareItems: (a: FileTreeItem, b: FileTreeItem) => number,
+) => (a: FileTreeItem, b: FileTreeItem) => {
+	const aIsPinned = isPinned(a.file.path)
+	const bIsPinned = isPinned(b.file.path)
+
+	if (aIsPinned !== bIsPinned) return aIsPinned ? -1 : 1
+	return compareItems(a, b)
+}
+
 const compareByCustomOrder = (children: string[]) => {
 	const orderIndex = new Map(children.map((path, index) => [path, index]))
 
@@ -54,23 +65,28 @@ const compareByTimestamp = (
 	return withNameFallback(direction === 'asc' ? result : -result, a, b)
 }
 
-export const sortFolderItems = (items: FileTreeItem[], sortOrder: SortOrder, children: string[]) => {
+export const sortFolderItems = (
+	items: FileTreeItem[],
+	sortOrder: SortOrder,
+	children: string[],
+	isPinned: (path: string) => boolean,
+) => {
 	const sortedItems = [...items]
 
 	switch (sortOrder) {
 		case 'alphabetical':
-			return sortedItems.sort(withFoldersFirst(compareNames))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst(compareNames)))
 		case 'alphabeticalReverse':
-			return sortedItems.sort(withFoldersFirst((a, b) => compareNames(b, a)))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst((a, b) => compareNames(b, a))))
 		case 'byCreatedTime':
-			return sortedItems.sort(withFoldersFirst(compareByTimestamp(getCreatedTime, 'asc')))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst(compareByTimestamp(getCreatedTime, 'asc'))))
 		case 'byCreatedTimeReverse':
-			return sortedItems.sort(withFoldersFirst(compareByTimestamp(getCreatedTime, 'desc')))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst(compareByTimestamp(getCreatedTime, 'desc'))))
 		case 'byModifiedTime':
-			return sortedItems.sort(withFoldersFirst(compareByTimestamp(getModifiedTime, 'asc')))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst(compareByTimestamp(getModifiedTime, 'asc'))))
 		case 'byModifiedTimeReverse':
-			return sortedItems.sort(withFoldersFirst(compareByTimestamp(getModifiedTime, 'desc')))
+			return sortedItems.sort(withPinnedFirst(isPinned, withFoldersFirst(compareByTimestamp(getModifiedTime, 'desc'))))
 		default:
-			return sortedItems.sort(compareByCustomOrder(children))
+			return sortedItems.sort(withPinnedFirst(isPinned, compareByCustomOrder(children)))
 	}
 }

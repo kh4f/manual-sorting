@@ -60,7 +60,7 @@ export default class ManualSortingPlugin extends Plugin {
 	}
 
 	async initialize() {
-		await this.explorerManager.waitForExplorerElement()
+		await this.explorerManager.waitForExplorerEl()
 		this.patcher.patchExplorer()
 		this.explorerManager.refreshExplorer()
 		this.explorerManager.refreshExplorerOnMount()

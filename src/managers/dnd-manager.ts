@@ -28,7 +28,7 @@ export class DndManager {
 	constructor(private plugin: ManualSortingPlugin) {}
 
 	async enable() {
-		this.explorerEl = await this.plugin.explorerManager.waitForExplorerElement(true)
+		this.explorerEl = await this.plugin.explorerManager.waitForExplorerEl(true)
 
 		let futureSibling: HTMLElement | null = null
 		let dropPosition: 'before' | 'after' = 'before'

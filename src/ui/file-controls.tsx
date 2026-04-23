@@ -57,7 +57,9 @@ const toStoredSortOrder = (order: PickerOrder, direction: SortDirection): Stored
 }
 
 export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin: ManualSortingPlugin) => {
-	createRoot(root).render(<FileControls file={file} plugin={plugin}/>)
+	createRoot(root).render(file.path === '/'
+		? <RootFolderControls file={file} plugin={plugin}/>
+		: <FileControls file={file} plugin={plugin}/>)
 	log(`File controls mounted for '${file.path}':`, root)
 	root.addEventListener('click', e => e.stopImmediatePropagation(), true)
 }
@@ -65,8 +67,38 @@ export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin
 const FileControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
 	return <>
 		<SortOrderControls file={file} plugin={plugin}/>
-		{file.path === '/' || <PinHideControls file={file} plugin={plugin}/>}
+		<PinHideControls file={file} plugin={plugin}/>
 	</>
+}
+
+const RootFolderControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
+	return <>
+		<SortOrderControls file={file} plugin={plugin}/>
+		<div className='separator'></div>
+		<ShowHiddenControls plugin={plugin}/>
+	</>
+}
+
+const ShowHiddenControls = ({ plugin }: { plugin: ManualSortingPlugin }) => {
+	const [showHidden, setShowHidden] = useState(plugin.settings.showHidden)
+
+	const handleToggle = async (e: React.MouseEvent) => {
+		e.stopPropagation()
+		const nextShowHidden = !showHidden
+		setShowHidden(nextShowHidden)
+		plugin.settings.showHidden = nextShowHidden
+		await plugin.saveSettings()
+		log(`Show hidden files changed to '${nextShowHidden}'`)
+	}
+
+	return <div className='show-hidden-controls'>
+		<button
+			type='button'
+			className={cn(showHidden && 'selected')}
+			aria-label='Show hidden files'
+			onClickCapture={e => void handleToggle(e)}
+		><HideIcon/></button>
+	</div>
 }
 
 const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
@@ -266,7 +298,8 @@ const PinHideControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manual
 
 void `css
 .ms-file-controls {
-	.sort-order-controls, .pin-hide-controls {
+	flex-direction: row;
+	.sort-order-controls, .pin-hide-controls, .show-hidden-controls {
 		display: flex;
 		align-items: center;
 		gap: 4;
@@ -307,6 +340,17 @@ void `css
 			button.selected & {
 				opacity: 1;
 			}
+		}
+	}
+	.menu-scroll& {
+		gap: 6;
+		.sort-order-controls, .show-hidden-controls {
+			gap: 2;
+		}
+		.separator {
+			width: 2;
+			height: 2;
+			background-color: var(--divider-color);
 		}
 	}
 }

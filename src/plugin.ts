@@ -10,6 +10,7 @@ const DEFAULT_SETTINGS: Settings = {
 	showChildCounter: true,
 	debugMode: !!process.env.DEV,
 	newItemPlacement: 'top',
+	showHidden: false,
 }
 
 const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item

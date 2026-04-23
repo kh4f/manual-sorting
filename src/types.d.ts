@@ -4,6 +4,7 @@ import type { FileTreeItem } from 'obsidian-typings'
 export interface Settings {
 	items: ItemSettingsMap
 	showChildCounter: boolean
+	showHidden: boolean
 	debugMode: boolean
 	newItemPlacement: 'top' | 'bottom'
 }

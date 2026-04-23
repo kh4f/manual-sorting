@@ -380,17 +380,5 @@ void `css
 			}
 		}
 	}
-
-	@media (pointer: coarse) {
-		.tree-item-self:not(.temp)::after {
-			content: '⋮⋮';
-			position: absolute;
-			rotate: 90deg;
-			right: 12px;
-			align-self: center;
-			font-size: calc(var(--nav-item-size) + 2px);
-			opacity: 0.4;
-		}
-	}
 }
 `

@@ -5,6 +5,7 @@ import { mountChildCounter, unmountChildCounter } from '@/ui/child-counter'
 
 const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 const FOLDER_TITLE_SELECTOR = '.nav-folder-title'
+const TREE_ITEM_SELF_SELECTOR = '.tree-item-self[data-path]'
 const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
 
 export class ExplorerManager {
@@ -54,6 +55,18 @@ export class ExplorerManager {
 			if (this.plugin.settings.showChildCounter) mountChildCounter(folderTitle)
 			else unmountChildCounter(folderTitle)
 		})
+
+		const treeItemSelfEls = root.matches(TREE_ITEM_SELF_SELECTOR)
+			? [root]
+			: [...root.querySelectorAll<HTMLElement>(TREE_ITEM_SELF_SELECTOR)]
+
+		treeItemSelfEls.forEach(treeItemSelf => {
+			const path = treeItemSelf.dataset.path
+			if (!path) return
+
+			const isHidden = this.plugin.settings.items[path]?.hidden ?? false
+			treeItemSelf.classList.toggle('ms-hidden-item', isHidden && this.plugin.settings.showHidden)
+		})
 	}
 
 	private observeFolderIndicators(explorerEl: HTMLElement) {
@@ -96,3 +109,9 @@ export class ExplorerManager {
 		observer.observe(document.querySelector('.workspace') ?? document.body, { childList: true, subtree: true })
 	}
 }
+
+void `css
+.tree-item-self.ms-hidden-item {
+	opacity: 0.3;
+}
+`

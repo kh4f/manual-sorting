@@ -88,6 +88,8 @@ const ShowHiddenControls = ({ plugin }: { plugin: ManualSortingPlugin }) => {
 		setShowHidden(nextShowHidden)
 		plugin.settings.showHidden = nextShowHidden
 		await plugin.saveSettings()
+		plugin.explorerManager.refreshFolderIndicators()
+		getFileExplorerView().sort()
 		log(`Show hidden files changed to '${nextShowHidden}'`)
 	}
 
@@ -277,6 +279,8 @@ const PinHideControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manual
 		}
 		setIsHidden(nextHidden)
 		await plugin.saveSettings()
+		plugin.explorerManager.refreshFolderIndicators()
+		getFileExplorerView().sort()
 		log(`Hidden state changed to '${nextHidden}' for '${file.path}'`)
 	}
 

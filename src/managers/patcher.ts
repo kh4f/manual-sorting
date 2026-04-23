@@ -2,8 +2,11 @@ import { TFolder } from 'obsidian'
 import type { FileTreeItem, FileExplorerView } from 'obsidian-typings'
 import { around } from 'monkey-around'
 import type ManualSortingPlugin from '@/plugin'
+import type { FolderSettings, ItemSettings } from '@/types'
 import { getFileExplorerView, initLog } from '@/utils'
 import { sortFolderItems } from './sort-folder-items'
+
+const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
 
 export class Patcher {
 	private explorerUninstaller: ReturnType<typeof around> | null = null
@@ -19,8 +22,8 @@ export class Patcher {
 				const sortedItems = original.call(this, folder)
 				if (bypass) return sortedItems
 				const folderPath = folder.path
-				if (!(folderPath in plugin.settings.customOrder)) return sortedItems
-				const folderOrder = plugin.settings.customOrder[folderPath]
+				const folderOrder = plugin.settings.items[folderPath]
+				if (!isFolderSettings(folderOrder)) return sortedItems
 				return sortFolderItems(sortedItems, folderOrder.sortOrder, folderOrder.children)
 			},
 		})

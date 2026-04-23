@@ -1,14 +1,36 @@
 import { Plugin, TAbstractFile } from 'obsidian'
 import { OrderManager, Patcher, ExplorerManager, DndManager } from '@/managers'
-import type { Settings } from '@/types'
+import type { FolderSettings, ItemSettings, ItemSettingsMap, Settings } from '@/types'
 import { getFileExplorerView, initLog, logger } from '@/utils'
 import { SettingsTab } from '@/ui/settings-tab'
 import { mountFileControls } from '@/ui/file-controls'
 
 const DEFAULT_SETTINGS: Settings = {
-	customOrder: { '/': { children: [], sortOrder: 'custom' } },
+	items: { '/': { pinned: false, hidden: false, children: [], sortOrder: 'custom' } },
 	debugMode: !!process.env.DEV,
 	newItemPlacement: 'top',
+}
+
+const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
+
+const getDefaultItemSettings = () => ({ pinned: false, hidden: false })
+
+const normalizeItems = (items: ItemSettingsMap | undefined): ItemSettingsMap => {
+	const normalizedItems: ItemSettingsMap = {}
+
+	for (const [path, item] of Object.entries(items ?? {})) {
+		if (!item) continue
+		normalizedItems[path] = isFolderSettings(item)
+			? { pinned: item.pinned, hidden: item.hidden, children: [...item.children], sortOrder: item.sortOrder }
+			: { pinned: item.pinned, hidden: item.hidden }
+	}
+
+	const root = normalizedItems['/']
+	normalizedItems['/'] = isFolderSettings(root)
+		? root
+		: { ...getDefaultItemSettings(), children: [], sortOrder: 'custom' }
+
+	return normalizedItems
 }
 
 export default class ManualSortingPlugin extends Plugin {
@@ -75,10 +97,13 @@ export default class ManualSortingPlugin extends Plugin {
 
 	async loadSettings() {
 		const savedSettings = (await this.loadData() || {}) as Partial<Settings>
+		const items = normalizeItems(savedSettings.items)
+
 		this.settings = {
 			...DEFAULT_SETTINGS,
+			items,
 			...Object.fromEntries((Object.keys(DEFAULT_SETTINGS) as (keyof Settings)[])
-				.filter(k => k in savedSettings).map(k => [k, savedSettings[k]]),
+				.filter(k => k !== 'items' && k in savedSettings).map(k => [k, savedSettings[k]]),
 			),
 		}
 		this.log('Settings loaded:', this.settings)

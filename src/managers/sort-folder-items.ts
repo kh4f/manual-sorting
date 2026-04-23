@@ -27,8 +27,8 @@ const withFoldersFirst = (compareItems: (a: FileTreeItem, b: FileTreeItem) => nu
 		return compareItems(a, b)
 	}
 
-const compareByCustomOrder = (customOrder: string[]) => {
-	const orderIndex = new Map(customOrder.map((path, index) => [path, index]))
+const compareByCustomOrder = (children: string[]) => {
+	const orderIndex = new Map(children.map((path, index) => [path, index]))
 
 	return (a: FileTreeItem, b: FileTreeItem) => {
 		const indexA = orderIndex.get(a.file.path) ?? Number.MAX_SAFE_INTEGER
@@ -54,7 +54,7 @@ const compareByTimestamp = (
 	return withNameFallback(direction === 'asc' ? result : -result, a, b)
 }
 
-export const sortFolderItems = (items: FileTreeItem[], sortOrder: SortOrder, customOrder: string[]) => {
+export const sortFolderItems = (items: FileTreeItem[], sortOrder: SortOrder, children: string[]) => {
 	const sortedItems = [...items]
 
 	switch (sortOrder) {
@@ -71,6 +71,6 @@ export const sortFolderItems = (items: FileTreeItem[], sortOrder: SortOrder, cus
 		case 'byModifiedTimeReverse':
 			return sortedItems.sort(withFoldersFirst(compareByTimestamp(getModifiedTime, 'desc')))
 		default:
-			return sortedItems.sort(compareByCustomOrder(customOrder))
+			return sortedItems.sort(compareByCustomOrder(children))
 	}
 }

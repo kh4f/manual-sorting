@@ -208,7 +208,7 @@ export class DndManager {
 			}
 		}
 
-		const childrenContainer = futureSibling.querySelector('.tree-item-children')
+		const childrenContainer = futureSibling.querySelector<HTMLElement>('.tree-item-children')
 		if (childrenContainer && !childrenContainer.children.length) {
 			const tempChild = Object.assign(document.createElement('div'), {
 				className: 'tree-item temp-child',

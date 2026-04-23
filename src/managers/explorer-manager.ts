@@ -1,9 +1,11 @@
 import type ManualSortingPlugin from '@/plugin'
+import type { FolderSettings, ItemSettings } from '@/types'
 import { getFileExplorerView, initLog } from '@/utils'
 import { mountChildCounter } from '@/ui/child-counter'
 
 const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 const FOLDER_TITLE_SELECTOR = '.nav-folder-title'
+const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
 
 export class ExplorerManager {
 	private log = initLog('EXPLORER-MANAGER', '#ffa700')
@@ -23,7 +25,8 @@ export class ExplorerManager {
 		explorerEl ??= document.querySelector(FILE_EXPLORER_SELECTOR)!
 		this.log('Refreshing Explorer after mount')
 		this.plugin.orderManager.reconcileOrder()
-		getFileExplorerView().setSortOrder(this.plugin.settings.customOrder['/'].sortOrder)
+		const rootSettings = this.plugin.settings.items['/']
+		getFileExplorerView().setSortOrder(isFolderSettings(rootSettings) ? rootSettings.sortOrder : 'custom')
 		void this.plugin.dndManager.enable()
 		this.observeFolderIndicators(explorerEl)
 	}

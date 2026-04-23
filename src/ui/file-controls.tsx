@@ -2,12 +2,29 @@ import { createRoot } from 'react-dom/client'
 import { useState, useRef } from 'react'
 import { TFolder, type TAbstractFile } from 'obsidian'
 import type ManualSortingPlugin from '@/plugin'
-import type { SortOrder as StoredSortOrder } from '@/types'
+import type { FolderSettings, ItemSettings, SortOrder as StoredSortOrder } from '@/types'
 import { getFileExplorerView, log, cn } from '@/utils'
 import { CustomOrderIcon, CheckIcon, FileNameIcon, ModifiedTimeIcon, CreatedTimeIcon, PinIcon, HideIcon } from '@/ui/icons'
 
 type PickerOrder = 'custom' | 'filename' | 'modified' | 'created'
 type SortDirection = 'asc' | 'desc'
+
+const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
+const getDefaultItemSettings = () => ({ pinned: false, hidden: false })
+
+const ensureFolderSettings = (plugin: ManualSortingPlugin, path: string) => {
+	const item = plugin.settings.items[path]
+	if (isFolderSettings(item)) return item
+
+	const folderSettings: FolderSettings = {
+		pinned: item ? item.pinned : false,
+		hidden: item ? item.hidden : false,
+		children: [],
+		sortOrder: 'custom',
+	}
+	plugin.settings.items[path] = folderSettings
+	return folderSettings
+}
 
 const getPickerOrder = (sortOrder: StoredSortOrder): PickerOrder => {
 	switch (sortOrder) {
@@ -48,13 +65,17 @@ export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin
 const FileControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
 	return <>
 		<SortOrderControls file={file} plugin={plugin}/>
-		<PinHideControls/>
+		<PinHideControls file={file} plugin={plugin}/>
 	</>
 }
 
 const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
 	const isFolder = file instanceof TFolder
-	const [sortOrder, setSortOrder] = useState<StoredSortOrder>(isFolder ? plugin.settings.customOrder[file.path].sortOrder : 'custom')
+	const itemSettings = plugin.settings.items[file.path]
+	const folderSettings = isFolderSettings(itemSettings) ? itemSettings : null
+	const [sortOrder, setSortOrder] = useState<StoredSortOrder>(
+		isFolder && folderSettings ? folderSettings.sortOrder : 'custom',
+	)
 	const [checkState, setCheckState] = useState<'hidden' | 'visible' | 'fading'>('hidden')
 	const holdTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 	const overwriteTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -71,7 +92,7 @@ const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manu
 	}
 
 	const updateFolderSortOrder = async (nextSortOrder: StoredSortOrder) => {
-		const folderOrder = plugin.settings.customOrder[file.path]
+		const folderOrder = ensureFolderSettings(plugin, file.path)
 		folderOrder.sortOrder = nextSortOrder
 		await plugin.saveSettings()
 		plugin.explorerManager.refreshFolderIndicators()
@@ -197,20 +218,34 @@ const SortOrderControls = ({ file, plugin }: { file: TAbstractFile, plugin: Manu
 	</div>
 }
 
-const PinHideControls = () => {
-	const [isPinned, setIsPinned] = useState(false)
-	const [isHidden, setIsHidden] = useState(false)
+const PinHideControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
+	const [isPinned, setIsPinned] = useState(plugin.settings.items[file.path]?.pinned ?? false)
+	const [isHidden, setIsHidden] = useState(plugin.settings.items[file.path]?.hidden ?? false)
 
-	const handlePin = (e: React.MouseEvent) => {
+	const handlePin = async (e: React.MouseEvent) => {
 		e.stopPropagation()
-		log('Pin button clicked')
-		setIsPinned(v => !v)
+		const nextPinned = !isPinned
+		plugin.settings.items[file.path] = {
+			...getDefaultItemSettings(),
+			...plugin.settings.items[file.path],
+			pinned: nextPinned,
+		}
+		setIsPinned(nextPinned)
+		await plugin.saveSettings()
+		log(`Pin state changed to '${nextPinned}' for '${file.path}'`)
 	}
 
-	const handleHide = (e: React.MouseEvent) => {
+	const handleHide = async (e: React.MouseEvent) => {
 		e.stopPropagation()
-		log('Hide button clicked')
-		setIsHidden(v => !v)
+		const nextHidden = !isHidden
+		plugin.settings.items[file.path] = {
+			...getDefaultItemSettings(),
+			...plugin.settings.items[file.path],
+			hidden: nextHidden,
+		}
+		setIsHidden(nextHidden)
+		await plugin.saveSettings()
+		log(`Hidden state changed to '${nextHidden}' for '${file.path}'`)
 	}
 
 	return <div className='pin-hide-controls'>
@@ -218,13 +253,13 @@ const PinHideControls = () => {
 			type='button'
 			className={cn(isPinned && 'selected')}
 			aria-label='Pin item'
-			onClickCapture={e => handlePin(e)}
+			onClickCapture={e => void handlePin(e)}
 		><PinIcon/></button>
 		<button
 			type='button'
 			className={cn(isHidden && 'selected')}
 			aria-label='Hide item'
-			onClickCapture={e => handleHide(e)}
+			onClickCapture={e => void handleHide(e)}
 		><HideIcon/></button>
 	</div>
 }

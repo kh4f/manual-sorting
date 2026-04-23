@@ -2,15 +2,23 @@ import { TFolder } from 'obsidian'
 import type { FileTreeItem } from 'obsidian-typings'
 
 export interface Settings {
-	customOrder: FileOrder
+	items: ItemSettingsMap
 	debugMode: boolean
 	newItemPlacement: 'top' | 'bottom'
 }
 
-export type FileOrder = Record<string, {
+export interface BaseItemSettings {
+	pinned: boolean
+	hidden: boolean
+}
+
+export interface FolderSettings extends BaseItemSettings {
 	children: string[]
 	sortOrder: SortOrder
-}>
+}
+
+export type ItemSettings = BaseItemSettings | FolderSettings
+export type ItemSettingsMap = Record<string, ItemSettings | undefined>
 
 export type SortOrder =
 	| 'custom'

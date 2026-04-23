@@ -11,7 +11,7 @@ export const mountChildCounter = (folderTitle: HTMLElement) => {
 	const folder = getFileExplorerView().files.get(folderEl)
 	if (!(folder instanceof TFolder)) return
 
-	const childrenCount = folder.children.length
+	const childrenCount = getFileExplorerView().getSortedFolderItems(folder, true).length
 
 	let counterEl = folderTitle.querySelector<HTMLElement>('.ms-child-counter')
 	if (!counterEl) counterEl = folderTitle.createDiv({ cls: 'ms-child-counter' })

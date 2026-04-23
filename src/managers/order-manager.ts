@@ -1,7 +1,26 @@
 import { TAbstractFile, TFolder } from 'obsidian'
 import type ManualSortingPlugin from '@/plugin'
 import { getFileExplorerView, initLog } from '@/utils'
-import type { FileOrder } from '@/types'
+import type { BaseItemSettings, FolderSettings, ItemSettings, ItemSettingsMap } from '@/types'
+
+type FolderOrder = Record<string, Pick<FolderSettings, 'children' | 'sortOrder'>>
+
+const ROOT_PATH = '/'
+
+const getParentPath = (path: string) => path.substring(0, path.lastIndexOf('/')) || ROOT_PATH
+
+const isFolderSettings = (item: ItemSettings | undefined): item is FolderSettings => !!item && 'children' in item
+
+const getDefaultItemSettings = (): BaseItemSettings => ({ pinned: false, hidden: false })
+
+const pickItemSettings = (item: ItemSettings | undefined): BaseItemSettings => {
+	if (!item) return getDefaultItemSettings()
+
+	return {
+		pinned: item.pinned,
+		hidden: item.hidden,
+	}
+}
 
 export class OrderManager {
 	private log = initLog('ORDER-MANAGER', '#00ccff')
@@ -11,26 +30,29 @@ export class OrderManager {
 	add(item: TAbstractFile) {
 		const path = item.path
 		this.log(`Inserting new item: '${path}'`)
-		const order = this.plugin.settings.customOrder
-		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
+		const order = this.plugin.settings.items
+		const dir = getParentPath(path)
 		const isFolder = item instanceof TFolder
 		const insertPos = this.plugin.settings.newItemPlacement
 
-		if (isFolder) order[path] = { children: [], sortOrder: 'custom' }
-		if (insertPos === 'top') order[dir].children.unshift(path)
-		else order[dir].children.push(path)
+		if (isFolder) this.ensureFolderSettings(path)
+		else order[path] ??= getDefaultItemSettings()
+
+		const parentFolder = this.ensureFolderSettings(dir)
+		if (insertPos === 'top') parentFolder.children.unshift(path)
+		else parentFolder.children.push(path)
 
 		this.logOrder('Updated order after adding new item:')
 	}
 
 	rename(oldPath: string, newPath: string) {
 		this.log(`Renaming '${oldPath}' to '${newPath}'`)
-		const order = this.plugin.settings.customOrder
-		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
+		const order = this.plugin.settings.items
+		const oldDir = getParentPath(oldPath)
+		const oldParent = this.ensureFolderSettings(oldDir)
 
-		order[oldDir].children = order[oldDir].children.map((path: string) => (path === oldPath ? newPath : path))
-		const isFolder = oldPath in order
-		if (isFolder) this.renameFolder(oldPath, newPath)
+		oldParent.children = oldParent.children.map(path => (path === oldPath ? newPath : path))
+		if (oldPath in order) this.renameItemSettings(oldPath, newPath)
 
 		void this.plugin.saveSettings()
 		this.logOrder('Updated order after renaming item:')
@@ -38,22 +60,23 @@ export class OrderManager {
 
 	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after') {
 		this.log(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
-		const order = this.plugin.settings.customOrder
-		const oldDir = oldPath.substring(0, oldPath.lastIndexOf('/')) || '/'
-		const newDir = newPath.substring(0, newPath.lastIndexOf('/')) || '/'
-		const isFolder = oldPath in order
+		const order = this.plugin.settings.items
+		const oldDir = getParentPath(oldPath)
+		const newDir = getParentPath(newPath)
+		const oldParent = this.ensureFolderSettings(oldDir)
+		const newParent = this.ensureFolderSettings(newDir)
 		const isDirChanged = oldDir !== newDir
 
-		order[oldDir].children = order[oldDir].children.filter(path => path !== oldPath)
+		oldParent.children = oldParent.children.filter(path => path !== oldPath)
 
 		let insertIdx = 0
 		if (targetSiblingPath) {
-			const siblingIdx = order[newDir].children.indexOf(targetSiblingPath)
+			const siblingIdx = newParent.children.indexOf(targetSiblingPath)
 			insertIdx = position === 'before' ? siblingIdx : siblingIdx + 1
 		}
-		order[newDir].children.splice(insertIdx, 0, newPath)
+		newParent.children.splice(insertIdx, 0, newPath)
 
-		if (isFolder) this.renameFolder(oldPath, newPath)
+		if (oldPath !== newPath && oldPath in order) this.renameItemSettings(oldPath, newPath)
 
 		this.logOrder('Updated order after moving item:')
 		if (!isDirChanged) {
@@ -64,12 +87,11 @@ export class OrderManager {
 
 	remove(path: string) {
 		this.log(`Removing item: '${path}'`)
-		const order = this.plugin.settings.customOrder
-		const dir = path.substring(0, path.lastIndexOf('/')) || '/'
-		const isFolder = path in order
+		const dir = getParentPath(path)
+		const parentFolder = this.ensureFolderSettings(dir)
 
-		order[dir].children = order[dir].children.filter(p => p !== path)
-		if (isFolder) delete order[path]
+		parentFolder.children = parentFolder.children.filter(childPath => childPath !== path)
+		this.removeItemSettings(path)
 
 		this.logOrder('Updated order after removing item:')
 	}
@@ -77,18 +99,18 @@ export class OrderManager {
 	reconcileOrder() {
 		this.log('Updating order...')
 		const currentOrder = this.getCurrentOrder()
-		const savedOrder = this.plugin.settings.customOrder
+		const savedOrder = this.plugin.settings.items
 		const newOrder = this.matchSavedOrder(currentOrder, savedOrder)
-		this.plugin.settings.customOrder = newOrder
+		this.plugin.settings.items = newOrder
 		this.logOrder('Order updated:')
 	}
 
 	resetOrder() {
-		this.plugin.settings.customOrder = { '/': { children: [], sortOrder: 'custom' } }
+		this.plugin.settings.items = { [ROOT_PATH]: { ...getDefaultItemSettings(), children: [], sortOrder: 'custom' } }
 	}
 
 	overwriteCustomOrder(folderPath: string) {
-		const folderOrder = this.plugin.settings.customOrder[folderPath]
+		const folderOrder = this.ensureFolderSettings(folderPath)
 		const folder = this.plugin.app.vault.getAbstractFileByPath(folderPath)
 		if (!(folder instanceof TFolder)) return
 
@@ -98,11 +120,11 @@ export class OrderManager {
 	}
 
 	private logOrder(message: string) {
-		this.log(message, JSON.stringify(this.plugin.settings.customOrder, null, 4), 'group')
+		this.log(message, JSON.stringify(this.plugin.settings.items, null, 4), 'group')
 	}
 
 	private getCurrentOrder() {
-		const currentOrder: FileOrder = {}
+		const currentOrder: FolderOrder = {}
 		const explorerView = getFileExplorerView()
 
 		const indexFolder = (folder: TFolder) => {
@@ -120,12 +142,24 @@ export class OrderManager {
 		return currentOrder
 	}
 
-	private matchSavedOrder(currentOrder: FileOrder, savedOrder: FileOrder) {
-		const result: FileOrder = {}
+	private matchSavedOrder(currentOrder: FolderOrder, savedOrder: ItemSettingsMap) {
+		const result: ItemSettingsMap = {}
+		const currentPaths = new Set<string>()
+
+		for (const [folderPath, folder] of Object.entries(currentOrder)) {
+			currentPaths.add(folderPath)
+			folder.children.forEach(childPath => currentPaths.add(childPath))
+		}
+
+		for (const [path, item] of Object.entries(savedOrder)) {
+			if (!currentPaths.has(path) || path in currentOrder) continue
+
+			result[path] = pickItemSettings(item)
+		}
 
 		for (const folder in currentOrder) {
-			if (folder in savedOrder) {
-				const prevOrder = savedOrder[folder]
+			const prevOrder = savedOrder[folder]
+			if (isFolderSettings(prevOrder)) {
 				const currentFiles = currentOrder[folder]
 				// Leave the files that have already been saved
 				const existingFiles = prevOrder.children.filter(file => currentFiles.children.includes(file))
@@ -133,36 +167,59 @@ export class OrderManager {
 				const newFiles = currentFiles.children.filter(file => !prevOrder.children.includes(file))
 				// Combine and remove duplicates
 				result[folder] = {
+					...pickItemSettings(prevOrder),
 					children: Array.from(this.plugin.settings.newItemPlacement === 'top' ? [...newFiles, ...existingFiles] : [...existingFiles, ...newFiles]),
 					sortOrder: prevOrder.sortOrder,
 				}
 			} else {
 				// Remove duplicates from current folder
-				result[folder] = { children: Array.from(new Set(currentOrder[folder].children)), sortOrder: 'custom' }
+				result[folder] = {
+					...pickItemSettings(prevOrder),
+					children: Array.from(new Set(currentOrder[folder].children)),
+					sortOrder: 'custom',
+				}
 			}
 		}
 
 		return result
 	}
 
-	private removeFolder(path: string) {
-		const order = this.plugin.settings.customOrder
-		order[path].children.forEach((childPath: string) => {
-			const isFolder = childPath in order
-			if (isFolder) this.removeFolder(childPath)
-		})
+	private ensureFolderSettings(path: string) {
+		const order = this.plugin.settings.items
+		const item = order[path]
+
+		if (isFolderSettings(item)) return item
+
+		const folderSettings: FolderSettings = {
+			...pickItemSettings(item),
+			children: [],
+			sortOrder: 'custom',
+		}
+		order[path] = folderSettings
+		return folderSettings
+	}
+
+	private removeItemSettings(path: string) {
+		const order = this.plugin.settings.items
+		const item = order[path]
+		if (isFolderSettings(item)) item.children.forEach(childPath => this.removeItemSettings(childPath))
 		delete order[path]
 	}
 
-	private renameFolder(oldPath: string, newPath: string) {
+	private renameItemSettings(oldPath: string, newPath: string) {
 		if (oldPath === newPath) return
-		const order = this.plugin.settings.customOrder
-		order[newPath] = order[oldPath]
+		const order = this.plugin.settings.items
+		const item = order[oldPath]
+		if (!item) return
+
+		order[newPath] = item
 		delete order[oldPath]
-		order[newPath].children = order[newPath].children.map((path: string) => {
+
+		if (!isFolderSettings(item)) return
+
+		item.children = item.children.map(path => {
 			const newChildPath = path.replace(oldPath, newPath)
-			const isFolder = path in order
-			if (isFolder) this.renameFolder(path, newChildPath)
+			if (path in order) this.renameItemSettings(path, newChildPath)
 			return newChildPath
 		})
 	}

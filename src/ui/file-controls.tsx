@@ -65,7 +65,7 @@ export const mountFileControls = (root: HTMLElement, file: TAbstractFile, plugin
 const FileControls = ({ file, plugin }: { file: TAbstractFile, plugin: ManualSortingPlugin }) => {
 	return <>
 		<SortOrderControls file={file} plugin={plugin}/>
-		<PinHideControls file={file} plugin={plugin}/>
+		{file.path === '/' || <PinHideControls file={file} plugin={plugin}/>}
 	</>
 }
 

@@ -3,6 +3,7 @@ import { TFolder } from 'obsidian'
 import { getFileExplorerView } from '@/utils'
 
 const counterRoots = new WeakMap<HTMLElement, ReturnType<typeof createRoot>>()
+const COUNTER_SELECTOR = '.ms-child-counter'
 
 export const mountChildCounter = (folderTitle: HTMLElement) => {
 	const folderEl = folderTitle.closest<HTMLElement>('.nav-folder')
@@ -23,6 +24,16 @@ export const mountChildCounter = (folderTitle: HTMLElement) => {
 	}
 
 	counterRoot.render(<ChildCounter childrenCount={childrenCount}/>)
+}
+
+export const unmountChildCounter = (folderTitle: HTMLElement) => {
+	const counterEl = folderTitle.querySelector<HTMLElement>(COUNTER_SELECTOR)
+	if (!counterEl) return
+
+	const counterRoot = counterRoots.get(counterEl)
+	counterRoot?.unmount()
+	counterRoots.delete(counterEl)
+	counterEl.remove()
 }
 
 export const ChildCounter = ({ childrenCount }: { childrenCount: number }) => <span>{childrenCount}</span>

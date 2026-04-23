@@ -1,7 +1,7 @@
 import type ManualSortingPlugin from '@/plugin'
 import type { FolderSettings, ItemSettings } from '@/types'
 import { getFileExplorerView, initLog } from '@/utils'
-import { mountChildCounter } from '@/ui/child-counter'
+import { mountChildCounter, unmountChildCounter } from '@/ui/child-counter'
 
 const FILE_EXPLORER_SELECTOR = '[data-type="file-explorer"] > .nav-files-container'
 const FOLDER_TITLE_SELECTOR = '.nav-folder-title'
@@ -50,7 +50,10 @@ export class ExplorerManager {
 			? [root]
 			: [...root.querySelectorAll<HTMLElement>(FOLDER_TITLE_SELECTOR)]
 
-		folderTitles.forEach(folderTitle => mountChildCounter(folderTitle))
+		folderTitles.forEach(folderTitle => {
+			if (this.plugin.settings.showChildCounter) mountChildCounter(folderTitle)
+			else unmountChildCounter(folderTitle)
+		})
 	}
 
 	private observeFolderIndicators(explorerEl: HTMLElement) {

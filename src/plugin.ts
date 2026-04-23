@@ -7,6 +7,7 @@ import { mountFileControls } from '@/ui/file-controls'
 
 const DEFAULT_SETTINGS: Settings = {
 	items: { '/': { pinned: false, hidden: false, children: [], sortOrder: 'custom' } },
+	showChildCounter: true,
 	debugMode: !!process.env.DEV,
 	newItemPlacement: 'top',
 }

@@ -24,6 +24,18 @@ export class SettingsTab extends PluginSettingTab {
 			)
 
 		new Setting(this.containerEl)
+			.setName('Show child counter')
+			.setDesc('Display item count next to folder names')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.showChildCounter)
+				.onChange(async showChildCounter => {
+					this.plugin.settings.showChildCounter = showChildCounter
+					await this.plugin.saveSettings()
+					this.plugin.explorerManager.refreshFolderIndicators()
+				}),
+			)
+
+		new Setting(this.containerEl)
 			.setName('Debug mode')
 			.setDesc('Show debug logs in the console')
 			.addToggle(toggle => toggle

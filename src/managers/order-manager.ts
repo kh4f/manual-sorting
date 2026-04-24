@@ -59,6 +59,7 @@ export class OrderManager {
 	}
 
 	move(oldPath: string, newPath: string, targetSiblingPath: string, position: 'before' | 'after') {
+		if (oldPath === newPath && targetSiblingPath === newPath) return
 		this.log(`Moving '${oldPath}' to '${newPath}' (${position} '${targetSiblingPath}')`)
 		const order = this.plugin.settings.items
 		const oldDir = getParentPath(oldPath)

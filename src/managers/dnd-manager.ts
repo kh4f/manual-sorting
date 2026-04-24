@@ -258,13 +258,9 @@ export class DndManager {
 
 		if (isSiblingTempChild) siblingPath = ''
 
-		if (sourcePath !== targetPath || targetPath !== siblingPath) {
-			this.log(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
-			void this.plugin.app.fileManager.renameFile(file, targetPath)
-			this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
-		} else {
-			this.log(`No move needed: '${sourcePath}' is already at the target position`)
-		}
+		this.log(`Moving '${sourcePath}' to '${targetPath}' (${dropPosition} '${siblingPath}')`)
+		void this.plugin.app.fileManager.renameFile(file, targetPath)
+		this.plugin.orderManager.move(sourcePath, targetPath, siblingPath, dropPosition)
 		void this.plugin.saveSettings()
 
 		getFileExplorerView().lastDropTargetEl = item.el

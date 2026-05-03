@@ -5,7 +5,7 @@
     "": {
       "name": "manual-sorting",
       "devDependencies": {
-        "@eslint-react/eslint-plugin": "^5.6.0",
+        "@eslint-react/eslint-plugin": "^5.6.2",
         "@eslint/js": "^10.0.1",
         "@stylistic/eslint-plugin": "^5.10.0",
         "@tsdown/css": "^0.21.10",

@@ -28,7 +28,7 @@
 		"@types/react-dom": "^19.2.3",
 		"@voicss/eslint": "^0.3.0",
 		"@voicss/vite": "^0.1.0",
-		"eslint": "^10.2.1",
+		"eslint": "^10.3.0",
 		"eslint-plugin-react-hooks": "^7.1.1",
 		"jiti": "^2.6.1",
 		"monkey-around": "^3.0.0",

@@ -30,7 +30,7 @@
 		"@voicss/vite": "^0.1.0",
 		"eslint": "^10.3.0",
 		"eslint-plugin-react-hooks": "^7.1.1",
-		"jiti": "^2.6.1",
+		"jiti": "^2.7.0",
 		"monkey-around": "^3.0.0",
 		"obsidian": "^1.12.3",
 		"obsidian-typings": "^5.21.0",

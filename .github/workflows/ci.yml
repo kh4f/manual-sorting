@@ -1,6 +1,6 @@
 name: CI
 
-on: { push: { branches-ignore: wip/** } }
+on: push
 
 jobs:
   ci:
@@ -10,6 +10,6 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - run: bun i
-      - run: bun lint
       - run: bun typecheck
+      - run: bun lint
       - run: bun -b build:prod

@@ -14,8 +14,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
 
       - run: bun i
-      - run: bun lint
       - run: bun typecheck
+      - run: bun lint
       - run: bun -b build:prod
 
       - run: zip -r $ZIP manifest.json main.js styles.css

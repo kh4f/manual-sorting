@@ -16,7 +16,7 @@ jobs:
       - run: bun i
       - run: bun lint
       - run: bun typecheck
-      - run: bun build:prod
+      - run: bun -b build:prod
 
       - run: zip -r $ZIP manifest.json main.js styles.css
       - run: gh release create $TAG --title $TAG --draft manifest.json main.js styles.css $ZIP

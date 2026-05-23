@@ -5,7 +5,7 @@
 	<p>
 		<a href="https://github.com/kh4f/flexplorer/releases"><img src="https://img.shields.io/github/v/tag/kh4f/flexplorer?label=%F0%9F%8F%B7%EF%B8%8F%20Release&style=flat-square&color=D6CFCB&labelColor=49355E" alt="version"/></a>&nbsp;
 		<a href="https://github.com/kh4f/flexplorer/issues?q=is%3Aissue+is%3Aopen+label%3Abug"><img src="https://img.shields.io/github/issues/kh4f/flexplorer/bug?label=%F0%9F%90%9B%20Bugs&style=flat-square&color=D6CFCB&labelColor=49355E" alt="bugs"></a>&nbsp;
-		<a href="https://github.com/kh4f/flexplorer/blob/master/LICENSE"><img src="https://img.shields.io/github/license/kh4f/flexplorer?style=flat-square&label=%F0%9F%9B%A1%EF%B8%8F%20License&color=D6CFCB&labelColor=49355E" alt="license"></a>
+		<a href="https://github.com/kh4f/flexplorer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/kh4f/flexplorer?style=flat-square&label=%F0%9F%9B%A1%EF%B8%8F%20License&color=D6CFCB&labelColor=49355E" alt="license"></a>
 	</p>
 	<b>
 		<a href="#-features">Features</a>&nbsp; •&nbsp;

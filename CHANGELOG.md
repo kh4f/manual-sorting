@@ -1,6 +1,35 @@
 # Changelog
 
 
+## &ensp; [` 📦 4.0.0  `](https://github.com/kh4f/flexplorer/compare/3.2.4...4.0.0)
+
+### &emsp; 📢 BREAKING CHANGES
+- **Plugin relaunch**: since the next major version (v4) would have introduced breaking changes anyway —  
+including a full reset of user settings — and the project focus has shifted from  
+manual sorting only to a broader file explorer enhancement suite, the plugin is being republished under a more versatile name: **Flexplorer**.  
+The **Manual Sorting** plugin will be unpublished soon.
+
+### &emsp; 🎁 Features
+- **Per-folder sorting**: each folder now maintains its own independent sorting mode. [#40](https://github.com/kh4f/flexplorer/issues/40)
+- **Pinning & hiding**: items can now be pinned to the top or hidden from view. [#124](https://github.com/kh4f/flexplorer/issues/124) [#146](https://github.com/kh4f/flexplorer/issues/146)
+- **Extended context menu**: explorer items now include `Pin`, `Hide`, and `Sort order` options.
+- **Enhanced sort order menu**: the native `Change sort order` menu now includes `Custom order` sorting mode, `Save as custom order` action, and `Show hidden` toggle.
+- **Smarter auto-scroll**: improved auto-scroll dynamics for faster and more flexible dragging near explorer edges [#135](https://github.com/kh4f/flexplorer/issues/135)
+- **Sync-friendly persistence**: added a setting to control whether `data.json` updates immediately after file create/delete operations, helping reduce sync conflicts with services like Obsidian Sync. [#120](https://github.com/kh4f/flexplorer/issues/120)
+
+### &emsp; ⚡ Performance
+- **Rewritten DnD engine**: drag‑and‑drop logic has been rebuilt from scratch for improved reliability and performance.
+
+### &emsp; 🧩 Compatibility
+- **File Explorer Note Count compatibility**: fixed the drag handles overlapping folder child counters on mobile. [#125](https://github.com/kh4f/flexplorer/issues/125)
+- **Novel Word Count compatibility**: resolved visual conflict with word counter on mobile. [#165](https://github.com/kh4f/flexplorer/issues/165)
+
+### &emsp; 🎨 Style
+- **Cleaner drag visuals**: removed tooltip, folder highlight, drop zones, indicator animation, and mobile drag handles for a more minimal, smooth and distraction‑free drag experience.
+
+##### &emsp;&emsp; [Full Changelog](https://github.com/kh4f/flexplorer/compare/3.2.4...4.0.0) &ensp;•&ensp; May 23, 2026
+
+
 ## &ensp; [` 📦 3.2.4  `](https://github.com/kh4f/manual-sorting/compare/3.2.3...3.2.4)
 
 ### &emsp; 🩹 Fixes

@@ -1,24 +1,25 @@
-import { pathToFileURL } from 'node:url'
-import { defineConfig } from 'tsdown'
+import { dirname } from 'node:path'
 import voicss from '@voicss/vite'
+import type { UserConfig } from 'tsdown'
 
-const isProd = process.argv.includes('-p')
-const dirUrl = pathToFileURL(import.meta.dirname).href
+const prod = process.argv.includes('-p')
+const dir = dirname(import.meta.url)
 
-export default defineConfig({
+export default {
 	entry: 'src/plugin.ts',
-	outputOptions: {
-		entryFileNames: 'main.js',
-		minify: isProd,
-		sourcemapBaseUrl: dirUrl,
-		sourcemapPathTransform: relativeSourcePath => `${dirUrl}/${relativeSourcePath}`,
-	},
-	sourcemap: !isProd,
+	css: { fileName: 'styles.css' },
 	format: 'cjs',
 	outDir: '.',
 	clean: false,
-	deps: { neverBundle: 'obsidian', onlyBundle: ['react', 'react-dom', 'scheduler', 'monkey-around'] },
-	env: { DEV: !isProd },
+	fixedExtension: true,
+	minify: prod,
+	sourcemap: !prod,
+	outputOptions: {
+		entryFileNames: 'main.js',
+		sourcemapBaseUrl: dir,
+		sourcemapPathTransform: relSourcePath => `${dir}/${relSourcePath}`,
+	},
+	env: { DEV: !prod },
+	deps: { neverBundle: 'obsidian', onlyBundle: ['react', 'react-dom', 'scheduler'] },
 	plugins: [voicss()],
-	css: { fileName: 'styles.css' },
-})
+} satisfies UserConfig

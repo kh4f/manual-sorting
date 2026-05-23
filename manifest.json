@@ -1,10 +1,10 @@
 {
-	"id": "manual-sorting",
-	"name": "Manual Sorting",
-	"version": "3.2.4",
-	"minAppVersion": "0.15.0",
-	"description": "DnD sorting for file explorer",
+	"id": "flexplorer",
+	"name": "Flexplorer",
+	"version": "0.0.0",
+	"description": "Enhance the file explorer with custom sorting, pinning, and hiding.",
 	"author": "kh4f",
 	"authorUrl": "https://github.com/kh4f",
+	"minAppVersion": "1.12.0",
 	"isDesktopOnly": false
 }

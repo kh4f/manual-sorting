@@ -1,43 +1,31 @@
-import { TFolder } from 'obsidian'
-import type { FileTreeItem } from 'obsidian-typings'
-
-export interface Settings {
-	items: ItemSettingsMap
-	showChildCounter: boolean
-	showHidden: boolean
-	debugMode: boolean
-	newItemPlacement: 'top' | 'bottom'
-}
-
-export interface BaseItemSettings {
-	pinned: boolean
-	hidden: boolean
-}
-
-export interface FolderSettings extends BaseItemSettings {
-	children: string[]
-	sortOrder: SortOrder
-}
-
-export type ItemSettings = BaseItemSettings | FolderSettings
-export type ItemSettingsMap = Record<string, ItemSettings | undefined>
+export type NewItemPlacement = 'top' | 'bottom'
 
 export type SortOrder =
 	| 'custom'
-	| 'alphabetical'
-	| 'alphabeticalReverse'
+	| 'byName'
+	| 'byNameReverse'
 	| 'byCreatedTime'
 	| 'byCreatedTimeReverse'
 	| 'byModifiedTime'
 	| 'byModifiedTimeReverse'
 
-declare module 'obsidian-typings' {
-	interface FileExplorerView {
-		getSortedFolderItems(folder: TFolder, bypass?: boolean): FileTreeItem[]
-	}
-
-	interface TreeItem {
-		collapsed: boolean
-		setCollapsed(collapsed: boolean, check: boolean): void
-	}
+export interface Settings {
+	items: Record<string, ItemSettings>
+	pinnedFiles: string[]
+	showHidden: boolean
+	newItemPlacement: NewItemPlacement
+	persistOrderOnCreateDelete: boolean
+	debugMode: boolean
 }
+
+export interface BaseItemSettings {
+	isPinned: boolean
+	isHidden: boolean
+}
+
+export interface FolderSettings extends BaseItemSettings {
+	customOrder: string[]
+	sortOrder: SortOrder
+}
+
+export type ItemSettings = BaseItemSettings | FolderSettings

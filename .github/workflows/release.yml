@@ -5,7 +5,7 @@ on: { push: { tags: '[0-9]+.[0-9]+.[0-9]+*' } }
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions: { contents: write }
+    permissions: { contents: write, id-token: write, attestations: write }
     env:
       TAG: ${{ github.ref_name }}
       ZIP: ${{ github.event.repository.name }}-${{ github.ref_name }}.zip
@@ -19,6 +19,9 @@ jobs:
       - run: bun -b build:prod
 
       - run: zip $ZIP manifest.json main.js styles.css
+      - uses: actions/attest@v4
+        with:
+          subject-path: manifest.json, main.js, styles.css, ${{ env.ZIP }}
       - run: gh release create $TAG --title $TAG --draft manifest.json main.js styles.css $ZIP
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -16,7 +16,7 @@ jobs:
       - run: bun i
       - run: bun typecheck
       - run: bun lint
-      - run: bun -b build:prod
+      - run: bun -b run build
 
       - run: zip $ZIP manifest.json main.js styles.css
       - uses: actions/attest@v4

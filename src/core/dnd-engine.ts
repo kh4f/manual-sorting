@@ -19,33 +19,25 @@ const DROP_FOLDER_SELECTOR = '[data-drop-folder]'
 
 export class DndEngine {
 	private readonly log = initLog('DND-ENGINE', '#a6ff00')
-	private readonly scrollZone = 60
-	private readonly baseScrollSpeed = 25
-	private readonly handleWidth = 36
-	private readonly expandDelay = 1000
-
-	private currentDragLogs = new Set<string>()
-	private previousDragLogs = new Set<string>()
-	private readonly dragLog = (...args: unknown[]) => {
-		const message = String(args)
-		this.currentDragLogs.add(message)
-		if (!this.previousDragLogs.has(message)) this.log(...args)
-	}
-
-	private explorerEl?: HTMLElement
-	private explorerRect?: DOMRect
+	private readonly sparseLog = this.initSparseLog(1000)
 
 	private readonly dragStartEvent = Platform.isMobile ? 'touchstart' : 'dragstart'
 	private readonly dragEvent = Platform.isMobile ? 'touchmove' : 'drag'
 	private readonly dropEvent = Platform.isMobile ? 'touchend' : 'drop'
 
+	private readonly scrollZone = 60
+	private readonly baseScrollSpeed = 25
+	private readonly handleWidth = 36
+	private readonly expandDelay = 1000
+
+	private explorerEl?: HTMLElement
+	private explorerRect?: DOMRect
 	private draggingItem?: TAbstractFile
 	private dropSibling: HTMLElement | null = null
 	private dropFolder: HTMLElement | null = null
 	private insertPos: InsertPosition = 'before'
 	private pointerY = 0
 	private autoscrollRaf = 0
-
 	private expandTimeout = 0
 	private expandTarget: HTMLElement | null = null
 
@@ -93,11 +85,8 @@ export class DndEngine {
 	}
 
 	private readonly onDrag = this.rafThrottle((event: DragPointerEvent) => {
-		this.previousDragLogs = this.currentDragLogs
-		this.currentDragLogs = new Set<string>()
-
 		if (!this.draggingItem) return
-		this.log('Dragging')
+		this.sparseLog('Dragging')
 
 		if (Platform.isMobile) event.preventDefault() // prevent swiping explorer horizontally on mobile
 
@@ -105,7 +94,7 @@ export class DndEngine {
 		this.pointerY = this.getPointerY(event)
 
 		if (this.isPointerOutsideExplorer(pointerX)) {
-			this.dragLog('Pointer outside explorer, clearing drop indicators')
+			this.sparseLog('Pointer outside explorer, clearing drop indicators')
 			return this.clearDropIndicators(false)
 		}
 
@@ -129,17 +118,17 @@ export class DndEngine {
 			&& this.dropSibling.contains(activeDocument.elementFromPoint(pointerX, this.pointerY))
 		) {
 			const folderEl = this.dropSibling
-			this.dragLog('Dragging over the folder', folderEl)
+			this.sparseLog('Dragging over the folder', folderEl)
 
 			this.dropSibling = folderEl.querySelector<HTMLElement>(':scope > .tree-item-children > :nth-last-child(1 of .tree-item)')
 			if (!this.dropSibling) {
-				this.dragLog('Drop sibling is an empty folder, treating it as drop folder')
+				this.sparseLog('Drop sibling is an empty folder, treating it as drop folder')
 				this.dropFolder = folderEl
 			}
 
 			if (folderEl.matches('.is-collapsed')) {
 				if (folderEl !== this.expandTarget) {
-					this.dragLog('Folder is collapsed, starting expand timeout')
+					this.sparseLog('Folder is collapsed, starting expand timeout')
 					this.scheduleFolderExpand(folderEl)
 				}
 			} else {
@@ -167,6 +156,8 @@ export class DndEngine {
 
 		// prevent Obsidian's native drop-target expansion from competing with custom DnD handling
 		this.plugin.getExplorerView().lastDropTargetEl = null
+
+		this.sparseLog.flush()
 	})
 
 	private readonly onDrop = (event: DragPointerEvent) => {
@@ -260,9 +251,6 @@ export class DndEngine {
 		this.autoscrollRaf = 0
 		this.clearPendingExpand()
 		this.clearDropIndicators()
-
-		this.previousDragLogs.clear()
-		this.currentDragLogs.clear()
 	}
 
 	private clearDropIndicators(resetState = true) {
@@ -313,7 +301,7 @@ export class DndEngine {
 			const folderPath = this.plugin.getExplorerView().files.get(folderEl)!.path
 			const folderItem = this.plugin.getExplorerView().fileItems[folderPath] as FolderTreeItem
 			void folderItem.setCollapsed(false, true)
-			this.dragLog(`Folder '${folderPath}' expanded after timeout`)
+			this.log(`Folder '${folderPath}' expanded after timeout`)
 		}, this.expandDelay)
 	}
 
@@ -350,11 +338,10 @@ export class DndEngine {
 		return event instanceof TouchEvent ? event.touches[0].clientY : event.clientY
 	}
 
-	private rafThrottle<T extends (...args: any[]) => void>(
-		fn: T,
-	): ((...args: Parameters<T>) => void) & { cancel: () => void } {
+	private rafThrottle<T extends (...args: any[]) => void>(fn: T) {
 		let raf = 0
 		let latestArgs: Parameters<T>
+
 		const throttled = (...args: Parameters<T>) => {
 			latestArgs = args
 
@@ -372,6 +359,25 @@ export class DndEngine {
 		}
 
 		return throttled
+	}
+
+	private initSparseLog(delay: number) {
+		let lastFlush = 0
+		let buffer: unknown[][] = []
+
+		const sparse = (...args: unknown[]) => buffer.push(args)
+
+		sparse.flush = () => {
+			if (!buffer.length) return
+			const now = Date.now()
+			if (now - lastFlush >= delay) {
+				lastFlush = now
+				for (const args of buffer) this.log(...args)
+			}
+			buffer = []
+		}
+
+		return sparse
 	}
 }
 

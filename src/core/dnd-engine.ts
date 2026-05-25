@@ -111,48 +111,70 @@ export class DndEngine {
 			})
 		}
 
-		this.updateClosestDropSibling(siblingCandidates)
+		let closestDist = Infinity
+		for (const candidate of siblingCandidates) {
+			const rect = candidate.getBoundingClientRect()
 
-		if (this.dropSibling?.matches('.nav-folder:not([data-dragging])')
-			&& this.insertPos === 'after'
-			&& this.dropSibling.contains(activeDocument.elementFromPoint(pointerX, this.pointerY))
-		) {
-			const folderEl = this.dropSibling
-			this.sparseLog('Dragging over the folder', folderEl)
-
-			this.dropSibling = folderEl.querySelector<HTMLElement>(':scope > .tree-item-children > :nth-last-child(1 of .tree-item)')
-			if (!this.dropSibling) {
-				this.sparseLog('Drop sibling is an empty folder, treating it as drop folder')
-				this.dropFolder = folderEl
-			}
-
-			if (folderEl.matches('.is-collapsed')) {
-				if (folderEl !== this.expandTarget) {
-					this.sparseLog('Folder is collapsed, starting expand timeout')
-					this.scheduleFolderExpand(folderEl)
+			let bottomY = rect.bottom
+			if (candidate.matches('.tree-item:nth-last-child(1 of .tree-item)')) {
+				let depth = 0
+				let el: HTMLElement | null = candidate.parentElement
+				while (el) {
+					if (el.matches('.nav-folder')) depth++
+					el = el.parentElement
 				}
-			} else {
-				this.clearPendingExpand()
+				if (depth) bottomY -= 5 * depth
 			}
-		} else {
-			this.clearPendingExpand()
+			const distToBottom = Math.abs(this.pointerY - bottomY)
+
+			let distToTop = Infinity
+			if (candidate.matches('.tree-item:nth-child(1 of .tree-item)')) distToTop = Math.abs(this.pointerY - rect.top)
+
+			const dist = Math.min(distToBottom, distToTop)
+			if (dist < closestDist) {
+				closestDist = dist
+				this.insertPos = distToBottom < distToTop ? 'after' : 'before'
+				this.dropSibling = candidate
+			}
 		}
+
+		const hoveredEl = activeDocument.elementFromPoint(pointerX, this.pointerY) as HTMLElement
+		const folderTitle = hoveredEl.closest('.nav-folder-title')
+		let shouldClearExpand = true
+
+		if (folderTitle) {
+			const titleRect = folderTitle.getBoundingClientRect()
+			if (this.pointerY > titleRect.top + 10 && this.pointerY < titleRect.bottom - 10) {
+				this.sparseLog('Hovering over folder title, treating it as drop folder')
+				const folderEl = folderTitle.parentElement!
+				this.dropSibling = null
+				this.dropFolder = folderEl
+
+				if (folderEl.matches('.is-collapsed')) {
+					if (folderEl !== this.expandTarget) {
+						this.sparseLog('Folder is collapsed, starting expand timeout')
+						this.scheduleFolderExpand(folderEl)
+					}
+					shouldClearExpand = false
+				}
+			}
+		}
+
+		if (shouldClearExpand) this.clearPendingExpand()
 
 		this.clearDropIndicators(false)
 		if (this.dropSibling) {
 			this.dropFolder = this.dropSibling.parentElement!.closest<HTMLElement>(`${ROOT_FOLDER_SELECTOR}, .nav-folder`)!
 			const folderPath = this.plugin.getExplorerView().files.get(this.dropFolder)?.path ?? ROOT_PATH
 			const folderSettings = this.plugin.settings.items[folderPath] as FolderSettings
-			if (folderSettings.sortOrder !== 'custom') {
-				this.dropSibling = null
-			} else {
+			if (folderSettings.sortOrder === 'custom') {
 				this.dropSibling.dataset.dropSibling = ''
 				this.dropSibling.dataset.insertPos = this.insertPos
+			} else {
+				this.dropSibling = null
 			}
 		}
-		if (this.dropFolder) {
-			this.dropFolder.dataset.dropFolder = ''
-		}
+		if (this.dropFolder) this.dropFolder.dataset.dropFolder = ''
 
 		// prevent Obsidian's native drop-target expansion from competing with custom DnD handling
 		this.plugin.getExplorerView().lastDropTargetEl = null
@@ -305,24 +327,6 @@ export class DndEngine {
 		}, this.expandDelay)
 	}
 
-	private updateClosestDropSibling(candidates: HTMLElement[]) {
-		let closestDist = Infinity
-		for (const candidate of candidates) {
-			const rect = candidate.getBoundingClientRect()
-			const distanceToBottom = Math.abs(this.pointerY - rect.bottom)
-			let distanceToTop = Infinity
-			if (candidate.matches('.tree-item:nth-child(1 of .tree-item)')) {
-				distanceToTop = Math.abs(this.pointerY - rect.top)
-			}
-			const dist = Math.min(distanceToBottom, distanceToTop)
-			if (dist < closestDist) {
-				closestDist = dist
-				this.insertPos = distanceToBottom < distanceToTop ? 'after' : 'before'
-				this.dropSibling = candidate
-			}
-		}
-	}
-
 	private isPointerOutsideExplorer(pointerX: number) {
 		return pointerX < this.explorerRect!.left
 			|| pointerX > this.explorerRect!.right
@@ -391,10 +395,10 @@ void `css
 			content: '';
 			position: absolute;
 			display: block;
-			translate: -52% -1px;
+			translate: 12px -1px;
 			height: 1px;
-			width: 80%;
-			left: 50%;
+			width: 90%;
+			left: 0px;
 			background: var(--color-accent);
 		}
 
@@ -415,9 +419,11 @@ void `css
 			> .nav-folder-title { color: var(--nav-item-color); }
 		}
 
-		body:not(:has([data-drop-sibling])) &[data-drop-folder] {
-			background-color: hsla(var(--interactive-accent-hsl), 0.1);
-			border-radius: var(--nav-item-radius);
+		&[data-drop-folder] {
+			body:not(:has([data-drop-sibling])) & {
+				background-color: hsla(var(--interactive-accent-hsl), 0.1);
+				border-radius: var(--radius-s);
+			}
 
 			> .nav-folder-title { color: var(--nav-item-color-highlighted); }
 		}

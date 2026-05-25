@@ -28,7 +28,7 @@ export class DndEngine {
 	private readonly scrollZone = 60
 	private readonly baseScrollSpeed = 25
 	private readonly handleWidth = 36
-	private readonly expandDelay = 1000
+	private readonly expandDelay = 800
 
 	private explorerEl?: HTMLElement
 	private explorerRect?: DOMRect

@@ -5,12 +5,19 @@
 ## Stack
 - TypeScript v6
 - React v19
-- Voicss (CSS-in-TS styling)
-- tsdown (transpilation + bundling)
+- Voicss (CSS-in-TS)
+- tsdown (build)
+- Bun (package management)
 
 ## Architecture
 - core layer (`src/core/`): DnD engine, order management, explorer observation, and patching logic
 - UI layer (`src/ui/`): React components and Obsidian views
 
+## Scripts
+- `bun dev` — development build
+- `bun run build` — production build
+- `bun typecheck` — type checking
+- `bun eslint` — linting
+
 ## Guidelines
-- Run `bun typecheck` and `bun eslint --fix` after making changes
+- Run `bun typecheck` and `bun eslint` after making changes

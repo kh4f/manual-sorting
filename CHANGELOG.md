@@ -1,6 +1,15 @@
 # Changelog
 
 
+## &ensp; [` 📦 4.0.1  `](https://github.com/kh4f/flexplorer/compare/4.0.0...4.0.1)
+
+### &emsp; 🩹 Fixes
+- **Collapsed subfolder drops**: resolved an issue where dragging an item into a collapsed subfolder (when it's the only child of its parent) would fail. [🡥](https://github.com/kh4f/flexplorer/commit/36eb0de)
+- **Quicker folder expansion**: reduced the folder expansion delay while hovering for a more natural drag-and-drop feel. [🡥](https://github.com/kh4f/flexplorer/commit/37506b0)
+
+##### &emsp;&emsp; [Full Changelog](https://github.com/kh4f/flexplorer/compare/4.0.0...4.0.1) &ensp;•&ensp; May 26, 2026
+
+
 ## &ensp; [` 📦 4.0.0  `](https://github.com/kh4f/flexplorer/compare/3.2.4...4.0.0)
 
 ### &emsp; 📢 BREAKING CHANGES

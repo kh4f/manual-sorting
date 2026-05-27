@@ -1,6 +1,14 @@
 # Changelog
 
 
+## &ensp; [` 📦 4.0.2  `](https://github.com/kh4f/flexplorer/compare/4.0.1...4.0.2)
+
+### &emsp; 🩹 Fixes
+- **Mobile loading error**: fixed a crash that prevented the plugin from loading on mobile devices. [🡥](https://github.com/kh4f/flexplorer/commit/8dd13b3) [#166](https://github.com/kh4f/flexplorer/issues/166)
+
+##### &emsp;&emsp; [Full Changelog](https://github.com/kh4f/flexplorer/compare/4.0.1...4.0.2) &ensp;•&ensp; May 27, 2026
+
+
 ## &ensp; [` 📦 4.0.1  `](https://github.com/kh4f/flexplorer/compare/4.0.0...4.0.1)
 
 ### &emsp; 🩹 Fixes

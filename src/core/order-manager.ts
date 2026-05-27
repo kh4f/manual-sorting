@@ -152,7 +152,6 @@ export class OrderManager {
 		items: FileTreeItem[],
 		sortOrder: SortOrder = folderSettings.sortOrder,
 	): FileTreeItem[] {
-		this.log(`Sorting items in '${sortOrder}' order`)
 		return items.slice().sort((aItem, bItem) => {
 			const [a, b] = [aItem.file, bItem.file]
 			const isAPinned = this.plugin.settings.items[a.path].isPinned

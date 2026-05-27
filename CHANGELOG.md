@@ -1,6 +1,15 @@
 # Changelog
 
 
+## &ensp; [` 📦 4.0.3  `](https://github.com/kh4f/flexplorer/compare/4.0.2...4.0.3)
+
+### &emsp; 🩹 Fixes
+- **Fixed multiple item dragging**: dragging multiple selected elements now correctly moves all items and updates the UI. [🡥](https://github.com/kh4f/flexplorer/commit/67fd614)
+- **Fixed indicator errors on rename**: prevented undefined settings errors during file renames by relying on automatic mounting. [🡥](https://github.com/kh4f/flexplorer/commit/75be877)
+
+##### &emsp;&emsp; [Full Changelog](https://github.com/kh4f/flexplorer/compare/4.0.2...4.0.3) &ensp;•&ensp; May 27, 2026
+
+
 ## &ensp; [` 📦 4.0.2  `](https://github.com/kh4f/flexplorer/compare/4.0.1...4.0.2)
 
 ### &emsp; 🩹 Fixes

@@ -19,6 +19,7 @@ export default {
 		sourcemapBaseUrl: dir,
 		sourcemapPathTransform: relSourcePath => `${dir}/${relSourcePath}`,
 	},
+	define: { 'process.env.NODE_ENV': prod ? '"production"' : '"development"' },
 	env: { DEV: !prod },
 	deps: { neverBundle: 'obsidian', onlyBundle: ['react', 'react-dom', 'scheduler'] },
 	plugins: [voicss()],

@@ -206,7 +206,7 @@ export class DndEngine {
 			this.log('Moving selected items:', selectedItems)
 			let insertPos = this.insertPos
 			selectedItems.forEach(item => {
-				const newPath = this.getNewPath(draggingItem, dropFolderPath)
+				const newPath = this.getNewPath(item.file, dropFolderPath)
 				this.moveItem(item.file, newPath, dropFolderPath, siblingPath, insertPos)
 				siblingPath = newPath
 				insertPos = 'after'

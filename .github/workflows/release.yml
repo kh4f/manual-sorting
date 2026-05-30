@@ -17,9 +17,6 @@ jobs:
       - run: bun lint
       - run: bun -b run build
 
-      - uses: actions/attest@v4
-        with:
-          subject-path: manifest.json, main.js, styles.css
       - run: gh release create $TAG --title $TAG --draft manifest.json main.js styles.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

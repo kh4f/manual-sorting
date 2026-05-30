@@ -12,4 +12,4 @@ jobs:
       - run: bun i
       - run: bun typecheck
       - run: bun lint
-      - run: bun -b run build
+      - run: bun prod

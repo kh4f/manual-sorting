@@ -14,7 +14,8 @@
 	"scripts": {
 		"dev": "tsdown",
 		"watch": "tsdown -w",
-		"build": "tsdown -p",
+		"prod": "bun -b tsdown -p",
+		"build": "bun prod",
 		"typecheck": "tsc",
 		"lint": "eslint",
 		"release": "bunx relion -b manifest.json -t ''"
